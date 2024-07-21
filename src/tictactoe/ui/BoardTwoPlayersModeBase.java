@@ -1,5 +1,6 @@
 package tictactoe.ui;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -108,6 +109,8 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         btnLeave = new Button();
         btnRematch = new Button();
 
+        BoardTwoPlayersController.resetTwoPlayersModeGame();
+        
         setId("AnchorPane");
         setPrefHeight(1000.0);
         setPrefWidth(693.0);
@@ -446,7 +449,19 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         getChildren().add(btnRematch);
         
          
+
+        btnRematch.setDisable(true);
+        btnRematch.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               resetBoardUI();
+               btnRematch.setDisable(true);
+            }
+        });
         //logic
+        
+        
+        
         stack00.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -460,6 +475,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x00.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -476,6 +492,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x01.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -492,6 +509,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x02.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -508,6 +526,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x10.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -524,6 +543,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x11.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -540,6 +560,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x12.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
 
@@ -557,6 +578,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x20.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -573,6 +595,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x21.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
         
@@ -589,10 +612,60 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 {
                     x22.setOpacity(1);
                 }
+                actionWhenGetBoardState();
             }
         });
     
 
+    }
+    
+    
+    private void actionWhenGetBoardState()
+    {
+        int result = BoardTwoPlayersController.getTwoPlayersModeBoardState();
+        
+        switch(result)
+        {
+            case 0:
+                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+                btnRematch.setDisable(false); 
+                break;
+            case 1:
+                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+                btnRematch.setDisable(false); 
+                break;
+            case 2:
+                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+                btnRematch.setDisable(false); 
+                break;
+        }
+    }
+    
+            
+    
+    private void resetBoardUI()
+    {
+        x00.setOpacity(0.0);
+        x01.setOpacity(0.0);
+        x02.setOpacity(0.0);
+        x10.setOpacity(0.0);
+        x11.setOpacity(0.0);
+        x12.setOpacity(0.0);
+        x20.setOpacity(0.0);
+        x21.setOpacity(0.0);
+        x22.setOpacity(0.0);
+        
+        o00.setOpacity(0.0);
+        o01.setOpacity(0.0);
+        o02.setOpacity(0.0);
+        o10.setOpacity(0.0);
+        o11.setOpacity(0.0);
+        o12.setOpacity(0.0);
+        o20.setOpacity(0.0);
+        o21.setOpacity(0.0);
+        o22.setOpacity(0.0);
+        
+        BoardTwoPlayersController.resetTwoPlayersModeGame();
     }
     
 }
