@@ -8,6 +8,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import tictactoe.resources.ResourcesLocation;
 
 public class ModeScreenBase extends StackPane {
@@ -27,13 +28,15 @@ public class ModeScreenBase extends StackPane {
         onlineButton = new Button();
         backButton = new Button();
 
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
-
+        //setMinWidth(1500);
+        //setMinHeight(1000);
+        //extra
+//       imageView.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
+//       imageView.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
+//       imageView.setPreserveRatio(true);
+        
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
-        imageView.setFitHeight(612.0);
-        imageView.setFitWidth(920.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
         
@@ -86,9 +89,7 @@ public class ModeScreenBase extends StackPane {
         backButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
         
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
+
 
         getChildren().add(imageView);
         flowPane.getChildren().add(text);
