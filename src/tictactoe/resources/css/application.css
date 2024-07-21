@@ -1,0 +1,5 @@
+.button{
+    -fx-background-image: url("../images/backgrounds/primary_button.jpg");
+    -fx-background-radius: 10;
+    -fx-background-size: stretch;
+}

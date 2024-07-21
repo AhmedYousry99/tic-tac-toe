@@ -1,0 +1,6 @@
+/.idea/
+git-token.txt
+/src/tictactoe/ui/tempfxmls
+/nbproject/private/
+/dist/
+/build/
