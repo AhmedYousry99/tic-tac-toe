@@ -22,6 +22,7 @@ public class StartScreenFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }  
+    int i  = 0;
     
 }
