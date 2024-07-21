@@ -52,10 +52,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     protected final ImageView x22;
     protected final ImageView o22;
     protected final ImageView action22;
-    protected final Text player1NameText;
-    protected final Text player1WinsText;
-    protected final Text player2NameText;
-    protected final Text player2WinsText;
+    protected final Text playerXXNameText;
+    protected final Text playerXXWinsText;
+    protected final Text playerOONameText;
+    protected final Text playerOOWinsText;
     protected final Text roundNumberText;
     protected final Text modeText;
     protected final Button btnLeave;
@@ -100,10 +100,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         x22 = new ImageView();
         o22 = new ImageView();
         action22 = new ImageView();
-        player1NameText = new Text();
-        player1WinsText = new Text();
-        player2NameText = new Text();
-        player2WinsText = new Text();
+        playerXXNameText = new Text();
+        playerXXWinsText = new Text();
+        playerOONameText = new Text();
+        playerOOWinsText = new Text();
         roundNumberText = new Text();
         modeText = new Text();
         btnLeave = new Button();
@@ -336,44 +336,44 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         action22.setPickOnBounds(true);
         action22.setPreserveRatio(true);
 
-        player1NameText.setFill(javafx.scene.paint.Color.WHITE);
-        player1NameText.setLayoutX(24.0);
-        player1NameText.setLayoutY(125.0);
-        player1NameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        player1NameText.setStrokeWidth(0.0);
-        player1NameText.setText("Player1");
-        player1NameText.setFont(new Font("Agency FB", 100.0));
+        playerXXNameText.setFill(javafx.scene.paint.Color.WHITE);
+        playerXXNameText.setLayoutX(24.0);
+        playerXXNameText.setLayoutY(125.0);
+        playerXXNameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        playerXXNameText.setStrokeWidth(0.0);
+        playerXXNameText.setText("PlayerX");
+        playerXXNameText.setFont(new Font("Agency FB", 100.0));
 
-        player1WinsText.setFill(javafx.scene.paint.Color.WHITE);
-        player1WinsText.setLayoutX(48.0);
-        player1WinsText.setLayoutY(243.0);
-        player1WinsText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        player1WinsText.setStrokeWidth(0.0);
-        player1WinsText.setText("Wins : 5");
-        player1WinsText.setFont(new Font("Agency FB", 70.0));
+        playerXXWinsText.setFill(javafx.scene.paint.Color.WHITE);
+        playerXXWinsText.setLayoutX(48.0);
+        playerXXWinsText.setLayoutY(243.0);
+        playerXXWinsText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        playerXXWinsText.setStrokeWidth(0.0);
+        playerXXWinsText.setText("Wins : 0");
+        playerXXWinsText.setFont(new Font("Agency FB", 70.0));
 
-        player2NameText.setFill(javafx.scene.paint.Color.WHITE);
-        player2NameText.setLayoutX(1235.0);
-        player2NameText.setLayoutY(122.0);
-        player2NameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        player2NameText.setStrokeWidth(0.0);
-        player2NameText.setText("Player2");
-        player2NameText.setFont(new Font("Agency FB", 100.0));
+        playerOONameText.setFill(javafx.scene.paint.Color.WHITE);
+        playerOONameText.setLayoutX(1235.0);
+        playerOONameText.setLayoutY(122.0);
+        playerOONameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        playerOONameText.setStrokeWidth(0.0);
+        playerOONameText.setText("PlayerO");
+        playerOONameText.setFont(new Font("Agency FB", 100.0));
 
-        player2WinsText.setFill(javafx.scene.paint.Color.WHITE);
-        player2WinsText.setLayoutX(1282.0);
-        player2WinsText.setLayoutY(227.0);
-        player2WinsText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        player2WinsText.setStrokeWidth(0.0);
-        player2WinsText.setText("Wins : 5");
-        player2WinsText.setFont(new Font("Agency FB", 70.0));
+        playerOOWinsText.setFill(javafx.scene.paint.Color.WHITE);
+        playerOOWinsText.setLayoutX(1282.0);
+        playerOOWinsText.setLayoutY(227.0);
+        playerOOWinsText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        playerOOWinsText.setStrokeWidth(0.0);
+        playerOOWinsText.setText("Wins : 0");
+        playerOOWinsText.setFont(new Font("Agency FB", 70.0));
 
         roundNumberText.setFill(javafx.scene.paint.Color.WHITE);
         roundNumberText.setLayoutX(625.0);
         roundNumberText.setLayoutY(126.0);
         roundNumberText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         roundNumberText.setStrokeWidth(0.0);
-        roundNumberText.setText("Round : 11");
+        roundNumberText.setText("Round : 1");
         roundNumberText.setFont(new Font("Agency FB", 80.0));
 
         modeText.setFill(javafx.scene.paint.Color.WHITE);
@@ -402,6 +402,8 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         btnRematch.setText("Rematch");
         btnRematch.setFont(new Font("Agency FB Bold", 48.0));
 
+        
+        resetBoardUI();
         getChildren().add(backgroundImage);
         stack00.getChildren().add(x00);
         stack00.getChildren().add(o00);
@@ -439,10 +441,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         stack22.getChildren().add(o22);
         stack22.getChildren().add(action22);
         getChildren().add(stack22);
-        getChildren().add(player1NameText);
-        getChildren().add(player1WinsText);
-        getChildren().add(player2NameText);
-        getChildren().add(player2WinsText);
+        getChildren().add(playerXXNameText);
+        getChildren().add(playerXXWinsText);
+        getChildren().add(playerOONameText);
+        getChildren().add(playerOOWinsText);
         getChildren().add(roundNumberText);
         getChildren().add(modeText);
         getChildren().add(btnLeave);
@@ -627,19 +629,34 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         switch(result)
         {
             case 0:
-                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
-                btnRematch.setDisable(false); 
+                doStuffOnGetResult(0);
                 break;
             case 1:
-                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
-                btnRematch.setDisable(false); 
+                doStuffOnGetResult(1);
                 break;
             case 2:
-                BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
-                btnRematch.setDisable(false); 
+                doStuffOnGetResult(2);
                 break;
         }
     }
+    
+    private void doStuffOnGetResult(int winner)
+    {
+        if(winner == 0)
+        {
+            BoardTwoPlayersController.playerOOWinsTwoPlayersMode++;
+        }else if(winner == 1)
+        {
+            BoardTwoPlayersController.playerXXWinsTwoPlayersMode++;
+        }
+        BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+        
+        BoardTwoPlayersController.roundsTwoPlayersMode++;
+        
+        btnRematch.setDisable(false); 
+    }
+    
+    
     
             
     
@@ -664,6 +681,19 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         o20.setOpacity(0.0);
         o21.setOpacity(0.0);
         o22.setOpacity(0.0);
+        
+        
+        playerXXWinsText
+                .setText("Wins : " + String.valueOf(BoardTwoPlayersController.playerXXWinsTwoPlayersMode));
+        playerOOWinsText
+                .setText("Wins : " + String.valueOf(BoardTwoPlayersController.playerOOWinsTwoPlayersMode));
+        
+        
+        int rounds = BoardTwoPlayersController.roundsTwoPlayersMode;
+        
+        
+        roundNumberText
+                .setText("Round : " + String.valueOf(rounds));
         
         BoardTwoPlayersController.resetTwoPlayersModeGame();
     }

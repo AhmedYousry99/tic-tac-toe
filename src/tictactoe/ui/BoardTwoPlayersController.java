@@ -18,10 +18,17 @@ public class BoardTwoPlayersController  {
 
     
     private static int currentPlayerTwoPlayersMode;
+    static int playerXXWinsTwoPlayersMode,playerOOWinsTwoPlayersMode,roundsTwoPlayersMode;
     private static char[][] simulationBoard;
     static boolean gameInProgressTwoPlayersMode;
     
     static{
+        
+        playerXXWinsTwoPlayersMode = 0;
+        playerOOWinsTwoPlayersMode = 0;
+        roundsTwoPlayersMode = 1;
+        
+        
         gameInProgressTwoPlayersMode = true;
         currentPlayerTwoPlayersMode = 1;
         simulationBoard = new char[3][3];
