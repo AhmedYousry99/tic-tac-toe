@@ -1,5 +1,9 @@
 package tictactoe.ui;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,6 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javax.annotation.Resource;
+import tictactoe.data.MainFileController;
+import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
 
 public class BoardTwoPlayersModeBase extends AnchorPane {
@@ -457,6 +463,14 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             @Override
             public void handle(ActionEvent event) {
                resetBoardUI();
+               
+                MainFileController mf = new MainFileController();
+                try {
+                    mf.writeFileInHardDisk(PlayingMode.TwoPlayersMode,"this is moves");
+                } catch (IOException ex) {
+                    Logger.getLogger(BoardTwoPlayersModeBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               
                btnRematch.setDisable(true);
             }
         });
@@ -468,7 +482,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             @Override
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
+                //System.out.println(getClass());
                 
+                
+   
                 int result = BoardTwoPlayersController.setMove(0, 0);
                 if(result == 0)
                 {
@@ -654,8 +671,6 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         {
             BoardTwoPlayersController.playerXXWinsTwoPlayersMode++;
         }
-        
-        
         BoardTwoPlayersController.roundsTwoPlayersMode++;
         
         btnRematch.setDisable(false); 
