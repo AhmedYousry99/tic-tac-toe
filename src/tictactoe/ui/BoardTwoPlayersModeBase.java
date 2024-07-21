@@ -626,9 +626,11 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     {
         int result = BoardTwoPlayersController.getTwoPlayersModeBoardState();
         
-        switch(result)
+        if(BoardTwoPlayersController.gameInProgressTwoPlayersMode)
         {
-            case 0:
+           switch(result)
+           {
+            case 0 :
                 doStuffOnGetResult(0);
                 break;
             case 1:
@@ -637,11 +639,14 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             case 2:
                 doStuffOnGetResult(2);
                 break;
+            } 
         }
+        
     }
     
     private void doStuffOnGetResult(int winner)
     {
+        BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
         if(winner == 0)
         {
             BoardTwoPlayersController.playerOOWinsTwoPlayersMode++;
@@ -649,7 +654,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         {
             BoardTwoPlayersController.playerXXWinsTwoPlayersMode++;
         }
-        BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+        
         
         BoardTwoPlayersController.roundsTwoPlayersMode++;
         
@@ -683,6 +688,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         o22.setOpacity(0.0);
         
         
+        /*System.out.println(BoardTwoPlayersController.playerXXWinsTwoPlayersMode);
+        System.out.println(BoardTwoPlayersController.playerOOWinsTwoPlayersMode);
+        System.out.println(BoardTwoPlayersController.roundsTwoPlayersMode);*/
+
         playerXXWinsText
                 .setText("Wins : " + String.valueOf(BoardTwoPlayersController.playerXXWinsTwoPlayersMode));
         playerOOWinsText
