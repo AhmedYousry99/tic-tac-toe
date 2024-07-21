@@ -1,4 +1,4 @@
-package tictactoe;
+package tictactoe.ui;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -8,6 +8,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.resources.ResourcesLocation;
 
 public class ModeScreenBase extends StackPane {
 
@@ -35,7 +36,10 @@ public class ModeScreenBase extends StackPane {
         imageView.setFitWidth(920.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
-        imageView.setImage(new Image(getClass().getResource("ui/resources/images/backgrounds/main.jpg").toExternalForm()));
+        
+        imageView.setImage(new Image(
+                ResourcesLocation.class.
+                        getResource("images/backgrounds/main.jpg").toExternalForm()));
 
         StackPane.setAlignment(flowPane, javafx.geometry.Pos.CENTER);
         flowPane.setAlignment(javafx.geometry.Pos.CENTER);
@@ -56,7 +60,7 @@ public class ModeScreenBase extends StackPane {
 
         localButton.setMaxWidth(Double.MAX_VALUE);
         localButton.setMnemonicParsing(false);
-        localButton.getStylesheets().add("/tictactoe/ui/resources/css/application.css");
+        localButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         localButton.setText("Local");
         localButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         localButton.setFont(new Font("Agency FB Bold", 36.0));
@@ -66,7 +70,7 @@ public class ModeScreenBase extends StackPane {
         onlineButton.setLayoutY(331.0);
         onlineButton.setMaxWidth(Double.MAX_VALUE);
         onlineButton.setMnemonicParsing(false);
-        onlineButton.getStylesheets().add("/tictactoe/ui/resources/css/application.css");
+        onlineButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         onlineButton.setText("Online");
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
@@ -76,7 +80,7 @@ public class ModeScreenBase extends StackPane {
         backButton.setLayoutY(385.0);
         backButton.setMaxWidth(Double.MAX_VALUE);
         backButton.setMnemonicParsing(false);
-        backButton.getStylesheets().add("/tictactoe/ui/resources/css/application.css");
+        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         backButton.setText("Back");
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         backButton.setFont(new Font("Agency FB Bold", 36.0));
