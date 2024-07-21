@@ -14,14 +14,48 @@ import javafx.fxml.Initializable;
  *
  * @author Kerolos Raouf
  */
-public class BoardSinglePlayerController implements Initializable {
+public class BoardTwoPlayersController  {
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    
+    private static int twoPlayersCurrentPlayer;
+    private static char[][] simulationBoard;
+    
+    static{
+        twoPlayersCurrentPlayer = 1;
+        simulationBoard = new char[3][3];
+        
+        for(int i = 0 ;i < 3;i++)
+        {
+            for(int j = 0 ;j < 3;j++)
+            {
+                simulationBoard[i][j] = '.';
+            }
+        }
+    }
+    
+    
+    static int setMove(int i ,int j)
+    {
+
+        if(simulationBoard[i][j] == '.')
+        {
+            if(twoPlayersCurrentPlayer == 1)
+            {
+                simulationBoard[i][j] = 'x';
+                twoPlayersCurrentPlayer = 0;
+                return 1;
+                
+            }else
+            {
+                simulationBoard[i][j] = 'o';
+                twoPlayersCurrentPlayer = 1;
+                return 0;
+            }
+        }else
+        {
+            return -1;
+        }
+    }
+
     
 }
