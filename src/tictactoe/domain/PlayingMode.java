@@ -9,6 +9,10 @@ package tictactoe.domain;
  *
  * @author Kerolos Raouf
  */
-public class PlayingMode {
+public enum PlayingMode
+{
+    SingleMode,
+    TwoPlayersMode,
+    OnlineMode
     
 }
