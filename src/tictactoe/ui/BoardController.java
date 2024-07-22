@@ -143,9 +143,13 @@ public class BoardController  {
                 ()->{
                     MainFileController mf = new MainFileController();
             try {
-                mf.writeFileInHardDisk(mode, moves);
+                int xWins = (winnerChar == 'X') ? playerXXWinsTwoPlayersMode-1:playerXXWinsTwoPlayersMode;
+                int oWins = (winnerChar == 'O') ? playerOOWinsTwoPlayersMode-1:playerOOWinsTwoPlayersMode;
+                String temp = String.valueOf(roundsTwoPlayersMode-1) + "," 
+                        + String.valueOf(xWins) + ","
+                        + String.valueOf(oWins) + "," + moves;
+                mf.writeFileInHardDisk(mode, temp);
                 moves = "";
-                
             } catch (IOException ex) {
                 Logger.getLogger(BoardController.class.getName()).log(Level.SEVERE, null, ex);
             }

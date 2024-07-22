@@ -669,10 +669,9 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.gameInProgressTwoPlayersMode = false;
-        char winnerChar = 'X';
+        boardController.showDialogToSaveMatch("TwoPlayersMode",(winner == 1) ? 'X' : 'O');
         if(winner == 0)
         {
-            winnerChar = 'O';
             boardController.playerOOWinsTwoPlayersMode++;
         }else if(winner == 1)
         {
@@ -682,7 +681,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         
         btnRematch.setDisable(false);
         
-        boardController.showDialogToSaveMatch("TwoPlayersMode",winnerChar);
+        
     }
     
     
@@ -711,11 +710,6 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         o20.setOpacity(0.0);
         o21.setOpacity(0.0);
         o22.setOpacity(0.0);
-        
-        
-        /*System.out.println(BoardTwoPlayersController.playerXXWinsTwoPlayersMode);
-        System.out.println(BoardTwoPlayersController.playerOOWinsTwoPlayersMode);
-        System.out.println(BoardTwoPlayersController.roundsTwoPlayersMode);*/
 
         playerXXWinsText
                 .setText("Wins : " + String.valueOf(boardController.playerXXWinsTwoPlayersMode));
