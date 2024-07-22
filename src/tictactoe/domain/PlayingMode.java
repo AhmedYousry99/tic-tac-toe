@@ -5,14 +5,14 @@
  */
 package tictactoe.domain;
 
-import java.io.IOException;
-
 /**
  *
- * @author Shyasuo
+ * @author Kerolos Raouf
  */
-public interface FileController {
-    void writeFileInHardDisk(String mode,String moves) throws IOException;
+public enum PlayingMode
+{
+    SingleMode,
+    TwoPlayersMode,
+    OnlineMode
     
-    String readFileFromHardDisk() throws IOException;
 }
