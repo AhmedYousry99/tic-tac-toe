@@ -8,6 +8,7 @@ package tictactoe.data;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import tictactoe.domain.FileController;
 import tictactoe.domain.PlayingMode;
 
@@ -18,8 +19,10 @@ import tictactoe.domain.PlayingMode;
 public class MainFileController implements FileController{
 
     @Override
-    public void writeFileInHardDisk(PlayingMode mode, String moves) throws IOException {
-        File file = new File("src/tictactoe/data/files/test.txt");
+    public void writeFileInHardDisk(String mode, String moves) throws IOException {
+        
+ 
+        File file = new File("src/tictactoe/data/files/" + prepareName(mode) + ".txt");
         if(file.createNewFile())
         {
             FileOutputStream os = new FileOutputStream(file);
@@ -27,6 +30,13 @@ public class MainFileController implements FileController{
             os.write(data);
             os.close();
         }
+    }
+    
+    private String prepareName(String mode)
+    {
+        Date date = new Date();
+        String dateStr = mode + " " +date.toString().replace(':', '_');
+        return dateStr;
     }
 
     @Override

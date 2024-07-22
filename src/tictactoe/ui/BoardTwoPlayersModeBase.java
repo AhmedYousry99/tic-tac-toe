@@ -466,7 +466,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                
                 MainFileController mf = new MainFileController();
                 try {
-                    mf.writeFileInHardDisk(PlayingMode.TwoPlayersMode,"this is moves");
+                    mf.writeFileInHardDisk("TwoPlayersMode","this is moves");
                 } catch (IOException ex) {
                     Logger.getLogger(BoardTwoPlayersModeBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
