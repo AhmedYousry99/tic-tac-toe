@@ -1,5 +1,6 @@
 package tictactoe.ui;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -8,7 +9,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.CustomDialogWithTextFieldBase;
 
 public class ModeScreenBase extends StackPane {
 
@@ -27,13 +30,15 @@ public class ModeScreenBase extends StackPane {
         onlineButton = new Button();
         backButton = new Button();
 
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
+        //setMinWidth(1500);
+        //setMinHeight(1000);
+        //extra
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
 
+        
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
-        imageView.setFitHeight(612.0);
-        imageView.setFitWidth(920.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
         
@@ -74,6 +79,14 @@ public class ModeScreenBase extends StackPane {
         onlineButton.setText("Online");
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
+        onlineButton.addEventHandler(ActionEvent.ACTION, (e) -> {
+            new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", () -> {
+                System.out.println("pressed ok button");}, () -> {
+                System.out.println("pressed cancel button");});
+
+        });
+                
+                
         FlowPane.setMargin(onlineButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         backButton.setLayoutX(406.0);
@@ -86,9 +99,7 @@ public class ModeScreenBase extends StackPane {
         backButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
         
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
+
 
         getChildren().add(imageView);
         flowPane.getChildren().add(text);

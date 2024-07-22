@@ -1,27 +1,31 @@
 package tictactoe.ui.util;
 
-import java.util.concurrent.Callable;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class CustomDialogBase extends AnchorPane {
+public class CustomDialogWithTextFieldBase extends AnchorPane {
 
     protected final Text text;
-    protected final Button defaultButton;
+    protected final TextField textField1;
+    protected final Button okButton;
     protected final Button cancelButton;
     protected final Stage stage;
+    
 
-    public CustomDialogBase(String message, String defaultButtontext, String cancelButtonText, VoidCallable defaultFunc, VoidCallable cancelFunc) {
+    public CustomDialogWithTextFieldBase(String message, String defaultButtontext, String cancelButtonText, VoidCallable defaultFunc, VoidCallable cancelFunc) {
 
         text = new Text();
-        defaultButton = new Button();
+        textField1 = new TextField();
+        okButton = new Button();
         cancelButton = new Button();
         this.stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -43,29 +47,33 @@ public class CustomDialogBase extends AnchorPane {
         text.setWrappingWidth(331.4700164794922);
         text.setFont(new Font("Agency FB", 24.0));
 
-        defaultButton.setLayoutX(228.0);
-        defaultButton.setLayoutY(184.0);
-        defaultButton.setMnemonicParsing(false);
-        defaultButton.setPrefHeight(25.0);
-        defaultButton.setPrefWidth(125.0);
-        defaultButton.setStyle("-fx-background-color: D38CC4;");
-        defaultButton.setText(defaultButtontext);
-        defaultButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        defaultButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
-        defaultButton.setFont(new Font("Agency FB Bold", 18.0));
-        defaultButton.setDefaultButton(true);
-        defaultButton.addEventHandler(ActionEvent.ACTION, (e) -> {
+        textField1.setLayoutX(43.0);
+        textField1.setLayoutY(113.0);
+        textField1.setPrefWidth(250.0);
+        textField1.setPromptText("ex: 192.168.1.10");
+        textField1.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: rgba(217, 217, 217, 1);");
+        textField1.setFont(new Font("Agency FB Bold", 18.0));
+
+        okButton.setLayoutX(228.0);
+        okButton.setLayoutY(184.0);
+        okButton.setMnemonicParsing(false);
+        okButton.setPrefWidth(125.0);
+        okButton.setStyle("-fx-background-color: D38CC4;");
+        okButton.setText(defaultButtontext);
+        okButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        okButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
+        okButton.setFont(new Font("Agency FB Bold", 18.0));
+        okButton.setDefaultButton(true);
+        okButton.addEventHandler(ActionEvent.ACTION, (e) -> {
             defaultFunc.call();
-            
         });
 
         cancelButton.setLayoutX(22.0);
         cancelButton.setLayoutY(184.0);
         cancelButton.setMnemonicParsing(false);
-        cancelButton.setPrefHeight(25.0);
         cancelButton.setPrefWidth(125.0);
         cancelButton.setStyle("-fx-background-color: D38CC4;");
-        cancelButton.setText("Cancel");
+        cancelButton.setText(cancelButtonText);
         cancelButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         cancelButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
         cancelButton.setFont(new Font("Agency FB Bold", 18.0));
@@ -76,7 +84,8 @@ public class CustomDialogBase extends AnchorPane {
         });
 
         getChildren().add(text);
-        getChildren().add(defaultButton);
+        getChildren().add(textField1);
+        getChildren().add(okButton);
         getChildren().add(cancelButton);
         stage.show();
     }
