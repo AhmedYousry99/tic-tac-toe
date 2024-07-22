@@ -66,8 +66,12 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     protected final Text modeText;
     protected final Button btnLeave;
     protected final Button btnRematch;
+    
+    BoardController boardController;
 
     public BoardTwoPlayersModeBase() {
+        
+        boardController = new BoardController();
 
         backgroundImage = new ImageView();
         stack00 = new StackPane();
@@ -115,17 +119,16 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         btnLeave = new Button();
         btnRematch = new Button();
 
-        BoardTwoPlayersController.resetTwoPlayersModeGame();
+        boardController.resetTwoPlayersModeGame();
         
         setId("AnchorPane");
-        setPrefHeight(1000.0);
-        setPrefWidth(693.0);
 
-        backgroundImage.setFitHeight(1000.0);
-        backgroundImage.setFitWidth(1500.0);
+
         backgroundImage.setPickOnBounds(true);
         backgroundImage.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/board.png").toExternalForm()));
-
+        backgroundImage.fitHeightProperty().bind(this.heightProperty());
+        backgroundImage.fitWidthProperty().bind(this.widthProperty());
+        
         stack00.setLayoutX(464.0);
         stack00.setLayoutY(258.0);
         stack00.setPrefHeight(150.0);
@@ -486,7 +489,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
                 
                 
    
-                int result = BoardTwoPlayersController.setMove(0, 0);
+                int result = boardController.setMove(0, 0);
                 if(result == 0)
                 {
                     o00.setOpacity(1);
@@ -503,7 +506,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(0, 1);
+                int result = boardController.setMove(0, 1);
                 if(result == 0)
                 {
                     o01.setOpacity(1);
@@ -520,7 +523,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(0, 2);
+                int result = boardController.setMove(0, 2);
                 if(result == 0)
                 {
                     o02.setOpacity(1);
@@ -537,7 +540,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(1, 0);
+                int result = boardController.setMove(1, 0);
                 if(result == 0)
                 {
                     o10.setOpacity(1);
@@ -554,7 +557,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(1, 1);
+                int result = boardController.setMove(1, 1);
                 if(result == 0)
                 {
                     o11.setOpacity(1);
@@ -571,7 +574,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(1, 2);
+                int result = boardController.setMove(1, 2);
                 if(result == 0)
                 {
                     o12.setOpacity(1);
@@ -589,7 +592,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(2, 0);
+                int result = boardController.setMove(2, 0);
                 if(result == 0)
                 {
                     o20.setOpacity(1);
@@ -606,7 +609,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(2, 1);
+                int result = boardController.setMove(2, 1);
                 if(result == 0)
                 {
                     o21.setOpacity(1);
@@ -623,7 +626,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(MouseEvent event) {
                 //System.out.println("hiiiiiiii");
                 
-                int result = BoardTwoPlayersController.setMove(2, 2);
+                int result = boardController.setMove(2, 2);
                 if(result == 0)
                 {
                     o22.setOpacity(1);
@@ -641,9 +644,9 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     
     private void actionWhenGetBoardState()
     {
-        int result = BoardTwoPlayersController.getTwoPlayersModeBoardState();
+        int result = boardController.getTwoPlayersModeBoardState();
         
-        if(BoardTwoPlayersController.gameInProgressTwoPlayersMode)
+        if(boardController.gameInProgressTwoPlayersMode)
         {
            switch(result)
            {
@@ -663,15 +666,15 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     
     private void doStuffOnGetResult(int winner)
     {
-        BoardTwoPlayersController.gameInProgressTwoPlayersMode = false;
+        boardController.gameInProgressTwoPlayersMode = false;
         if(winner == 0)
         {
-            BoardTwoPlayersController.playerOOWinsTwoPlayersMode++;
+            boardController.playerOOWinsTwoPlayersMode++;
         }else if(winner == 1)
         {
-            BoardTwoPlayersController.playerXXWinsTwoPlayersMode++;
+            boardController.playerXXWinsTwoPlayersMode++;
         }
-        BoardTwoPlayersController.roundsTwoPlayersMode++;
+        boardController.roundsTwoPlayersMode++;
         
         btnRematch.setDisable(false); 
     }
@@ -708,18 +711,18 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         System.out.println(BoardTwoPlayersController.roundsTwoPlayersMode);*/
 
         playerXXWinsText
-                .setText("Wins : " + String.valueOf(BoardTwoPlayersController.playerXXWinsTwoPlayersMode));
+                .setText("Wins : " + String.valueOf(boardController.playerXXWinsTwoPlayersMode));
         playerOOWinsText
-                .setText("Wins : " + String.valueOf(BoardTwoPlayersController.playerOOWinsTwoPlayersMode));
+                .setText("Wins : " + String.valueOf(boardController.playerOOWinsTwoPlayersMode));
         
         
-        int rounds = BoardTwoPlayersController.roundsTwoPlayersMode;
+        int rounds = boardController.roundsTwoPlayersMode;
         
         
         roundNumberText
                 .setText("Round : " + String.valueOf(rounds));
         
-        BoardTwoPlayersController.resetTwoPlayersModeGame();
+        boardController.resetTwoPlayersModeGame();
     }
     
 }

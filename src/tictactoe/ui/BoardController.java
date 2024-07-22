@@ -14,16 +14,17 @@ import javafx.fxml.Initializable;
  *
  * @author Kerolos Raouf
  */
-public class BoardTwoPlayersController  {
+public class BoardController  {
 
     
-    private static int currentPlayerTwoPlayersMode;
-    static int playerXXWinsTwoPlayersMode,playerOOWinsTwoPlayersMode,roundsTwoPlayersMode;
-    private static char[][] simulationBoard;
-    static boolean gameInProgressTwoPlayersMode;
+    private int currentPlayerTwoPlayersMode;
+    int playerXXWinsTwoPlayersMode,playerOOWinsTwoPlayersMode,roundsTwoPlayersMode;
+    private char[][] simulationBoard;
+    boolean gameInProgressTwoPlayersMode;
     
-    static{
-        
+    
+    BoardController()
+    {
         playerXXWinsTwoPlayersMode = 0;
         playerOOWinsTwoPlayersMode = 0;
         roundsTwoPlayersMode = 1;
@@ -41,9 +42,10 @@ public class BoardTwoPlayersController  {
             }
         }
     }
+
     
     
-    static int setMove(int i ,int j)
+    int setMove(int i ,int j)
     {
 
         if(simulationBoard[i][j] == '.' && gameInProgressTwoPlayersMode)
@@ -66,7 +68,7 @@ public class BoardTwoPlayersController  {
         }
     }
     
-    static void resetTwoPlayersModeGame()
+    void resetTwoPlayersModeGame()
     {
         currentPlayerTwoPlayersMode = 1;
         gameInProgressTwoPlayersMode = true;
@@ -79,7 +81,7 @@ public class BoardTwoPlayersController  {
         }
     }
     
-    static int getTwoPlayersModeBoardState()
+    int getTwoPlayersModeBoardState()
     {
         int dots = 0;
         int x=0,o=0;
