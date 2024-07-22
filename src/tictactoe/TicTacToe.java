@@ -22,8 +22,10 @@ public class TicTacToe extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = new ModeScreenBase();
         
+
         Scene scene = new Scene(root, 1500, 1000);
         stage.setResizable(false);
+
         stage.setScene(scene);
         stage.show();
     }
