@@ -10,7 +10,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="1000.0" fitWidth="1500.0">
@@ -28,7 +27,7 @@
             <Font name="Agency FB" size="70.0" />
          </font>
       </Text>
-      <TextField fx:id="usernameTxtField" layoutX="597.0" layoutY="355.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
+      <TextField fx:id="usernameTxtField" editable="false" layoutX="597.0" layoutY="355.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
          <padding>
             <Insets left="10.0" />
          </padding>
@@ -48,7 +47,7 @@
             <Font name="Agency FB" size="28.0" />
          </font>
       </Hyperlink>
-      <TextField fx:id="passwordTxtField" layoutX="597.0" layoutY="569.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
+      <TextField fx:id="passwordTxtField" editable="false" layoutX="597.0" layoutY="569.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
          <padding>
             <Insets left="10.0" />
          </padding>

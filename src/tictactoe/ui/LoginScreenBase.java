@@ -1,12 +1,16 @@
 package tictactoe.ui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
@@ -20,7 +24,7 @@ public  class LoginScreenBase extends AnchorPane {
     protected final Text text1;
     protected final Button loginButton;
     protected final Hyperlink hyperlink;
-    protected final TextField passwordTxtField;
+    protected final PasswordField passwordTxtField;
 
     public LoginScreenBase() {
 
@@ -31,7 +35,7 @@ public  class LoginScreenBase extends AnchorPane {
         text1 = new Text();
         loginButton = new Button();
         hyperlink = new Hyperlink();
-        passwordTxtField = new TextField();
+        passwordTxtField = new PasswordField();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -68,6 +72,16 @@ public  class LoginScreenBase extends AnchorPane {
         usernameTxtField.setPrefWidth(318.0);
         usernameTxtField.setPromptText("Write here...");
         usernameTxtField.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
+        
+          
+        
+        usernameTxtField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               
+                usernameTxtField.getText();
+            }
+        });
 
         text1.setFill(javafx.scene.paint.Color.valueOf("#f2f0f0"));
         text1.setLayoutX(641.0);
@@ -98,8 +112,16 @@ public  class LoginScreenBase extends AnchorPane {
         passwordTxtField.setLayoutY(569.0);
         passwordTxtField.setPrefHeight(49.0);
         passwordTxtField.setPrefWidth(318.0);
-        passwordTxtField.setPromptText("Write here...");
+        passwordTxtField.setPromptText("Enter password...");
         passwordTxtField.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
+        
+       
+        passwordTxtField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               passwordTxtField.getText();
+            }
+        });
 
         getChildren().add(imageView);
         getChildren().add(text);

@@ -3,6 +3,7 @@ package tictactoe.ui;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,9 +19,9 @@ public class SignupScreenBase extends AnchorPane {
     protected final Text text0;
     protected final TextField usernametxtField;
     protected final Text text1;
-    protected final TextField passwordTxtField;
+    protected final PasswordField passwordTxtField;
     protected final Text text2;
-    protected final TextField confirmPassTxtField;
+    protected final PasswordField confirmPassTxtField;
     protected final Button signupButton;
     protected final Hyperlink loginRedirect;
 
@@ -31,9 +32,9 @@ public class SignupScreenBase extends AnchorPane {
         text0 = new Text();
         usernametxtField = new TextField();
         text1 = new Text();
-        passwordTxtField = new TextField();
+        passwordTxtField = new PasswordField();
         text2 = new Text();
-        confirmPassTxtField = new TextField();
+        confirmPassTxtField = new PasswordField();
         signupButton = new Button();
         loginRedirect = new Hyperlink();
 
