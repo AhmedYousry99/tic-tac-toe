@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import tictactoe.data.MainFileController;
 import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.CustomDialogBase;
 
 public class BoardTwoPlayersModeBase extends AnchorPane {
 
@@ -68,6 +69,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     protected final Button btnRematch;
     
     BoardController boardController;
+    
 
     public BoardTwoPlayersModeBase() {
         
@@ -467,12 +469,12 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             public void handle(ActionEvent event) {
                resetBoardUI();
                
-                MainFileController mf = new MainFileController();
+                /*MainFileController mf = new MainFileController();
                 try {
                     mf.writeFileInHardDisk("TwoPlayersMode","this is moves");
                 } catch (IOException ex) {
                     Logger.getLogger(BoardTwoPlayersModeBase.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
                
                btnRematch.setDisable(true);
             }
@@ -667,8 +669,10 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.gameInProgressTwoPlayersMode = false;
+        char winnerChar = 'X';
         if(winner == 0)
         {
+            winnerChar = 'O';
             boardController.playerOOWinsTwoPlayersMode++;
         }else if(winner == 1)
         {
@@ -676,8 +680,11 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         }
         boardController.roundsTwoPlayersMode++;
         
-        btnRematch.setDisable(false); 
+        btnRematch.setDisable(false);
+        
+        boardController.showDialogToSaveMatch("TwoPlayersMode",winnerChar);
     }
+    
     
     
     

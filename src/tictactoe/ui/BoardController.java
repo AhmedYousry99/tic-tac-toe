@@ -5,9 +5,14 @@
  */
 package tictactoe.ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.Initializable;
+import tictactoe.data.MainFileController;
+import tictactoe.ui.util.CustomDialogBase;
 
 /**
  * FXML Controller class
@@ -21,10 +26,12 @@ public class BoardController  {
     int playerXXWinsTwoPlayersMode,playerOOWinsTwoPlayersMode,roundsTwoPlayersMode;
     private char[][] simulationBoard;
     boolean gameInProgressTwoPlayersMode;
+    private String moves;
     
     
     BoardController()
     {
+        moves = "";
         playerXXWinsTwoPlayersMode = 0;
         playerOOWinsTwoPlayersMode = 0;
         roundsTwoPlayersMode = 1;
@@ -48,6 +55,10 @@ public class BoardController  {
     int setMove(int i ,int j)
     {
 
+        moves += String.valueOf(i);
+        moves += String.valueOf(j);
+        moves += ',';
+        
         if(simulationBoard[i][j] == '.' && gameInProgressTwoPlayersMode)
         {
             if(currentPlayerTwoPlayersMode == 1)
@@ -119,6 +130,27 @@ public class BoardController  {
         if(dots == 0)return 2;
         
          return -1;
+    }
+    
+    void showDialogToSaveMatch(String mode ,char winnerChar)
+    {
+        
+        
+        CustomDialogBase dialog = new CustomDialogBase(
+                winnerChar + "! is the winner. \n Do you want to save the match.",
+                "Save",
+                "Cancel", 
+                ()->{
+                    MainFileController mf = new MainFileController();
+            try {
+                mf.writeFileInHardDisk(mode, moves);
+                moves = "";
+                
+            } catch (IOException ex) {
+                Logger.getLogger(BoardController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                }, 
+                ()->{});
     }
 
     
