@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
-import tictactoe.ui.BoardTwoPlayersModeBase;
 import tictactoe.ui.ModeScreenBase;
 
 /**
@@ -21,7 +20,7 @@ public class TicTacToe extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new BoardTwoPlayersModeBase();
+        Parent root = new ModeScreenBase();
         
         Scene scene = new Scene(root, 1500, 1000);
         stage.setResizable(false);

@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author Shyasuo
  */
 public interface FileController {
-    void writeFileInHardDisk(String mode,String moves) throws IOException;
+    void writeFileInHardDisk(String moves) throws IOException;
     
     String readFileFromHardDisk() throws IOException;
 }
