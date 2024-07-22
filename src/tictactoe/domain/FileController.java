@@ -5,6 +5,7 @@
  */
 package tictactoe.domain;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -12,7 +13,9 @@ import java.io.IOException;
  * @author Shyasuo
  */
 public interface FileController {
-    void writeFileInHardDisk(String mode,String moves) throws IOException;
+    void writeFileInDirectory(String mode,String moves) throws IOException;
     
-    String readFileFromHardDisk() throws IOException;
+    String readFile(File file) throws IOException;
+    
+    void getfilesFromDirectory() throws IOException;
 }

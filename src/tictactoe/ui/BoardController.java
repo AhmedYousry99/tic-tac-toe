@@ -54,7 +54,7 @@ public class BoardController  {
     
     int setMove(int i ,int j)
     {
-
+        
         moves += String.valueOf(i);
         moves += String.valueOf(j);
         moves += ',';
@@ -148,7 +148,7 @@ public class BoardController  {
                 String temp = String.valueOf(roundsTwoPlayersMode-1) + "," 
                         + String.valueOf(xWins) + ","
                         + String.valueOf(oWins) + "," + moves;
-                mf.writeFileInHardDisk(mode, temp);
+                mf.writeFileInDirectory(mode, temp);
                 moves = "";
             } catch (IOException ex) {
                 Logger.getLogger(BoardController.class.getName()).log(Level.SEVERE, null, ex);
