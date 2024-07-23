@@ -392,9 +392,30 @@ public class GamePlayBoard extends AnchorPane {
         modeText.setLayoutX(480.0);
         modeText.setLayoutY(963.0);
         modeText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        modeText.setStrokeWidth(0.0);
-        modeText.setText("Two Players Mode");
+        modeText.setStrokeWidth(0.0);   
         modeText.setFont(new Font("Agency FB", 96.0));
+        
+        
+        if(customController instanceof SinglePlayerModeController)
+        {
+            modeText.setLayoutX(400.0);
+            modeText.setFont(new Font("Agency FB", 76.0));
+            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
+            {
+                case EASY:
+                    modeText.setText("Single Palyer Mode (EASY)");
+                    break;
+                case INTERMEDIATE:
+                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
+                    break;
+                case DIFFICULT:
+                    modeText.setText("Single Palyer Mode (DIFFICULT)");
+                    break;
+            }
+        }else if(customController instanceof BoardController)
+        {
+             modeText.setText("Two Players Mode");
+        }
 
         btnLeave.setLayoutX(23.0);
         btnLeave.setLayoutY(887.0);
@@ -537,7 +558,7 @@ public class GamePlayBoard extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.isGameInProgress = false;
-        boardController.showDialogToSaveMatch("TwoPlayersMode",(winner == 1) ? 'X' : 'O');
+        boardController.showDialogToSaveMatch("TwoPlayersMode",winner);
         if(winner == 0)
         {
             boardController.playerOOWins++;
