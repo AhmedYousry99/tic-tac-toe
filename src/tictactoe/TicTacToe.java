@@ -13,8 +13,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.GamePlayBoard;
+import tictactoe.ui.LoginScreenBase;
 import tictactoe.ui.StartScreenFXMLBase;
 import tictactoe.ui.util.StaticNames;
+
 
 /**
  *
@@ -26,11 +28,12 @@ public class TicTacToe extends Application {
     public static Stack<Parent> roots;
     
     @Override
+
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+
         
         Parent root = new StartScreenFXMLBase();
-        
         primaryStage.getIcons().add(new Image(ResourcesLocation.class.
                         getResource("images/icons/xo_icon.png").toExternalForm()));
 
