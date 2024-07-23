@@ -10,10 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.SignupScreenController;
 
 public  class LoginScreenBase extends AnchorPane {
 
@@ -107,6 +107,13 @@ public  class LoginScreenBase extends AnchorPane {
         hyperlink.setText("Don't have an account? Signup!");
         hyperlink.setTextFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
         hyperlink.setFont(new Font("Agency FB", 28.0));
+        
+        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            SignupScreenController.gotoLoginScreenBase(event);
+            }
+        });
 
         passwordTxtField.setLayoutX(597.0);
         passwordTxtField.setLayoutY(569.0);

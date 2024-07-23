@@ -1,5 +1,8 @@
 package tictactoe.ui;
 
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -7,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -121,6 +125,12 @@ public class SignupScreenBase extends AnchorPane {
         loginRedirect.setText("Have an account? Login!");
         loginRedirect.setTextFill(javafx.scene.paint.Color.valueOf("#fcfcfc"));
         loginRedirect.setFont(new Font("Agency FB", 30.0));
+        loginRedirect.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                LoginScreenController.gotoLoginScreenBase(event);
+            }
+        });
 
         getChildren().add(imageView);
         getChildren().add(text);

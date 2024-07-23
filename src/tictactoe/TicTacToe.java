@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import tictactoe.ui.LoginScreenBase;
 import tictactoe.ui.ModeScreenBase;
+import tictactoe.ui.SignupScreenBase;
 
 /**
  *
@@ -21,7 +22,7 @@ public class TicTacToe extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new LoginScreenBase();
+        Parent root = new SignupScreenBase();
         
 
         Scene scene = new Scene(root, 1500, 1000);
