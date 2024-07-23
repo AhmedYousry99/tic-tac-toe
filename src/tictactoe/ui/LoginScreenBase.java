@@ -1,5 +1,7 @@
 package tictactoe.ui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -11,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.ScreenController;
 
 public class LoginScreenBase extends AnchorPane {
 
@@ -96,6 +99,10 @@ public class LoginScreenBase extends AnchorPane {
         loginButton.setText("Login");
         loginButton.setTextFill(javafx.scene.paint.Color.valueOf("#f2efef"));
         loginButton.setFont(new Font("Agency FB Bold", 36.0));
+        
+        hyperlink.setOnAction((event) -> {
+            ScreenController.pushScreen(new SignupScreenBase(), this);
+        });
 
         hyperlink.setLayoutX(628.0);
         hyperlink.setLayoutY(831.0);
@@ -119,6 +126,9 @@ public class LoginScreenBase extends AnchorPane {
         backButton.setText("Back");
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#f2efef"));
         backButton.setFont(new Font("Agency FB Bold", 36.0));
+        backButton.setOnAction((event) -> {
+            ScreenController.popScreen();
+        });
 
         getChildren().add(imageView);
         getChildren().add(text);

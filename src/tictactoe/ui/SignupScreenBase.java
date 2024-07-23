@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.ScreenController;
 
 public class SignupScreenBase extends AnchorPane {
 
@@ -95,6 +96,9 @@ public class SignupScreenBase extends AnchorPane {
         loginRedirect.setText("Have an account? Login!");
         loginRedirect.setTextFill(javafx.scene.paint.Color.valueOf("#fcfcfc"));
         loginRedirect.setFont(new Font("Agency FB", 30.0));
+        loginRedirect.setOnAction((event) -> {
+            ScreenController.popScreen();
+        });
 
         text1.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
         text1.setLayoutX(707.0);
