@@ -1,8 +1,5 @@
 package tictactoe.ui;
 
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -10,7 +7,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -22,12 +18,12 @@ public class SignupScreenBase extends AnchorPane {
     protected final Text text;
     protected final Text text0;
     protected final TextField usernametxtField;
-    protected final Text text1;
-    protected final PasswordField passwordTxtField;
-    protected final Text text2;
-    protected final PasswordField confirmPassTxtField;
     protected final Button signupButton;
     protected final Hyperlink loginRedirect;
+    protected final Text text1;
+    protected final Text text2;
+    protected final PasswordField passwordField;
+    protected final PasswordField confirmField;
 
     public SignupScreenBase() {
 
@@ -35,12 +31,12 @@ public class SignupScreenBase extends AnchorPane {
         text = new Text();
         text0 = new Text();
         usernametxtField = new TextField();
-        text1 = new Text();
-        passwordTxtField = new PasswordField();
-        text2 = new Text();
-        confirmPassTxtField = new PasswordField();
         signupButton = new Button();
         loginRedirect = new Hyperlink();
+        text1 = new Text();
+        text2 = new Text();
+        passwordField = new PasswordField();
+        confirmField = new PasswordField();
 
         setId("AnchorPane");
         setMaxHeight(USE_PREF_SIZE);
@@ -55,93 +51,94 @@ public class SignupScreenBase extends AnchorPane {
         imageView.setFitWidth(1500.0);
         imageView.setLayoutX(-4.0);
         imageView.setLayoutY(-1.0);
-        imageView.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/main.jpg").toExternalForm()));
+        imageView.setImage(new Image(
+                ResourcesLocation.class.
+                        getResource("images/backgrounds/main.jpg").toExternalForm()));
 
         text.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
-        text.setLayoutX(676.0);
-        text.setLayoutY(112.0);
+        text.setLayoutX(688.0);
+        text.setLayoutY(159.0);
         text.setStroke(javafx.scene.paint.Color.valueOf("#1b1919"));
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        text.setText("Signup");
-        text.setFont(new Font("Agency FB", 70.0));
+        text.setStrokeWidth(0.0);
+        text.setText("SIGNUP");
+        text.setFont(new Font("Agency FB Bold", 60.0));
 
         text0.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
-        text0.setLayoutX(647.0);
-        text0.setLayoutY(253.0);
+        text0.setLayoutX(705.0);
+        text0.setLayoutY(306.0);
         text0.setStroke(javafx.scene.paint.Color.valueOf("#171717"));
         text0.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        text0.setStrokeWidth(0.0);
         text0.setText("Username");
-        text0.setFont(new Font("Agency FB", 70.0));
+        text0.setFont(new Font("Agency FB Bold", 40.0));
 
-        usernametxtField.setLayoutX(585.0);
-        usernametxtField.setLayoutY(306.0);
+        usernametxtField.setLayoutX(608.0);
+        usernametxtField.setLayoutY(331.0);
         usernametxtField.setPrefHeight(44.0);
         usernametxtField.setPrefWidth(348.0);
-        usernametxtField.setPromptText("Write here...");
+        usernametxtField.setPromptText("Enter username...");
         usernametxtField.setOpaqueInsets(new Insets(0.0, 0.0, 0.0, 10.0));
 
-        text1.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
-        text1.setLayoutX(637.0);
-        text1.setLayoutY(433.0);
-        text1.setStroke(javafx.scene.paint.Color.valueOf("#171717"));
-        text1.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        text1.setText("Password");
-        text1.setFont(new Font("Agency FB", 70.0));
-
-        passwordTxtField.setLayoutX(592.0);
-        passwordTxtField.setLayoutY(456.0);
-        passwordTxtField.setPrefHeight(44.0);
-        passwordTxtField.setPrefWidth(348.0);
-        passwordTxtField.setPromptText("Write here...");
-        passwordTxtField.setOpaqueInsets(new Insets(0.0, 0.0, 0.0, 10.0));
-
-        text2.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
-        text2.setLayoutX(573.0);
-        text2.setLayoutY(601.0);
-        text2.setStroke(javafx.scene.paint.Color.valueOf("#171717"));
-        text2.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        text2.setText("Confirm password");
-        text2.setFont(new Font("Agency FB", 70.0));
-
-        confirmPassTxtField.setLayoutX(592.0);
-        confirmPassTxtField.setLayoutY(623.0);
-        confirmPassTxtField.setPrefHeight(44.0);
-        confirmPassTxtField.setPrefWidth(348.0);
-        confirmPassTxtField.setPromptText("Write here...");
-        confirmPassTxtField.setOpaqueInsets(new Insets(0.0, 0.0, 0.0, 10.0));
-
-        signupButton.setLayoutX(686.0);
-        signupButton.setLayoutY(742.0);
+        signupButton.setLayoutX(698.0);
+        signupButton.setLayoutY(778.0);
         signupButton.setMnemonicParsing(false);
         signupButton.setPrefHeight(49.0);
-        signupButton.setPrefWidth(160.0);
+        signupButton.setPrefWidth(152.0);
         signupButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         signupButton.setText("Signup");
         signupButton.setTextFill(javafx.scene.paint.Color.WHITE);
-        signupButton.setFont(new Font("Agency FB", 30.0));
+        signupButton.setFont(new Font("Agency FB Bold", 36.0));
 
-        loginRedirect.setLayoutX(643.0);
-        loginRedirect.setLayoutY(821.0);
+        loginRedirect.setLayoutX(651.0);
+        loginRedirect.setLayoutY(846.0);
         loginRedirect.setText("Have an account? Login!");
         loginRedirect.setTextFill(javafx.scene.paint.Color.valueOf("#fcfcfc"));
         loginRedirect.setFont(new Font("Agency FB", 30.0));
-        loginRedirect.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                LoginScreenController.gotoLoginScreenBase(event);
-            }
-        });
+
+        text1.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
+        text1.setLayoutX(707.0);
+        text1.setLayoutY(461.0);
+        text1.setStroke(javafx.scene.paint.Color.valueOf("#171717"));
+        text1.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        text1.setStrokeWidth(0.0);
+        text1.setText("Password");
+        text1.setFont(new Font("Agency FB Bold", 40.0));
+
+        text2.setFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
+        text2.setLayoutX(657.0);
+        text2.setLayoutY(614.0);
+        text2.setStroke(javafx.scene.paint.Color.valueOf("#171717"));
+        text2.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        text2.setStrokeWidth(0.0);
+        text2.setText("Confirm password");
+        text2.setFont(new Font("Agency FB Bold", 40.0));
+
+        passwordField.setLayoutX(608.0);
+        passwordField.setLayoutY(478.0);
+        passwordField.setPrefHeight(44.0);
+        passwordField.setPrefWidth(348.0);
+        passwordField.setPromptText("Enter password...");
+
+        confirmField.setLayoutX(608.0);
+        confirmField.setLayoutY(638.0);
+        confirmField.setPrefHeight(44.0);
+        confirmField.setPrefWidth(348.0);
+        confirmField.setPromptText("Enter password...");
 
         getChildren().add(imageView);
         getChildren().add(text);
         getChildren().add(text0);
         getChildren().add(usernametxtField);
-        getChildren().add(text1);
-        getChildren().add(passwordTxtField);
-        getChildren().add(text2);
-        getChildren().add(confirmPassTxtField);
         getChildren().add(signupButton);
         getChildren().add(loginRedirect);
+        getChildren().add(text1);
+        getChildren().add(text2);
+        getChildren().add(passwordField);
+        getChildren().add(confirmField);
 
     }
+
+ 
+
 }
