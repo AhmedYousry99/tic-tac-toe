@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import tictactoe.data.MainFileController;
 import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.CustomDialogBase;
 
 public class BoardTwoPlayersModeBase extends AnchorPane {
 
@@ -68,10 +69,11 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     protected final Button btnRematch;
     
     BoardController boardController;
+    
 
-    public BoardTwoPlayersModeBase() {
+    public BoardTwoPlayersModeBase(BoardController customController) {
         
-        boardController = new BoardController();
+        boardController = customController;
 
         backgroundImage = new ImageView();
         stack00 = new StackPane();
@@ -119,7 +121,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
         btnLeave = new Button();
         btnRematch = new Button();
 
-        boardController.resetTwoPlayersModeGame();
+        boardController.resetBoard();
         
         setId("AnchorPane");
 
@@ -466,187 +468,47 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
             @Override
             public void handle(ActionEvent event) {
                resetBoardUI();
-               
-                MainFileController mf = new MainFileController();
-                try {
-                    mf.writeFileInHardDisk("TwoPlayersMode","this is moves");
-                } catch (IOException ex) {
-                    Logger.getLogger(BoardTwoPlayersModeBase.class.getName()).log(Level.SEVERE, null, ex);
-                }
-               
+            
                btnRematch.setDisable(true);
             }
         });
-        //logic
         
         
+        //logic     
+        stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
-        stack00.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                //System.out.println(getClass());
-                
-                
-   
-                int result = boardController.setMove(0, 0);
-                if(result == 0)
-                {
-                    o00.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x00.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
         
-        stack01.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(0, 1);
-                if(result == 0)
-                {
-                    o01.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x01.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack02.setOnMouseClicked((event)->{ButtonAction(0, 2);});
         
-        stack02.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(0, 2);
-                if(result == 0)
-                {
-                    o02.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x02.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack10.setOnMouseClicked((event)->{ButtonAction(1, 0);});
         
-        stack10.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(1, 0);
-                if(result == 0)
-                {
-                    o10.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x10.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack11.setOnMouseClicked((event)->{ButtonAction(1, 1);});
         
-        stack11.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(1, 1);
-                if(result == 0)
-                {
-                    o11.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x11.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack12.setOnMouseClicked((event)->{ButtonAction(1, 2);});
+     
+        stack20.setOnMouseClicked((event)->{ButtonAction(2, 0);});
         
-        stack12.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(1, 2);
-                if(result == 0)
-                {
-                    o12.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x12.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
-
+        stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
         
-        stack20.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(2, 0);
-                if(result == 0)
-                {
-                    o20.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x20.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
-        
-        stack21.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(2, 1);
-                if(result == 0)
-                {
-                    o21.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x21.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
-        
-        stack22.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("hiiiiiiii");
-                
-                int result = boardController.setMove(2, 2);
-                if(result == 0)
-                {
-                    o22.setOpacity(1);
-                }else if(result == 1)
-                {
-                    x22.setOpacity(1);
-                }
-                actionWhenGetBoardState();
-            }
-        });
+        stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
     
 
+    }
+    
+    void ButtonAction(int i,int j)
+    {
+        boardController.setMove(i, j);
+        resetBoardBaseOnSimulationBoard();
+        actionWhenGetBoardState();
     }
     
     
     private void actionWhenGetBoardState()
     {
-        int result = boardController.getTwoPlayersModeBoardState();
+        int result = boardController.getBoardState();
         
-        if(boardController.gameInProgressTwoPlayersMode)
+        if(boardController.isGameInProgress)
         {
            switch(result)
            {
@@ -666,18 +528,22 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     
     private void doStuffOnGetResult(int winner)
     {
-        boardController.gameInProgressTwoPlayersMode = false;
+        boardController.isGameInProgress = false;
+        boardController.showDialogToSaveMatch("TwoPlayersMode",(winner == 1) ? 'X' : 'O');
         if(winner == 0)
         {
-            boardController.playerOOWinsTwoPlayersMode++;
+            boardController.playerOOWins++;
         }else if(winner == 1)
         {
-            boardController.playerXXWinsTwoPlayersMode++;
+            boardController.playerXXWins++;
         }
-        boardController.roundsTwoPlayersMode++;
+        boardController.roundsNumber++;
         
-        btnRematch.setDisable(false); 
+        btnRematch.setDisable(false);
+        
+        
     }
+    
     
     
     
@@ -685,44 +551,70 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     
     private void resetBoardUI()
     {
-        x00.setOpacity(0.0);
-        x01.setOpacity(0.0);
-        x02.setOpacity(0.0);
-        x10.setOpacity(0.0);
-        x11.setOpacity(0.0);
-        x12.setOpacity(0.0);
-        x20.setOpacity(0.0);
-        x21.setOpacity(0.0);
-        x22.setOpacity(0.0);
-        
-        o00.setOpacity(0.0);
-        o01.setOpacity(0.0);
-        o02.setOpacity(0.0);
-        o10.setOpacity(0.0);
-        o11.setOpacity(0.0);
-        o12.setOpacity(0.0);
-        o20.setOpacity(0.0);
-        o21.setOpacity(0.0);
-        o22.setOpacity(0.0);
-        
-        
-        /*System.out.println(BoardTwoPlayersController.playerXXWinsTwoPlayersMode);
-        System.out.println(BoardTwoPlayersController.playerOOWinsTwoPlayersMode);
-        System.out.println(BoardTwoPlayersController.roundsTwoPlayersMode);*/
-
         playerXXWinsText
-                .setText("Wins : " + String.valueOf(boardController.playerXXWinsTwoPlayersMode));
+                .setText("Wins : " + String.valueOf(boardController.playerXXWins));
         playerOOWinsText
-                .setText("Wins : " + String.valueOf(boardController.playerOOWinsTwoPlayersMode));
-        
-        
-        int rounds = boardController.roundsTwoPlayersMode;
+                .setText("Wins : " + String.valueOf(boardController.playerOOWins));
+          
+        int rounds = boardController.roundsNumber;
         
         
         roundNumberText
                 .setText("Round : " + String.valueOf(rounds));
         
-        boardController.resetTwoPlayersModeGame();
+        boardController.resetBoard();
+        resetBoardBaseOnSimulationBoard();
+    }
+    
+    private void resetBoardBaseOnSimulationBoard()
+    {
+        char[][] simulationBoard = boardController.getSimulationBoard();
+        for(int i = 0;i < 3;i++)
+        {
+            for(int j = 0;j < 3;j++)
+            {
+                setOpacityBasedOnIndex(simulationBoard[i][j], i, j, 1);
+            }
+        }
+        
+    }
+    
+    private void setOpacityBasedOnIndex(char symbol,int i,int j,double opacity)
+    {
+        
+        /// set if X
+        if(i == 0 && j == 0 && symbol == 'x'){x00.setOpacity(opacity);o00.setOpacity(0);}
+        if(i == 0 && j == 1 && symbol == 'x'){x01.setOpacity(opacity);o01.setOpacity(0);}
+        if(i == 0 && j == 2 && symbol == 'x'){x02.setOpacity(opacity);o02.setOpacity(0);}
+        if(i == 1 && j == 0 && symbol == 'x'){x10.setOpacity(opacity);o10.setOpacity(0);}
+        if(i == 1 && j == 1 && symbol == 'x'){x11.setOpacity(opacity);o11.setOpacity(0);}
+        if(i == 1 && j == 2 && symbol == 'x'){x12.setOpacity(opacity);o12.setOpacity(0);}
+        if(i == 2 && j == 0 && symbol == 'x'){x20.setOpacity(opacity);o20.setOpacity(0);}
+        if(i == 2 && j == 1 && symbol == 'x'){x21.setOpacity(opacity);o21.setOpacity(0);}
+        if(i == 2 && j == 2 && symbol == 'x'){x22.setOpacity(opacity);o22.setOpacity(0);}
+        
+        /// set if O
+        if(i == 0 && j == 0 && symbol == 'o'){x00.setOpacity(0);o00.setOpacity(opacity);}
+        if(i == 0 && j == 1 && symbol == 'o'){x01.setOpacity(0);o01.setOpacity(opacity);}
+        if(i == 0 && j == 2 && symbol == 'o'){x02.setOpacity(0);o02.setOpacity(opacity);}
+        if(i == 1 && j == 0 && symbol == 'o'){x10.setOpacity(0);o10.setOpacity(opacity);}
+        if(i == 1 && j == 1 && symbol == 'o'){x11.setOpacity(0);o11.setOpacity(opacity);}
+        if(i == 1 && j == 2 && symbol == 'o'){x12.setOpacity(0);o12.setOpacity(opacity);}
+        if(i == 2 && j == 0 && symbol == 'o'){x20.setOpacity(0);o20.setOpacity(opacity);}
+        if(i == 2 && j == 1 && symbol == 'o'){x21.setOpacity(0);o21.setOpacity(opacity);}
+        if(i == 2 && j == 2 && symbol == 'o'){x22.setOpacity(0);o22.setOpacity(opacity);}
+        
+        /// set if Dot
+        if(i == 0 && j == 0 && symbol == '.'){x00.setOpacity(0);o00.setOpacity(0);}
+        if(i == 0 && j == 1 && symbol == '.'){x01.setOpacity(0);o01.setOpacity(0);}
+        if(i == 0 && j == 2 && symbol == '.'){x02.setOpacity(0);o02.setOpacity(0);}
+        if(i == 1 && j == 0 && symbol == '.'){x10.setOpacity(0);o10.setOpacity(0);}
+        if(i == 1 && j == 1 && symbol == '.'){x11.setOpacity(0);o11.setOpacity(0);}
+        if(i == 1 && j == 2 && symbol == '.'){x12.setOpacity(0);o12.setOpacity(0);}
+        if(i == 2 && j == 0 && symbol == '.'){x20.setOpacity(0);o20.setOpacity(0);}
+        if(i == 2 && j == 1 && symbol == '.'){x21.setOpacity(0);o21.setOpacity(0);}
+        if(i == 2 && j == 2 && symbol == '.'){x22.setOpacity(0);o22.setOpacity(0);}
+           
     }
     
 }
