@@ -5,14 +5,17 @@
  */
 package tictactoe;
 
+import java.util.Stack;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import tictactoe.ui.LoginScreenBase;
-import tictactoe.ui.ModeScreenBase;
-import tictactoe.ui.SignupScreenBase;
+import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.GamePlayBoard;
+import tictactoe.ui.StartScreenFXMLBase;
+import tictactoe.ui.util.StaticNames;
+
 
 /**
  *
@@ -20,16 +23,27 @@ import tictactoe.ui.SignupScreenBase;
  */
 public class TicTacToe extends Application {
     
+    public static Stage primaryStage;
+    public static Stack<Parent> roots;
+    
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = new SignupScreenBase();
+
+    public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+
         
+        Parent root = new StartScreenFXMLBase();
+        
+        primaryStage.getIcons().add(new Image(ResourcesLocation.class.
+                        getResource("images/icons/xo_icon.png").toExternalForm()));
 
         Scene scene = new Scene(root, 1500, 1000);
-        stage.setResizable(false);
-
-        stage.setScene(scene);
-        stage.show();
+        roots = new Stack();
+        
+        primaryStage.setResizable(false);
+        primaryStage.setTitle(StaticNames.TIC_TAC_TOE);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     /**
