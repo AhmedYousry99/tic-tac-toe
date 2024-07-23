@@ -1,5 +1,6 @@
 package tictactoe.ui;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -8,9 +9,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.ui.util.ScreenController;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.CustomDialogWithTextFieldBase;
 
-public class ModeScreenBase extends StackPane {
+public class ConnectionModeScreenBase extends StackPane {
 
     protected final ImageView imageView;
     protected final FlowPane flowPane;
@@ -19,7 +22,7 @@ public class ModeScreenBase extends StackPane {
     protected final Button onlineButton;
     protected final Button backButton;
 
-    public ModeScreenBase() {
+    public ConnectionModeScreenBase() {
         imageView = new ImageView();
         flowPane = new FlowPane();
         text = new Text();
@@ -27,13 +30,15 @@ public class ModeScreenBase extends StackPane {
         onlineButton = new Button();
         backButton = new Button();
 
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
+//        setMinWidth(1500);
+//        setMinHeight(1000);
+        //extra
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
 
+        
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
-        imageView.setFitHeight(612.0);
-        imageView.setFitWidth(920.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
         
@@ -64,6 +69,9 @@ public class ModeScreenBase extends StackPane {
         localButton.setText("Local");
         localButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         localButton.setFont(new Font("Agency FB Bold", 36.0));
+        localButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new PlayersModeFXMLBase(), this);
+        });
         FlowPane.setMargin(localButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         onlineButton.setLayoutX(406.0);
@@ -74,6 +82,12 @@ public class ModeScreenBase extends StackPane {
         onlineButton.setText("Online");
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
+        onlineButton.addEventHandler(ActionEvent.ACTION, (e) -> {
+//            new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", this, new BoardTwoPlayersModeBase());
+            
+        });
+                
+                
         FlowPane.setMargin(onlineButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         backButton.setLayoutX(406.0);
@@ -84,11 +98,12 @@ public class ModeScreenBase extends StackPane {
         backButton.setText("Back");
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         backButton.setFont(new Font("Agency FB Bold", 36.0));
+        backButton.setOnAction((e) -> {
+            ScreenController.popScreen();
+        });
         FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
         
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
+
 
         getChildren().add(imageView);
         flowPane.getChildren().add(text);

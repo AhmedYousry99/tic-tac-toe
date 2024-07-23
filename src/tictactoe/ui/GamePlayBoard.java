@@ -19,6 +19,7 @@ import tictactoe.data.MainFileController;
 import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
+import tictactoe.ui.util.ScreenController;
 
 public class GamePlayBoard extends AnchorPane {
 
@@ -403,6 +404,13 @@ public class GamePlayBoard extends AnchorPane {
         btnLeave.setStyle("-fx-background-color: #D38CC4;");
         btnLeave.setText("Leave");
         btnLeave.setFont(new Font("Agency FB Bold", 48.0));
+        btnLeave.setOnAction((e) -> {
+            new CustomDialogBase("Are you sure you want to leave?", "Leave", "Cancel", () -> {
+                ScreenController.popScreen();
+            },() -> {
+                
+            });
+        });
 
         btnRematch.setLayoutX(1265.0);
         btnRematch.setLayoutY(885.0);
