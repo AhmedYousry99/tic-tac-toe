@@ -22,11 +22,11 @@ import tictactoe.ui.util.CustomDialogBase;
 public class BoardController  {
 
     
-    private int currentPlayer;
+    protected int currentPlayer;
     int playerXXWins,playerOOWins,roundsNumber;
-    private char[][] simulationBoard;
+    protected char[][] simulationBoard;
     boolean isGameInProgress;
-    private String moves;
+    protected String moves;
     
     
     public BoardController()
@@ -52,31 +52,22 @@ public class BoardController  {
 
     
     
-    int setMove(int i ,int j)
+    void setMove(int i ,int j)
     {
-        
-        
-        
+
         if(simulationBoard[i][j] == '.' && isGameInProgress)
         {
-            moves += String.valueOf(i);
-            moves += String.valueOf(j);
-            moves += ',';
+            addToMoves(i, j);
             if(currentPlayer == 1)
             {
                 simulationBoard[i][j] = 'x';
                 currentPlayer = 0;
-                return 1;
                 
             }else
             {
                 simulationBoard[i][j] = 'o';
                 currentPlayer = 1;
-                return 0;
             }
-        }else
-        {
-            return -1;
         }
     }
     
@@ -135,7 +126,7 @@ public class BoardController  {
     
     void showDialogToSaveMatch(String mode ,int winner)
     {
-        String message = String.valueOf(winner) 
+        String message = ((winner == 1) ? "X" : "O") 
                 + "! is the winner. \n Do you want to save the match.";
         
         if(winner == 2) message = "The game is Draw! \n Do you want to save the match.";
@@ -166,6 +157,13 @@ public class BoardController  {
     public char[][] getSimulationBoard()
     {
         return simulationBoard;
+    }
+    
+    protected void addToMoves(int i,int j)
+    {
+        moves += String.valueOf(i);
+        moves += String.valueOf(j);
+        moves += ',';
     }
 
     
