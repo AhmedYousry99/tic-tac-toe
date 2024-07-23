@@ -537,7 +537,7 @@ public class GamePlayBoard extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.isGameInProgress = false;
-        boardController.showDialogToSaveMatch("TwoPlayersMode",(winner == 1) ? 'X' : 'O');
+        boardController.showDialogToSaveMatch("TwoPlayersMode",winner);
         if(winner == 0)
         {
             boardController.playerOOWins++;

@@ -55,12 +55,13 @@ public class BoardController  {
     int setMove(int i ,int j)
     {
         
-        moves += String.valueOf(i);
-        moves += String.valueOf(j);
-        moves += ',';
+        
         
         if(simulationBoard[i][j] == '.' && isGameInProgress)
         {
+            moves += String.valueOf(i);
+            moves += String.valueOf(j);
+            moves += ',';
             if(currentPlayer == 1)
             {
                 simulationBoard[i][j] = 'x';
@@ -132,19 +133,22 @@ public class BoardController  {
          return -1;
     }
     
-    void showDialogToSaveMatch(String mode ,char winnerChar)
+    void showDialogToSaveMatch(String mode ,int winner)
     {
+        String message = String.valueOf(winner) 
+                + "! is the winner. \n Do you want to save the match.";
         
+        if(winner == 2) message = "The game is Draw! \n Do you want to save the match.";
         
         CustomDialogBase dialog = new CustomDialogBase(
-                winnerChar + "! is the winner. \n Do you want to save the match.",
+                message,
                 "Save",
                 "Cancel", 
                 ()->{
                     MainFileController mf = new MainFileController();
             try {
-                int xWins = (winnerChar == 'X') ? playerXXWins-1:playerXXWins;
-                int oWins = (winnerChar == 'O') ? playerOOWins-1:playerOOWins;
+                int xWins = (winner == 1) ? playerXXWins-1:playerXXWins;
+                int oWins = (winner == 0) ? playerOOWins-1:playerOOWins;
                 String temp = String.valueOf(roundsNumber-1) + "," 
                         + String.valueOf(xWins) + ","
                         + String.valueOf(oWins) + "," + moves;
