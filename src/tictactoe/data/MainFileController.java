@@ -20,10 +20,10 @@ import tictactoe.domain.PlayingMode;
  */
 public class MainFileController implements FileController{
 
-    static public ArrayList<File> storedGames;
+    static public ArrayList<File> storedMatches;
     
     static{
-        storedGames = new ArrayList<>();
+        storedMatches = new ArrayList<>();
     }
     @Override
     public void writeFileInDirectory(String mode, String moves) throws IOException {
@@ -66,7 +66,7 @@ public class MainFileController implements FileController{
         
         for(File f : all)
         {
-            storedGames.add(f);
+            storedMatches.add(f);
         }
     }
     
