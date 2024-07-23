@@ -1,6 +1,5 @@
 package tictactoe.ui;
 
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -9,64 +8,57 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import tictactoe.resources.ResourcesLocation;
-import tictactoe.ui.util.CustomDialogWithTextFieldBase;
 
-public class ModeScreenBase extends StackPane {
+public class PlayersModeFXMLBase extends StackPane {
 
     protected final ImageView imageView;
     protected final FlowPane flowPane;
-    protected final Text text;
+    protected final Text gameModeText;
     protected final Button localButton;
     protected final Button onlineButton;
-    protected final Button backButton;
 
-    public ModeScreenBase() {
+    public PlayersModeFXMLBase() {
+
         imageView = new ImageView();
         flowPane = new FlowPane();
-        text = new Text();
+        gameModeText = new Text();
         localButton = new Button();
         onlineButton = new Button();
-        backButton = new Button();
 
-        //setMinWidth(1500);
-        //setMinHeight(1000);
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
 
-        
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
-        
-        imageView.setImage(new Image(
-                ResourcesLocation.class.
-                        getResource("images/backgrounds/main.jpg").toExternalForm()));
+        imageView.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/main.jpg").toExternalForm()));
+        //extra
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
 
         StackPane.setAlignment(flowPane, javafx.geometry.Pos.CENTER);
         flowPane.setAlignment(javafx.geometry.Pos.CENTER);
         flowPane.setColumnHalignment(javafx.geometry.HPos.CENTER);
         flowPane.setOrientation(javafx.geometry.Orientation.VERTICAL);
-        flowPane.setPrefHeight(200.0);
-        flowPane.setPrefWidth(200.0);
+        flowPane.setPrefHeight(954.0);
+        flowPane.setPrefWidth(892.0);
         flowPane.setRowValignment(javafx.geometry.VPos.TOP);
         flowPane.setVgap(40.0);
 
-        text.setFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        text.setStrokeWidth(0.0);
-        text.setText("CHOOSE CONNECTION MODE");
-        text.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        text.setFont(new Font("Agency FB Bold", 48.0));
-        FlowPane.setMargin(text, new Insets(0.0, 0.0, 100.0, 0.0));
+        gameModeText.setFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        gameModeText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        gameModeText.setStrokeWidth(0.0);
+        gameModeText.setText("CHOOSE GAME MODE");
+        gameModeText.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        gameModeText.setFont(new Font("Agency FB Bold", 48.0));
+        FlowPane.setMargin(gameModeText, new Insets(0.0, 0.0, 100.0, 0.0));
 
         localButton.setMaxWidth(Double.MAX_VALUE);
         localButton.setMnemonicParsing(false);
+        localButton.setPrefHeight(78.0);
+        localButton.setPrefWidth(432.0);
         localButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        localButton.setText("Local");
+        localButton.setText("Single Player");
         localButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         localButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(localButton, new Insets(0.0, 50.0, 0.0, 50.0));
@@ -75,37 +67,18 @@ public class ModeScreenBase extends StackPane {
         onlineButton.setLayoutY(331.0);
         onlineButton.setMaxWidth(Double.MAX_VALUE);
         onlineButton.setMnemonicParsing(false);
+        onlineButton.setPrefHeight(80.0);
+        onlineButton.setPrefWidth(442.0);
         onlineButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        onlineButton.setText("Online");
+        onlineButton.setText("Two Players");
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
-        onlineButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", () -> {
-                System.out.println("pressed ok button");}, () -> {
-                System.out.println("pressed cancel button");});
-
-        });
-                
-                
         FlowPane.setMargin(onlineButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
-        backButton.setLayoutX(406.0);
-        backButton.setLayoutY(385.0);
-        backButton.setMaxWidth(Double.MAX_VALUE);
-        backButton.setMnemonicParsing(false);
-        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        backButton.setText("Back");
-        backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        backButton.setFont(new Font("Agency FB Bold", 36.0));
-        FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
-        
-
-
         getChildren().add(imageView);
-        flowPane.getChildren().add(text);
+        flowPane.getChildren().add(gameModeText);
         flowPane.getChildren().add(localButton);
         flowPane.getChildren().add(onlineButton);
-        flowPane.getChildren().add(backButton);
         getChildren().add(flowPane);
 
     }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="1000.0" fitWidth="1500.0">
+         <image>
+            <Image url="@../resources/images/backgrounds/main.jpg" />
+         </image>
+      </ImageView>
+      <Text fill="#f2f0f0" layoutX="681.0" layoutY="89.0" stroke="#1b1a1a" strokeType="OUTSIDE" text="Login" wrappingWidth="138.4462890625">
+         <font>
+            <Font name="Agency FB" size="70.0" />
+         </font>
+      </Text>
+      <Text fill="#f2f0f0" layoutX="629.0" layoutY="300.0" stroke="#282828" strokeType="OUTSIDE" text="Username" wrappingWidth="254.4462890625">
+         <font>
+            <Font name="Agency FB" size="70.0" />
+         </font>
+      </Text>
+      <TextField fx:id="usernameTxtField" layoutX="597.0" layoutY="355.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </TextField>
+      <Text fill="#f2f0f0" layoutX="641.0" layoutY="512.0" stroke="#1b1a1a" strokeType="OUTSIDE" text="Password" wrappingWidth="254.4462890625">
+         <font>
+            <Font name="Agency FB" size="70.0" />
+         </font>
+      </Text>
+      <Button fx:id="loginButton" layoutX="660.0" layoutY="708.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" stylesheets="@../resources/css/application.css" text="Login" textFill="#f2efef">
+         <font>
+            <Font name="Agency FB" size="40.0" />
+         </font>
+      </Button>
+      <Hyperlink layoutX="605.0" layoutY="785.0" text="Don't have an account? Signup!" textFill="#fcfafa">
+         <font>
+            <Font name="Agency FB" size="28.0" />
+         </font>
+      </Hyperlink>
+      <TextField fx:id="passwordTxtField" layoutX="597.0" layoutY="569.0" prefHeight="49.0" prefWidth="318.0" promptText="Write here...">
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </TextField>
+   </children>
+</AnchorPane>
