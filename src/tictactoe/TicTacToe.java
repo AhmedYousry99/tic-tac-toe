@@ -7,15 +7,12 @@ package tictactoe;
 
 import java.util.Stack;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import tictactoe.resources.ResourcesLocation;
-import tictactoe.ui.BoardTwoPlayersModeBase;
-import tictactoe.ui.ConnectionModeScreenBase;
+import tictactoe.ui.GamePlayBoard;
 import tictactoe.ui.StartScreenFXMLBase;
 import tictactoe.ui.util.StaticNames;
 
@@ -36,7 +33,7 @@ public class TicTacToe extends Application {
         
         primaryStage.getIcons().add(new Image(ResourcesLocation.class.
                         getResource("images/icons/xo_icon.png").toExternalForm()));
-        
+
         Scene scene = new Scene(root, 1500, 1000);
         roots = new Stack();
         

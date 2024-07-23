@@ -13,7 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoe.TicTacToe;
-import tictactoe.ui.BoardTwoPlayersModeBase;
+import tictactoe.ui.GamePlayBoard;
 
 public class CustomDialogWithTextFieldBase extends AnchorPane {
 

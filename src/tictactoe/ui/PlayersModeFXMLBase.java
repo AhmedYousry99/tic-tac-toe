@@ -18,6 +18,7 @@ public class PlayersModeFXMLBase extends StackPane {
     protected final Text gameModeText;
     protected final Button singlePlayerButton;
     protected final Button twoPlayerButton;
+    protected final Button backButton;
 
     public PlayersModeFXMLBase() {
 
@@ -26,6 +27,7 @@ public class PlayersModeFXMLBase extends StackPane {
         gameModeText = new Text();
         singlePlayerButton = new Button();
         twoPlayerButton = new Button();
+        backButton = new Button();
 
 
         imageView.setCache(true);
@@ -75,14 +77,28 @@ public class PlayersModeFXMLBase extends StackPane {
         twoPlayerButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         twoPlayerButton.setFont(new Font("Agency FB Bold", 36.0));
         twoPlayerButton.setOnAction((e) -> {
-            ScreenController.pushScreen(new BoardTwoPlayersModeBase(), this);
+            ScreenController.pushScreen(new GamePlayBoard(new BoardController()), this);
         });
         FlowPane.setMargin(twoPlayerButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
+        backButton.setLayoutX(406.0);
+        backButton.setLayoutY(385.0);
+        backButton.setMaxWidth(Double.MAX_VALUE);
+        backButton.setMnemonicParsing(false);
+        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+        backButton.setText("Back");
+        backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        backButton.setFont(new Font("Agency FB Bold", 36.0));
+        backButton.setOnAction((e) -> {
+            ScreenController.popScreen();
+        });
+        FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         getChildren().add(imageView);
         flowPane.getChildren().add(gameModeText);
         flowPane.getChildren().add(singlePlayerButton);
         flowPane.getChildren().add(twoPlayerButton);
+        flowPane.getChildren().add(backButton);
         getChildren().add(flowPane);
 
     }

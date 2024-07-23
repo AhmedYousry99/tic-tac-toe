@@ -80,4 +80,6 @@ public class CustomDialogBase extends AnchorPane {
         getChildren().add(cancelButton);
         stage.show();
     }
+    
+    
 }
