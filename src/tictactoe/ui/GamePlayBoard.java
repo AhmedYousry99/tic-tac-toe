@@ -20,7 +20,7 @@ import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 
-public class BoardTwoPlayersModeBase extends AnchorPane {
+public class GamePlayBoard extends AnchorPane {
 
     protected final ImageView backgroundImage;
     protected final StackPane stack00;
@@ -71,7 +71,7 @@ public class BoardTwoPlayersModeBase extends AnchorPane {
     BoardController boardController;
     
 
-    public BoardTwoPlayersModeBase(BoardController customController) {
+    public GamePlayBoard(BoardController customController) {
         
         boardController = customController;
 
