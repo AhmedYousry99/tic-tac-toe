@@ -1,6 +1,7 @@
 package tictactoe.ui.util;
 
 import javafx.event.ActionEvent;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -11,6 +12,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tictactoe.TicTacToe;
+import tictactoe.ui.BoardTwoPlayersModeBase;
 
 public class CustomDialogWithTextFieldBase extends AnchorPane {
 
@@ -21,7 +24,7 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
     protected final Stage stage;
     
 
-    public CustomDialogWithTextFieldBase(String message, String defaultButtontext, String cancelButtonText, VoidCallable defaultFunc, VoidCallable cancelFunc) {
+    public CustomDialogWithTextFieldBase(String message, String defaultButtontext, String cancelButtonText, Parent currentRoot, Parent newRoot) {
 
         text = new Text();
         textField1 = new TextField();
@@ -65,7 +68,10 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         okButton.setFont(new Font("Agency FB Bold", 18.0));
         okButton.setDefaultButton(true);
         okButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            defaultFunc.call();
+            if(validateInput(textField1.getText())){
+                stage.close();
+                ScreenController.pushScreen(newRoot, currentRoot);
+            }
         });
 
         cancelButton.setLayoutX(22.0);
@@ -79,7 +85,6 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         cancelButton.setFont(new Font("Agency FB Bold", 18.0));
         cancelButton.setCancelButton(true);
         cancelButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            cancelFunc.call();
             stage.close();
         });
 
@@ -88,5 +93,18 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         getChildren().add(okButton);
         getChildren().add(cancelButton);
         stage.show();
+    }
+    
+        private boolean validateInput(String ip){
+        boolean result = false;
+        if(!ip.isEmpty()){
+            String[] octets = ip.split("[.]");  
+            if(octets.length == 4){
+                
+                result = true;
+            }
+        }
+        
+        return result;
     }
 }
