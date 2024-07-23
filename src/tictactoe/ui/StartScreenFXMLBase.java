@@ -8,6 +8,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.TicTacToe;
+import tictactoe.ui.util.ScreenController;
 import tictactoe.resources.ResourcesLocation;
 
 public class StartScreenFXMLBase extends StackPane {
@@ -17,7 +19,7 @@ public class StartScreenFXMLBase extends StackPane {
     protected final Text welcomeText;
     protected final Button playButton;
     protected final Button historyButton;
-    protected final Button backButton;
+    protected final Button exitButton;
 
     public StartScreenFXMLBase() {
 
@@ -26,7 +28,7 @@ public class StartScreenFXMLBase extends StackPane {
         welcomeText = new Text();
         playButton = new Button();
         historyButton = new Button();
-        backButton = new Button();
+        exitButton = new Button();
         
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
@@ -60,6 +62,9 @@ public class StartScreenFXMLBase extends StackPane {
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setMnemonicParsing(false);
         playButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+        playButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new ConnectionModeScreenBase(), this);
+        });
         
         
         playButton.setText("Play");
@@ -77,21 +82,24 @@ public class StartScreenFXMLBase extends StackPane {
         historyButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(historyButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
-        backButton.setLayoutX(406.0);
-        backButton.setLayoutY(385.0);
-        backButton.setMaxWidth(Double.MAX_VALUE);
-        backButton.setMnemonicParsing(false);
-        backButton.getStylesheets().add("tictactoe/resources/css/application.css");
-        backButton.setText("Back");
-        backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        backButton.setFont(new Font("Agency FB Bold", 36.0));
-        FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        exitButton.setLayoutX(406.0);
+        exitButton.setLayoutY(385.0);
+        exitButton.setMaxWidth(Double.MAX_VALUE);
+        exitButton.setMnemonicParsing(false);
+        exitButton.getStylesheets().add("tictactoe/resources/css/application.css");
+        exitButton.setText("Exit");
+        exitButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        exitButton.setFont(new Font("Agency FB Bold", 36.0));
+        exitButton.setOnAction((e) -> {
+            TicTacToe.primaryStage.close();
+        });
+        FlowPane.setMargin(exitButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         getChildren().add(imageView);
         flowPane.getChildren().add(welcomeText);
         flowPane.getChildren().add(playButton);
         flowPane.getChildren().add(historyButton);
-        flowPane.getChildren().add(backButton);
+        flowPane.getChildren().add(exitButton);
         getChildren().add(flowPane);
 
     }

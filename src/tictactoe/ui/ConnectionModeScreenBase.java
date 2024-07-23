@@ -9,11 +9,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
+import tictactoe.ui.util.ScreenController;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogWithTextFieldBase;
 
-public class ModeScreenBase extends StackPane {
+public class ConnectionModeScreenBase extends StackPane {
 
     protected final ImageView imageView;
     protected final FlowPane flowPane;
@@ -22,7 +22,7 @@ public class ModeScreenBase extends StackPane {
     protected final Button onlineButton;
     protected final Button backButton;
 
-    public ModeScreenBase() {
+    public ConnectionModeScreenBase() {
         imageView = new ImageView();
         flowPane = new FlowPane();
         text = new Text();
@@ -30,8 +30,8 @@ public class ModeScreenBase extends StackPane {
         onlineButton = new Button();
         backButton = new Button();
 
-        //setMinWidth(1500);
-        //setMinHeight(1000);
+//        setMinWidth(1500);
+//        setMinHeight(1000);
         //extra
         imageView.fitHeightProperty().bind(this.heightProperty());
         imageView.fitWidthProperty().bind(this.widthProperty());
@@ -69,6 +69,9 @@ public class ModeScreenBase extends StackPane {
         localButton.setText("Local");
         localButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         localButton.setFont(new Font("Agency FB Bold", 36.0));
+        localButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new PlayersModeFXMLBase(), this);
+        });
         FlowPane.setMargin(localButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         onlineButton.setLayoutX(406.0);
@@ -80,10 +83,8 @@ public class ModeScreenBase extends StackPane {
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
         onlineButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", () -> {
-                System.out.println("pressed ok button");}, () -> {
-                System.out.println("pressed cancel button");});
-
+            new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", this, new BoardTwoPlayersModeBase());
+            
         });
                 
                 
@@ -97,6 +98,9 @@ public class ModeScreenBase extends StackPane {
         backButton.setText("Back");
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         backButton.setFont(new Font("Agency FB Bold", 36.0));
+        backButton.setOnAction((e) -> {
+            ScreenController.popScreen();
+        });
         FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
         
 

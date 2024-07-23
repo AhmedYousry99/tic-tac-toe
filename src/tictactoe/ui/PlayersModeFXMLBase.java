@@ -9,22 +9,23 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.ScreenController;
 
 public class PlayersModeFXMLBase extends StackPane {
 
     protected final ImageView imageView;
     protected final FlowPane flowPane;
     protected final Text gameModeText;
-    protected final Button localButton;
-    protected final Button onlineButton;
+    protected final Button singlePlayerButton;
+    protected final Button twoPlayerButton;
 
     public PlayersModeFXMLBase() {
 
         imageView = new ImageView();
         flowPane = new FlowPane();
         gameModeText = new Text();
-        localButton = new Button();
-        onlineButton = new Button();
+        singlePlayerButton = new Button();
+        twoPlayerButton = new Button();
 
 
         imageView.setCache(true);
@@ -53,32 +54,35 @@ public class PlayersModeFXMLBase extends StackPane {
         gameModeText.setFont(new Font("Agency FB Bold", 48.0));
         FlowPane.setMargin(gameModeText, new Insets(0.0, 0.0, 100.0, 0.0));
 
-        localButton.setMaxWidth(Double.MAX_VALUE);
-        localButton.setMnemonicParsing(false);
-        localButton.setPrefHeight(78.0);
-        localButton.setPrefWidth(432.0);
-        localButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        localButton.setText("Single Player");
-        localButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        localButton.setFont(new Font("Agency FB Bold", 36.0));
-        FlowPane.setMargin(localButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        singlePlayerButton.setMaxWidth(Double.MAX_VALUE);
+        singlePlayerButton.setMnemonicParsing(false);
+        singlePlayerButton.setPrefHeight(78.0);
+        singlePlayerButton.setPrefWidth(432.0);
+        singlePlayerButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+        singlePlayerButton.setText("Single Player");
+        singlePlayerButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        singlePlayerButton.setFont(new Font("Agency FB Bold", 36.0));
+        FlowPane.setMargin(singlePlayerButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
-        onlineButton.setLayoutX(406.0);
-        onlineButton.setLayoutY(331.0);
-        onlineButton.setMaxWidth(Double.MAX_VALUE);
-        onlineButton.setMnemonicParsing(false);
-        onlineButton.setPrefHeight(80.0);
-        onlineButton.setPrefWidth(442.0);
-        onlineButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        onlineButton.setText("Two Players");
-        onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        onlineButton.setFont(new Font("Agency FB Bold", 36.0));
-        FlowPane.setMargin(onlineButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        twoPlayerButton.setLayoutX(406.0);
+        twoPlayerButton.setLayoutY(331.0);
+        twoPlayerButton.setMaxWidth(Double.MAX_VALUE);
+        twoPlayerButton.setMnemonicParsing(false);
+        twoPlayerButton.setPrefHeight(80.0);
+        twoPlayerButton.setPrefWidth(442.0);
+        twoPlayerButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+        twoPlayerButton.setText("Two Players");
+        twoPlayerButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        twoPlayerButton.setFont(new Font("Agency FB Bold", 36.0));
+        twoPlayerButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new BoardTwoPlayersModeBase(), this);
+        });
+        FlowPane.setMargin(twoPlayerButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         getChildren().add(imageView);
         flowPane.getChildren().add(gameModeText);
-        flowPane.getChildren().add(localButton);
-        flowPane.getChildren().add(onlineButton);
+        flowPane.getChildren().add(singlePlayerButton);
+        flowPane.getChildren().add(twoPlayerButton);
         getChildren().add(flowPane);
 
     }
