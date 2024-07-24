@@ -1,0 +1,18 @@
+.list-view .list-cell:odd, 
+.list-view .list-cell:even {
+    -fx-background-color: #050046;
+    -fx-border-color: #D38CC4;
+}
+
+.list-view .list-cell:selected:odd,
+.list-view .list-cell:selected:even {
+    -fx-background-color: #050046;
+}
+.list-view .list-cell:empty{
+    -fx-background-color: #050046;
+    -fx-border-color: #050046;
+}
+
+.list-view{
+    
+}
