@@ -86,6 +86,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         intermediateButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         intermediateButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(intermediateButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
+        intermediateButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.INTERMEDIATE)), this);
+            });
 
         difficultButton.setLayoutX(406.0);
         difficultButton.setLayoutY(385.0);
@@ -98,6 +102,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         difficultButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         difficultButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(difficultButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
+        difficultButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.DIFFICULT)), this);
+            });
 
         backButton.setLayoutX(406.0);
         backButton.setLayoutY(385.0);
