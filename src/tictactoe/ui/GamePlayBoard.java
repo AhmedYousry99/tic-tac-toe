@@ -400,26 +400,7 @@ public class GamePlayBoard extends AnchorPane {
         modeText.setFont(new Font("Agency FB", 96.0));
         
         
-        if(customController instanceof SinglePlayerModeController)
-        {
-            modeText.setLayoutX(400.0);
-            modeText.setFont(new Font("Agency FB", 76.0));
-            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
-            {
-                case EASY:
-                    modeText.setText("Single Palyer Mode (EASY)");
-                    break;
-                case INTERMEDIATE:
-                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
-                    break;
-                case DIFFICULT:
-                    modeText.setText("Single Palyer Mode (DIFFICULT)");
-                    break;
-            }
-        }else if(customController instanceof BoardController)
-        {
-             modeText.setText("Two Players Mode");
-        }
+        
 
         btnLeave.setLayoutX(23.0);
         btnLeave.setLayoutY(887.0);
@@ -494,6 +475,30 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(btnLeave);
         getChildren().add(btnRematch);
         
+        
+        
+        if(customController instanceof SinglePlayerModeController)
+        {
+            modeText.setLayoutX(400.0);
+            modeText.setFont(new Font("Agency FB", 76.0));
+            playerOONameText.setText("Computer");
+            playerOONameText.setLayoutX(1180);
+            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
+            {
+                case EASY:
+                    modeText.setText("Single Palyer Mode (EASY)");
+                    break;
+                case INTERMEDIATE:
+                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
+                    break;
+                case DIFFICULT:
+                    modeText.setText("Single Palyer Mode (DIFFICULT)");
+                    break;
+            }
+        }else if(customController instanceof BoardController)
+        {
+             modeText.setText("Two Players Mode");
+        }
          
 
         btnRematch.setDisable(true);

@@ -130,6 +130,9 @@ public class SinglePlayerModeController extends BoardController {
     }
     
     
+    
+    
+    
     private boolean doCornerMove()
     {
         if(simulationBoard[1][1] == 'x'){
