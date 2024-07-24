@@ -64,8 +64,12 @@ public class PlayersModeFXMLBase extends StackPane {
         singlePlayerButton.setText("Single Player");
         singlePlayerButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         singlePlayerButton.setFont(new Font("Agency FB Bold", 36.0));
+        
         FlowPane.setMargin(singlePlayerButton, new Insets(0.0, 50.0, 0.0, 50.0));
-
+        singlePlayerButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new ChooseLevelFXMLBase(), this);});
+        
+        
         twoPlayerButton.setLayoutX(406.0);
         twoPlayerButton.setLayoutY(331.0);
         twoPlayerButton.setMaxWidth(Double.MAX_VALUE);
