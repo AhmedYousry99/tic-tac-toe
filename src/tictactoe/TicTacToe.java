@@ -11,8 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import tictactoe.domain.DifficultyLevel;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.GamePlayBoard;
+import tictactoe.ui.SinglePlayerModeController;
 import tictactoe.ui.StartScreenFXMLBase;
 import tictactoe.ui.util.StaticNames;
 
@@ -32,7 +34,8 @@ public class TicTacToe extends Application {
         this.primaryStage = primaryStage;
 
         
-        Parent root = new StartScreenFXMLBase();
+        //Parent root = new StartScreenFXMLBase();
+        Parent root = new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.DIFFICULT));
         
         primaryStage.getIcons().add(new Image(ResourcesLocation.class.
                         getResource("images/icons/xo_icon.png").toExternalForm()));
