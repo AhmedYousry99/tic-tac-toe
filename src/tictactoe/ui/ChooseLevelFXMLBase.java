@@ -9,7 +9,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.domain.DifficultyLevel;
 import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.ScreenController;
 
 public class ChooseLevelFXMLBase extends StackPane {
 
@@ -19,6 +21,7 @@ public class ChooseLevelFXMLBase extends StackPane {
     protected final Button easyButton;
     protected final Button intermediateButton;
     protected final Button difficultButton;
+    protected final Button backButton;
 
     public ChooseLevelFXMLBase() {
 
@@ -28,6 +31,7 @@ public class ChooseLevelFXMLBase extends StackPane {
         easyButton = new Button();
         intermediateButton = new Button();
         difficultButton = new Button();
+        backButton = new Button ();
            
         //extra
         imageView.fitHeightProperty().bind(this.heightProperty());
@@ -67,6 +71,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         easyButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(easyButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
+        easyButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.EASY)), this);
+            });
+        
         intermediateButton.setLayoutX(406.0);
         intermediateButton.setLayoutY(331.0);
         intermediateButton.setMaxWidth(Double.MAX_VALUE);
@@ -91,11 +99,25 @@ public class ChooseLevelFXMLBase extends StackPane {
         difficultButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(difficultButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
+        backButton.setLayoutX(406.0);
+        backButton.setLayoutY(385.0);
+        backButton.setMaxWidth(Double.MAX_VALUE);
+        backButton.setMnemonicParsing(false);
+        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+        backButton.setText("Back");
+        backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        backButton.setFont(new Font("Agency FB Bold", 36.0));
+        backButton.setOnAction((e) -> {
+            ScreenController.popScreen();
+        });
+        FlowPane.setMargin(backButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
         getChildren().add(imageView);
         flowPane.getChildren().add(chooseLevel);
         flowPane.getChildren().add(easyButton);
         flowPane.getChildren().add(intermediateButton);
         flowPane.getChildren().add(difficultButton);
+        flowPane.getChildren().add(backButton);
         getChildren().add(flowPane);
 
     }

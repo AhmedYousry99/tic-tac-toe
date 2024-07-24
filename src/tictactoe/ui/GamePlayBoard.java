@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import javax.annotation.Resource;
 import tictactoe.data.MainFileController;
 import tictactoe.domain.PlayingMode;
@@ -70,10 +72,12 @@ public class GamePlayBoard extends AnchorPane {
     protected final Button btnRematch;
     
     BoardController boardController;
+    boolean play;
     
 
     public GamePlayBoard(BoardController customController) {
         
+        play = true;
         boardController = customController;
 
         backgroundImage = new ImageView();
@@ -396,26 +400,7 @@ public class GamePlayBoard extends AnchorPane {
         modeText.setFont(new Font("Agency FB", 96.0));
         
         
-        if(customController instanceof SinglePlayerModeController)
-        {
-            modeText.setLayoutX(400.0);
-            modeText.setFont(new Font("Agency FB", 76.0));
-            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
-            {
-                case EASY:
-                    modeText.setText("Single Palyer Mode (EASY)");
-                    break;
-                case INTERMEDIATE:
-                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
-                    break;
-                case DIFFICULT:
-                    modeText.setText("Single Palyer Mode (DIFFICULT)");
-                    break;
-            }
-        }else if(customController instanceof BoardController)
-        {
-             modeText.setText("Two Players Mode");
-        }
+        
 
         btnLeave.setLayoutX(23.0);
         btnLeave.setLayoutY(887.0);
@@ -443,7 +428,7 @@ public class GamePlayBoard extends AnchorPane {
         btnRematch.setFont(new Font("Agency FB Bold", 48.0));
 
         
-        resetBoardUI();
+        updateUIAfterWin();
         getChildren().add(backgroundImage);
         stack00.getChildren().add(x00);
         stack00.getChildren().add(o00);
@@ -490,16 +475,37 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(btnLeave);
         getChildren().add(btnRematch);
         
+        
+        
+        if(customController instanceof SinglePlayerModeController)
+        {
+            modeText.setLayoutX(400.0);
+            modeText.setFont(new Font("Agency FB", 76.0));
+            playerOONameText.setText("Computer");
+            playerOONameText.setLayoutX(1180);
+            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
+            {
+                case EASY:
+                    modeText.setText("Single Palyer Mode (EASY)");
+                    break;
+                case INTERMEDIATE:
+                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
+                    break;
+                case DIFFICULT:
+                    modeText.setText("Single Palyer Mode (DIFFICULT)");
+                    break;
+            }
+        }else if(customController instanceof BoardController)
+        {
+             modeText.setText("Two Players Mode");
+        }
          
 
         btnRematch.setDisable(true);
-        btnRematch.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-               resetBoardUI();
-            
-               btnRematch.setDisable(true);
-            }
+        btnRematch.setOnAction((e)->{
+            boardController.resetBoard();
+            resetBoardBaseOnSimulationBoard();
+            btnRematch.setDisable(true);
         });
         
         
@@ -527,15 +533,47 @@ public class GamePlayBoard extends AnchorPane {
     
     void ButtonAction(int i,int j)
     {
-        boardController.setMove(i, j);
-        resetBoardBaseOnSimulationBoard();
+        if(boardController instanceof SinglePlayerModeController)
+        {
+            
+            doButtonActionOnSinglePlayerMode(i,j);
+            
+        }else
+        {
+            boardController.setMove(i, j);
+            resetBoardBaseOnSimulationBoard();
+            actionWhenGetBoardState();
+        } 
         actionWhenGetBoardState();
+    }
+    
+    private void doButtonActionOnSinglePlayerMode(int i,int j)
+    {
+        if(boardController.isThisAValidMove(i, j))
+        {
+            if(play)
+            {
+                boardController.setMove(i, j);
+                resetBoardBaseOnSimulationBoard();
+            }
+                
+            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1){
+                    PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
+                    pause.setOnFinished(e -> {
+                        boardController.doComputerMove();
+                        resetBoardBaseOnSimulationBoard();
+                        actionWhenGetBoardState();
+                        play = true;
+                    });
+                    pause.play();
+            }    
+        }
     }
     
     
     private void actionWhenGetBoardState()
     {
-        int result = boardController.getBoardState();
+        int result = boardController.getBoardState(boardController.getSimulationBoard());
         
         if(boardController.isGameInProgress)
         {
@@ -569,7 +607,8 @@ public class GamePlayBoard extends AnchorPane {
         boardController.roundsNumber++;
         
         btnRematch.setDisable(false);
-        
+         
+        updateUIAfterWin();    
         
     }
     
@@ -578,7 +617,7 @@ public class GamePlayBoard extends AnchorPane {
     
             
     
-    private void resetBoardUI()
+    private void updateUIAfterWin()
     {
         playerXXWinsText
                 .setText("Wins : " + String.valueOf(boardController.playerXXWins));
@@ -586,13 +625,9 @@ public class GamePlayBoard extends AnchorPane {
                 .setText("Wins : " + String.valueOf(boardController.playerOOWins));
           
         int rounds = boardController.roundsNumber;
-        
-        
-        roundNumberText
-                .setText("Round : " + String.valueOf(rounds));
-        
-        boardController.resetBoard();
-        resetBoardBaseOnSimulationBoard();
+
+        roundNumberText.setText("Round : " + String.valueOf(rounds));
+
     }
     
     private void resetBoardBaseOnSimulationBoard()
