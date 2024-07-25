@@ -47,7 +47,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         vBox = new VBox();
         label = new Label();
         listTiles = new ArrayList();
-        emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames(listTiles) ? "You haven't saved any recordings yet." : "Failed to load recorded games");
+        emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames(listTiles, this) ? "You haven't saved any recordings yet." : "Failed to load recorded games");
         
         System.out.println(listTiles.size());
         

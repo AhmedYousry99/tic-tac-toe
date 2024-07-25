@@ -59,6 +59,7 @@ public class CustomDialogBase extends AnchorPane {
             defaultFunc.call();
             stage.close();
         });
+        getChildren().add(defaultButton);
         }
 
         cancelButton.setLayoutX(22.0);
@@ -78,7 +79,7 @@ public class CustomDialogBase extends AnchorPane {
         });
 
         getChildren().add(text);
-        getChildren().add(defaultButton);
+        
         getChildren().add(cancelButton);
         stage.show();
     }

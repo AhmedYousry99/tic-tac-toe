@@ -32,7 +32,7 @@ public class CustomListTile extends HBox{
     protected final Region spacer;
     private final File file;
 
-    public CustomListTile(File file) {
+    public CustomListTile(File file, VoidCallable function) {
         hBox = new HBox();
         label = new Label();
         replayButton = new Button();
@@ -51,11 +51,12 @@ public class CustomListTile extends HBox{
         replayButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
         replayButton.setFont(new Font("Agency FB Bold", 24.0));
         replayButton.setOnAction((e) -> {
-            try {
-                ScreenController.pushScreen( new GamePlayBoard(new ReplayMatchController(new MainFileController().readFile(file))), this);
-            } catch (IOException ex) {
-                new CustomDialogBase("File is corrupt", null, "Ok", null, null);
-            }
+//            try {
+//                ScreenController.pushScreen( new GamePlayBoard(new ReplayMatchController(new MainFileController().readFile(file))), this);
+//            } catch (IOException ex) {
+//                new CustomDialogBase("File is corrupt", "", "Ok", null, null);
+//            }
+            function.call();
         });
         
         label.setAlignment(javafx.geometry.Pos.CENTER);
