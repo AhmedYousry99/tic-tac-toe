@@ -81,6 +81,7 @@ public class SinglePlayerModeController extends BoardController {
         if(simulationBoard[1][1] == '.')
         {
             simulationBoard[1][1] = 'o';
+            addToMoves(1, 1);
         }
         else if(!isThereWinForPlayer(simulationBoard,'x','o'))
         {
@@ -93,6 +94,7 @@ public class SinglePlayerModeController extends BoardController {
         if(simulationBoard[1][1] == '.')
         {
             simulationBoard[1][1] = 'o';
+            addToMoves(1, 1);
         }
         else if(!isThereWinForPlayer(simulationBoard,'o','o'))
         {
@@ -120,6 +122,7 @@ public class SinglePlayerModeController extends BoardController {
                     if(getBoardState(grid) == getPlayerCharNumber(Player))
                     {
                         simulationBoard[i][j] = charToPlay;
+                        addToMoves(i, j);
                         return true;
                     }
                     grid[i][j] = '.';
@@ -141,10 +144,10 @@ public class SinglePlayerModeController extends BoardController {
                     || simulationBoard[0][2] == 'x'
                     || simulationBoard[2][2] == 'x')
             {
-                if(simulationBoard[0][0] == '.'){simulationBoard[0][0] = 'o';return true;} 
-                if(simulationBoard[2][0] == '.'){simulationBoard[2][0] = 'o';return true;} 
-                if(simulationBoard[0][2] == '.'){simulationBoard[0][2] = 'o';return true;} 
-                if(simulationBoard[2][2] == '.'){simulationBoard[2][2] = 'o';return true;} 
+                if(simulationBoard[0][0] == '.'){simulationBoard[0][0] = 'o';addToMoves(0, 0);return true;} 
+                if(simulationBoard[2][0] == '.'){simulationBoard[2][0] = 'o';addToMoves(2, 0);return true;} 
+                if(simulationBoard[0][2] == '.'){simulationBoard[0][2] = 'o';addToMoves(0, 2);return true;} 
+                if(simulationBoard[2][2] == '.'){simulationBoard[2][2] = 'o';addToMoves(2, 2);return true;} 
             }
         }
         return false;
