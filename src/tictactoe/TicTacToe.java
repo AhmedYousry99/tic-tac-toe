@@ -38,6 +38,7 @@ public class TicTacToe extends Application {
                         getResource("images/icons/xo_icon.png").toExternalForm()));
 
         Scene scene = new Scene(root, 1500, 1000);
+        scene.getStylesheets().add("tictactoe/resources/css/listview.css");
         roots = new Stack();
         
         primaryStage.setResizable(false);

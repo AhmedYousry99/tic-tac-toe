@@ -80,6 +80,9 @@ public class StartScreenFXMLBase extends StackPane {
         historyButton.setText("History");
         historyButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         historyButton.setFont(new Font("Agency FB Bold", 36.0));
+        historyButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new HistoryScreenFXMLBase(), this);
+        });
         FlowPane.setMargin(historyButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
         exitButton.setLayoutX(406.0);

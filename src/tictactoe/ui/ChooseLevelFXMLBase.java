@@ -9,6 +9,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.domain.DifficultyLevel;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
 
@@ -70,6 +71,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         easyButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(easyButton, new Insets(0.0, 50.0, 0.0, 50.0));
 
+        easyButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.EASY)), this);
+            });
+        
         intermediateButton.setLayoutX(406.0);
         intermediateButton.setLayoutY(331.0);
         intermediateButton.setMaxWidth(Double.MAX_VALUE);
@@ -81,6 +86,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         intermediateButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         intermediateButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(intermediateButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
+        intermediateButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.INTERMEDIATE)), this);
+            });
 
         difficultButton.setLayoutX(406.0);
         difficultButton.setLayoutY(385.0);
@@ -93,6 +102,10 @@ public class ChooseLevelFXMLBase extends StackPane {
         difficultButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         difficultButton.setFont(new Font("Agency FB Bold", 36.0));
         FlowPane.setMargin(difficultButton, new Insets(0.0, 50.0, 0.0, 50.0));
+        
+        difficultButton.setOnAction((e) -> {
+            ScreenController.pushScreen(new GamePlayBoard(new SinglePlayerModeController(DifficultyLevel.DIFFICULT)), this);
+            });
 
         backButton.setLayoutX(406.0);
         backButton.setLayoutY(385.0);

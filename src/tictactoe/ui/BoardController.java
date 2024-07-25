@@ -55,7 +55,7 @@ public class BoardController  {
     void setMove(int i ,int j)
     {
 
-        if(simulationBoard[i][j] == '.' && isGameInProgress)
+        if(isThisAValidMove(i, j))
         {
             addToMoves(i, j);
             if(currentPlayer == 1)
@@ -84,7 +84,7 @@ public class BoardController  {
         }
     }
     
-    int getBoardState()
+    int getBoardState(char grid[][])
     {
         int dots = 0;
         int x=0,o=0;
@@ -95,13 +95,13 @@ public class BoardController  {
             x = o = 0;
             for(int j = 0 ;j < 3;j++)
             {        
-                if(simulationBoard[i][j] == '.')dots++;
-                if(simulationBoard[i][j] == 'x')x++;
-                if(simulationBoard[i][j] == 'o')o++;
-                if(i == j &&simulationBoard[i][j] == 'x')dix++;
-                if(i == j &&simulationBoard[i][j] == 'o')dio++;
-                if(i + j == 2 &&simulationBoard[i][j] == 'x')dix2++;
-                if(i + j == 2 &&simulationBoard[i][j] == 'o')dio2++;
+                if(grid[i][j] == '.')dots++;
+                if(grid[i][j] == 'x')x++;
+                if(grid[i][j] == 'o')o++;
+                if(i == j &&grid[i][j] == 'x')dix++;
+                if(i == j &&grid[i][j] == 'o')dio++;
+                if(i + j == 2 &&grid[i][j] == 'x')dix2++;
+                if(i + j == 2 &&grid[i][j] == 'o')dio2++;
             }
             if(x == 3 || dix == 3 || dix2 == 3)return 1;
             if(o == 3 || dio == 3 || dio2 == 3)return 0;
@@ -112,8 +112,8 @@ public class BoardController  {
             x = o = 0;
             for(int i = 0 ;i < 3;i++)
             {        
-                if(simulationBoard[i][j] == 'x')x++;
-                if(simulationBoard[i][j] == 'o')o++;
+                if(grid[i][j] == 'x')x++;
+                if(grid[i][j] == 'o')o++;
             }
             if(x == 3)return 1;
             if(o == 3)return 0;
@@ -126,10 +126,7 @@ public class BoardController  {
     
     void showDialogToSaveMatch(String mode ,int winner)
     {
-        String message = ((winner == 1) ? "X" : "O") 
-                + "! is the winner. \n Do you want to save the match.";
-        
-        if(winner == 2) message = "The game is Draw! \n Do you want to save the match.";
+        String message = "Do you want to save the match.";
         
         CustomDialogBase dialog = new CustomDialogBase(
                 message,
@@ -165,6 +162,32 @@ public class BoardController  {
         moves += String.valueOf(j);
         moves += ',';
     }
+    
+    protected char reverserPlayerChar(char player)
+    {
+        if(player == 'x')return 'o';
+        else return 'x';
+    }
+    
+    protected int getPlayerCharNumber(char player)
+    {
+        if(player == 'x')return 1;
+        else return 0;
+    }
 
+    void doComputerMove() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected boolean isThisAValidMove(int i ,int j)
+    {
+        if(simulationBoard[i][j] == '.' && isGameInProgress)
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
     
 }
