@@ -26,8 +26,8 @@ public class VideoFXMLBase extends AnchorPane {
         mediaView.setLayoutY(1.0);
         mediaView.setPreserveRatio(false);
         
-        skipButton.setLayoutX(27.0);
-        skipButton.setLayoutY(357.0);
+        skipButton.setLayoutX(30.0);
+        skipButton.setLayoutY(30.0);
         skipButton.setMnemonicParsing(false);
         skipButton.setStyle("-fx-background-color: #D38CC4; -fx-border-radius: 5;");
         skipButton.setText("Skip");
