@@ -85,6 +85,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         flowPane.setPrefWidth(1500.0);
         flowPane.setRowValignment(javafx.geometry.VPos.TOP);
         flowPane.setVgap(40.0);
+        setMargin(flowPane, new Insets(0, 20, 0, 20));
 
         text.setFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
@@ -108,6 +109,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         vBox.prefWidthProperty().bind(flowPane.widthProperty());
         listView.setStyle("-fx-background-color: #050046; -fx-background-insets: 0;");
         listView.setPrefHeight(500.0);
+       
         
         StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_LEFT);
         backButton.setAlignment(javafx.geometry.Pos.CENTER);
