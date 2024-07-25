@@ -133,22 +133,25 @@ public class BoardController  {
                 "Save",
                 "Cancel", 
                 ()->{
-                    MainFileController mf = new MainFileController();
-            try {
+                    saveMatch(mode, winner);
+                }, 
+                ()->{moves = "";});
+    }
+    
+    void saveMatch(String mode ,int winner)
+    {
+        MainFileController mf = new MainFileController();
+        try {
                 int xWins = (winner == 1) ? playerXXWins-1:playerXXWins;
                 int oWins = (winner == 0) ? playerOOWins-1:playerOOWins;
                 String temp = String.valueOf(roundsNumber-1) + "," 
                         + String.valueOf(xWins) + ","
                         + String.valueOf(oWins) + "," + moves;
-                mf.writeFileInDirectory(mode, temp);
-               moves = "";
+                 mf.writeFileInDirectory(mode, temp);
+                 moves = "";
             } catch (IOException ex) {
                 Logger.getLogger(BoardController.class.getName()).log(Level.SEVERE, null, ex);
             }
-                }, 
-                ()->{moves = "";});
-        
-         
     }
     
     public char[][] getSimulationBoard()

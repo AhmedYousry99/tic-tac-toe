@@ -70,15 +70,18 @@ public class GamePlayBoard extends AnchorPane {
     protected final Text modeText;
     protected final Button btnLeave;
     protected final Button btnRematch;
+    protected final Button btnSaveMatch;
     
     BoardController boardController;
-    boolean play;
+    boolean play,saveTheMatch;
     String modeName;
+    
     
 
     public GamePlayBoard(BoardController customController) {
         
         play = true;
+        saveTheMatch = false;
         boardController = customController;
         modeName = "Two Players Mode";
 
@@ -127,6 +130,7 @@ public class GamePlayBoard extends AnchorPane {
         modeText = new Text();
         btnLeave = new Button();
         btnRematch = new Button();
+        btnSaveMatch = new Button();
 
         boardController.resetBoard();
         
@@ -423,11 +427,21 @@ public class GamePlayBoard extends AnchorPane {
         btnRematch.setLayoutX(1265.0);
         btnRematch.setLayoutY(885.0);
         btnRematch.setMnemonicParsing(false);
-        btnRematch.setPrefHeight(57.0);
+        btnRematch.setPrefHeight(85.0);
         btnRematch.setPrefWidth(210.0);
         btnRematch.setStyle("-fx-background-color: #D38CC4;");
-        btnRematch.setText("Rematch");
-        btnRematch.setFont(new Font("Agency FB Bold", 48.0));
+        btnRematch.setText("Play Again");
+        btnRematch.setFont(new Font("Agency FB Bold", 30.0));
+        
+        
+        btnSaveMatch.setLayoutX(1265.0);
+        btnSaveMatch.setLayoutY(780.0);
+        btnSaveMatch.setMnemonicParsing(false);
+        btnSaveMatch.setPrefHeight(85.0);
+        btnSaveMatch.setPrefWidth(210.0);
+        btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
+        btnSaveMatch.setText("Save Match");
+        btnSaveMatch.setFont(new Font("Agency FB Bold", 30.0));
 
         
         updateUIAfterWin();
@@ -476,6 +490,7 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(modeText);
         getChildren().add(btnLeave);
         getChildren().add(btnRematch);
+        getChildren().add(btnSaveMatch);
         
         
         
@@ -506,16 +521,29 @@ public class GamePlayBoard extends AnchorPane {
              //modeText.setText("Two Players Mode");
         }
          
-        modeText.setText(modeName);
+            modeText.setText(modeName);
+            
+            
+        //logic    
+    
         btnRematch.setDisable(true);
         btnRematch.setOnAction((e)->{
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
+            resetSaveMatchBtn();
             btnRematch.setDisable(true);
         });
         
+
+        btnSaveMatch.setOnAction((e)->{
+            btnSaveMatch.setStyle("-fx-background-color: #96D38C;");
+            btnSaveMatch.setText("Recording...");
+            saveTheMatch = true;
+            btnSaveMatch.setDisable(true);
+        });
         
-        //logic     
+        
+        
         stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
         stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
@@ -536,6 +564,8 @@ public class GamePlayBoard extends AnchorPane {
     
 
     }
+    
+    
     
     void ButtonAction(int i,int j)
     {
@@ -602,9 +632,7 @@ public class GamePlayBoard extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.isGameInProgress = false;
-        
-        
-        
+
         String url = "videos/draw.mp4";
         if(winner == 0)
         {
@@ -622,9 +650,12 @@ public class GamePlayBoard extends AnchorPane {
         updateUIAfterWin();  
         
         ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
-        boardController.showDialogToSaveMatch(modeName,winner);
-        
-        
+        if(saveTheMatch)
+        {
+            boardController.saveMatch(modeName, winner);
+        }
+        //boardController.showDialogToSaveMatch(modeName,winner);
+
     }
     
     
@@ -694,6 +725,14 @@ public class GamePlayBoard extends AnchorPane {
         if(i == 2 && j == 1 && symbol == '.'){x21.setOpacity(0);o21.setOpacity(0);}
         if(i == 2 && j == 2 && symbol == '.'){x22.setOpacity(0);o22.setOpacity(0);}
            
+    }
+    
+    private void resetSaveMatchBtn()
+    {
+        btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
+        btnSaveMatch.setText("Save Match");
+        saveTheMatch = false;
+        btnSaveMatch.setDisable(false);
     }
     
 }
