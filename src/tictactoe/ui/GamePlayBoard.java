@@ -68,6 +68,7 @@ public class GamePlayBoard extends AnchorPane {
     BoardController boardController;
     boolean play,saveTheMatch,isThisIsCurrentPlayerTurn;
     String modeName;
+    Thread replayThread;
     
     
     
@@ -415,6 +416,10 @@ public class GamePlayBoard extends AnchorPane {
         btnLeave.setFont(new Font("Agency FB Bold", 48.0));
         btnLeave.setOnAction((e) -> {
             new CustomDialogBase("Are you sure you want to leave?", "Leave", "Cancel", () -> {
+                if(customController instanceof ReplayMatchController)
+                {
+                    replayThread.stop();
+                }
                 ScreenController.popScreen();
             },() -> {
                 
@@ -751,7 +756,7 @@ public class GamePlayBoard extends AnchorPane {
         
         
         
-        new Thread(()->{
+        replayThread = new Thread(()->{
             
             char player;
             for(int k = 5;k < movesFromFile.length;k++)
@@ -768,7 +773,8 @@ public class GamePlayBoard extends AnchorPane {
 
                 setOpacityBasedOnIndex(player,i,j,1);
             }
-        }).start();
+        });
+        replayThread.start();
     }
     
 }
