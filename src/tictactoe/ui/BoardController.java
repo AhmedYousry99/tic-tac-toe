@@ -154,6 +154,11 @@ public class BoardController  {
             }
     }
     
+    void resetMatchMoves()
+    {
+        moves = "";
+    }
+    
     public char[][] getSimulationBoard()
     {
         return simulationBoard;

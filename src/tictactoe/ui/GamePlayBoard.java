@@ -531,6 +531,7 @@ public class GamePlayBoard extends AnchorPane {
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
             resetSaveMatchBtn();
+            boardController.resetMatchMoves();
             btnRematch.setDisable(true);
         });
         
