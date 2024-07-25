@@ -126,10 +126,7 @@ public class BoardController  {
     
     void showDialogToSaveMatch(String mode ,int winner)
     {
-        String message = ((winner == 1) ? "X" : "O") 
-                + "! is the winner. \n Do you want to save the match.";
-        
-        if(winner == 2) message = "The game is Draw! \n Do you want to save the match.";
+        String message = "Do you want to save the match.";
         
         CustomDialogBase dialog = new CustomDialogBase(
                 message,

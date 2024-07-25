@@ -73,12 +73,14 @@ public class GamePlayBoard extends AnchorPane {
     
     BoardController boardController;
     boolean play;
+    String modeName;
     
 
     public GamePlayBoard(BoardController customController) {
         
         play = true;
         boardController = customController;
+        modeName = "Two Players Mode";
 
         backgroundImage = new ImageView();
         stack00 = new StackPane();
@@ -486,21 +488,25 @@ public class GamePlayBoard extends AnchorPane {
             switch(((SinglePlayerModeController) customController).getDifficultyLevel())
             {
                 case EASY:
-                    modeText.setText("Single Palyer Mode (EASY)");
+                    modeName = "Single Palyer Mode (EASY)";
+                    //modeText.setText("Single Palyer Mode (EASY)");
                     break;
                 case INTERMEDIATE:
-                    modeText.setText("Single Palyer Mode (INTERMEDIATE)");
+                    modeName = "Single Palyer Mode (INTERMEDIATE)";
+                    //modeText.setText("Single Palyer Mode (INTERMEDIATE)");
                     break;
                 case DIFFICULT:
-                    modeText.setText("Single Palyer Mode (DIFFICULT)");
+                    modeName = "Single Palyer Mode (DIFFICULT)";
+                    //modeText.setText("Single Palyer Mode (INTERMEDIATE)");
                     break;
             }
         }else if(customController instanceof BoardController)
         {
-             modeText.setText("Two Players Mode");
+            modeName = "Two Players Mode";
+             //modeText.setText("Two Players Mode");
         }
          
-
+        modeText.setText(modeName);
         btnRematch.setDisable(true);
         btnRematch.setOnAction((e)->{
             boardController.resetBoard();
@@ -596,19 +602,28 @@ public class GamePlayBoard extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.isGameInProgress = false;
-        boardController.showDialogToSaveMatch("TwoPlayersMode",winner);
+        
+        
+        
+        String url = "videos/draw.mp4";
         if(winner == 0)
         {
             boardController.playerOOWins++;
+            url = "videos/o_beats_x.mp4";
         }else if(winner == 1)
         {
             boardController.playerXXWins++;
+            url = "videos/x_beats_o.mp4";
         }
         boardController.roundsNumber++;
         
         btnRematch.setDisable(false);
          
-        updateUIAfterWin();    
+        updateUIAfterWin();  
+        
+        ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
+        boardController.showDialogToSaveMatch(modeName,winner);
+        
         
     }
     

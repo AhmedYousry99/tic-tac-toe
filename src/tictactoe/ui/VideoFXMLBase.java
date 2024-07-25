@@ -11,7 +11,7 @@ public class VideoFXMLBase extends AnchorPane {
     protected final VideoFXMLController videoController;
     protected final Button skipButton;
     
-    public VideoFXMLBase(String url) {
+    public VideoFXMLBase(String url, int time) {
         mediaView = new MediaView();
         skipButton = new Button();
 
@@ -24,6 +24,7 @@ public class VideoFXMLBase extends AnchorPane {
         mediaView.fitWidthProperty().bind(this.widthProperty());
         mediaView.setLayoutX(4.0);
         mediaView.setLayoutY(1.0);
+        mediaView.setPreserveRatio(false);
         
         skipButton.setLayoutX(27.0);
         skipButton.setLayoutY(357.0);
@@ -33,13 +34,15 @@ public class VideoFXMLBase extends AnchorPane {
         skipButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
         skipButton.setFont(new Font("Agency FB Bold", 18.0));
         
-        videoController = new VideoFXMLController(url);
+        videoController = new VideoFXMLController(url, time);
         mediaView.setMediaPlayer(videoController.getMediaplayer());
         videoController.play();
         
         getChildren().add(mediaView);
         getChildren().add(skipButton);
-
+        videoController.play();
+        
+        skipButton.setOnAction((e)->{videoController.skipVedio();});
     }
 
 //    public VideoFXMLBase() {
