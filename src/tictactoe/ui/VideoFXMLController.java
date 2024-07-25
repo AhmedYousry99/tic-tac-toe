@@ -14,6 +14,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import java.io.*;
 import java.lang.Thread;
+import javafx.animation.PauseTransition;
+import javafx.scene.Parent;
+import javafx.util.Duration;
+import tictactoe.resources.ResourcesLocation;
+import tictactoe.ui.util.ScreenController;
 
 /**
  *
@@ -28,17 +33,40 @@ public class VideoFXMLController{
         return mediaplayer;
     }
    private String url;
+   private int time;
 
-    public VideoFXMLController(String url) {
-        this.url = url;
-        Media media = new Media(url);
-        mediaplayer = new MediaPlayer(media);
+   private boolean finished = false;
+    public VideoFXMLController(String url, int time) {
+//        primaryStage.getIcons().add(new Image(ResourcesLocation.class.
+//                        getResource("images/icons/xo_icon.png").toExternalForm()));
         
+ 
+        this.url = url;
+        Media media = new Media(ResourcesLocation.class.
+                        getResource(url).toExternalForm());
+        mediaplayer = new MediaPlayer(media);
+        this.time = time;
     }
     
     
 
     void play(){
+        PauseTransition delay = new PauseTransition(Duration.seconds(time));
+        delay.setOnFinished( event -> {skipVedio();});
         mediaplayer.play();
+        delay.play();
+        
     }
+    
+   void skipVedio()
+   {
+       if(!finished)
+       {
+           ScreenController.popScreen();
+            mediaplayer.stop();
+            
+            finished = true;
+       }
+       
+   }
 }
