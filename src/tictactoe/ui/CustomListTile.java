@@ -5,12 +5,19 @@
  */
 package tictactoe.ui;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
+import tictactoe.data.MainFileController;
+import tictactoe.ui.util.CustomDialogBase;
+import tictactoe.ui.util.ScreenController;
 import tictactoe.ui.util.VoidCallable;
 
 /**
@@ -23,12 +30,14 @@ public class CustomListTile extends HBox{
     protected final HBox hBox;
     protected final Label label;
     protected final Region spacer;
+    private final File file;
 
-    public CustomListTile(String description, VoidCallable replay) {
+    public CustomListTile(File file) {
         hBox = new HBox();
         label = new Label();
         replayButton = new Button();
         spacer = new Region();
+        this.file = file;
         setHgrow(spacer, Priority.ALWAYS);
         setStyle("-fx-background-color: #050046;");
         
@@ -41,10 +50,17 @@ public class CustomListTile extends HBox{
         replayButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         replayButton.setTextFill(javafx.scene.paint.Color.valueOf("#050046"));
         replayButton.setFont(new Font("Agency FB Bold", 24.0));
+        replayButton.setOnAction((e) -> {
+            try {
+                ScreenController.pushScreen( new GamePlayBoard(new ReplayMatchController(new MainFileController().readFile(file))), this);
+            } catch (IOException ex) {
+                new CustomDialogBase("File is corrupt", null, "Ok", null, null);
+            }
+        });
         
         label.setAlignment(javafx.geometry.Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
-        label.setText(description);
+        label.setText(file.getName().split("[.]")[0]);
         label.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         label.setFont(new Font("Agency FB Bold", 24.0));
         

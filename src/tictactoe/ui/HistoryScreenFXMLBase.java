@@ -1,6 +1,7 @@
 package tictactoe.ui;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -35,10 +36,8 @@ public class HistoryScreenFXMLBase extends StackPane {
     protected final ListView<HBox> listView;
     protected final Button backButton;
     private ObservableList<HBox> hboxs;
-    private final List<CustomListTile> listTiles =  MainFileController.storedMatches.stream().map((file) -> {
-              return new CustomListTile(file.getName(), ()->{});  
-            }).collect(Collectors.toList());
-
+    private ArrayList<CustomListTile> listTiles;
+    
 
     public HistoryScreenFXMLBase() {
 
@@ -47,10 +46,12 @@ public class HistoryScreenFXMLBase extends StackPane {
         text = new Text();
         vBox = new VBox();
         label = new Label();
-        emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames() ? "You haven't saved any recordings yet." : "Failed to load recorded games");
+        listTiles = new ArrayList();
+        emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames(listTiles) ? "You haven't saved any recordings yet." : "Failed to load recorded games");
+        
+        System.out.println(listTiles.size());
         
         hboxs = FXCollections.observableArrayList(
-           
             listTiles
         );
         
