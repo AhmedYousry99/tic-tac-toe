@@ -5,6 +5,7 @@
  */
 package tictactoe;
 
+import tictactoe.domain.MusicController;
 import java.util.Stack;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -40,7 +41,8 @@ public class TicTacToe extends Application {
         Scene scene = new Scene(root, 1500, 1000);
         scene.getStylesheets().add("tictactoe/resources/css/listview.css");
         roots = new Stack();
-        
+          
+        MusicController music = new MusicController();
         primaryStage.setResizable(false);
         primaryStage.setTitle(StaticNames.TIC_TAC_TOE);
         primaryStage.setScene(scene);
