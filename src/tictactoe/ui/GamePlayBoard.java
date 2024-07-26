@@ -80,8 +80,8 @@ public class GamePlayBoard extends AnchorPane {
         saveTheMatch = false;
         boardController = customController;
         modeName = "Two Players Mode";
-        boardController.playerXXName = "PlayerX";
-        boardController.playerOOName = "PlayerO";
+        boardController.playerXXName = "Player X";
+        boardController.playerOOName = "Player O";
 
         backgroundImage = new ImageView();
         stack00 = new StackPane();
@@ -361,7 +361,6 @@ public class GamePlayBoard extends AnchorPane {
         playerXXNameText.setLayoutY(125.0);
         playerXXNameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         playerXXNameText.setStrokeWidth(0.0);
-        playerXXNameText.setText("PlayerX");
         playerXXNameText.setFont(new Font("Agency FB", 100.0));
 
         playerXXWinsText.setFill(javafx.scene.paint.Color.WHITE);
@@ -377,7 +376,6 @@ public class GamePlayBoard extends AnchorPane {
         playerOONameText.setLayoutY(122.0);
         playerOONameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         playerOONameText.setStrokeWidth(0.0);
-        playerOONameText.setText("PlayerO");
         playerOONameText.setFont(new Font("Agency FB", 100.0));
 
         playerOOWinsText.setFill(javafx.scene.paint.Color.WHITE);
@@ -510,7 +508,6 @@ public class GamePlayBoard extends AnchorPane {
             modeText.setLayoutX(400.0);
             modeText.setFont(new Font("Agency FB", 76.0));
             boardController.playerOOName = "Computer";
-            playerOONameText.setText("Computer");
             playerOONameText.setLayoutX(1180);
             switch(((SinglePlayerModeController) customController).getDifficultyLevel())
             {
@@ -530,6 +527,8 @@ public class GamePlayBoard extends AnchorPane {
         }
          
         modeText.setText(modeName);
+        playerXXNameText.setText(boardController.playerXXName);
+        playerOONameText.setText(boardController.playerOOName);
             
             
         //logic    
