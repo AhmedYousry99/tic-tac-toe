@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MusicFXMLController;
+package tictactoe.domain;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -20,12 +20,12 @@ import tictactoe.resources.ResourcesLocation;
  *
  * @author Ghazala
  */
-public class MusicFXMLController {
+public class MusicController {
     
        private static MediaPlayer mediaPlayer;
        private String url;
 
-    public MusicFXMLController ()
+    public MusicController ()
     {
         url = ResourcesLocation.class.getResource("audios/background_music.mp3").toExternalForm();
         mediaPlayer = new MediaPlayer(new Media(url));
