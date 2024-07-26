@@ -27,7 +27,7 @@ public class SocketConnectionController implements ConnectionInterface{
     private int port;
     private String addr;
   
-    //Singleton instance of server
+    //Singleton instance of SocketConnectionController
     private static SocketConnectionController instance;
 
     private static void setInstance(SocketConnectionController instance)
@@ -69,10 +69,10 @@ public class SocketConnectionController implements ConnectionInterface{
         return instance;
     }
     
-    private static SocketConnectionController getInstance() throws InstantiationException{
-        if(instance == null) throw new InstantiationError("An instance was not yet created, Create an instance by calling initialize first.");
-        return instance;
-    }
+//    private static SocketConnectionController getInstance() throws InstantiationException{
+//        if(instance == null) throw new InstantiationError("An instance was not yet created, Create an instance by calling initialize first.");
+//        return instance;
+//    }
 
     public int getPort()
     {
@@ -92,6 +92,8 @@ public class SocketConnectionController implements ConnectionInterface{
             if (port < 0 || port > 0xFFFF) throw new IllegalArgumentException("Invalid port value");
             createdSocket = new Socket(InetAddress.getByName(this.addr), port);
             this.port = createdSocket.getLocalPort();
+            playerDataHandler = new PlayerDataHandler(createdSocket);
+            playerDataHandler.start();
         } catch (IOException ex) {
             Logger.getLogger(SocketConnectionController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -122,7 +124,7 @@ public class SocketConnectionController implements ConnectionInterface{
     @Override
     public boolean connectToServer(String playerIp, int playerPort) throws UnknownHostException, IllegalArgumentException
     {
-       boolean successful = false;
+       boolean successful = true;
             try {
             initialize(playerIp, playerPort);
         }catch (IOException ex) {
@@ -135,11 +137,15 @@ public class SocketConnectionController implements ConnectionInterface{
     @Override
     public boolean disconnectFromServer()
     {
-        boolean successful = false;
-        
+        boolean successful = true;
+        try {
+            close();
+        } catch (IOException ex) {
+            System.out.println("close did throw an exception as expected, what to do...");
+            Logger.getLogger(SocketConnectionController.class.getName()).log(Level.SEVERE, null, ex);
+            successful = false;
+        }
         return successful;
     }
 
-
-    
 }
