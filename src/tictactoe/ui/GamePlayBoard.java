@@ -641,6 +641,7 @@ public class GamePlayBoard extends AnchorPane {
     
     private void doStuffOnGetResult(int winner)
     {
+        btnSaveMatch.setDisable(true);
         boardController.isGameInProgress = false;
 
         String url = "videos/draw.mp4";
