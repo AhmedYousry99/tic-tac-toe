@@ -5,7 +5,7 @@
  */
 package tictactoe;
 
-import MusicFXMLController.MusicFXMLController;
+import tictactoe.domain.MusicController;
 import java.util.Stack;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -45,7 +45,7 @@ public class TicTacToe extends Application {
         roots = new Stack();
         
         
-        MusicFXMLController music = new MusicFXMLController();
+        MusicController music = new MusicController();
         
         
         primaryStage.setResizable(false);
