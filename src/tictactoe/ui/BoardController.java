@@ -23,6 +23,7 @@ public class BoardController  {
 
     
     protected int currentPlayer;
+    String playerXXName,playerOOName;
     int playerXXWins,playerOOWins,roundsNumber;
     protected char[][] simulationBoard;
     boolean isGameInProgress;
@@ -35,7 +36,8 @@ public class BoardController  {
         playerXXWins = 0;
         playerOOWins = 0;
         roundsNumber = 1;
-        
+        playerXXName = "";
+        playerOOName = "";
         
         isGameInProgress = true;
         currentPlayer = 1;
@@ -55,7 +57,7 @@ public class BoardController  {
     void setMove(int i ,int j)
     {
 
-        if(isThisAValidMove(i, j))
+        if(isThisIsAValidMove(i, j))
         {
             addToMoves(i, j);
             if(currentPlayer == 1)
@@ -133,22 +135,32 @@ public class BoardController  {
                 "Save",
                 "Cancel", 
                 ()->{
-                    MainFileController mf = new MainFileController();
-            try {
+                    saveMatch(mode, winner);
+                }, 
+                ()->{moves = "";});
+    }
+    
+    void saveMatch(String mode ,int winner)
+    {
+        MainFileController mf = new MainFileController();
+        try {
                 int xWins = (winner == 1) ? playerXXWins-1:playerXXWins;
                 int oWins = (winner == 0) ? playerOOWins-1:playerOOWins;
-                String temp = String.valueOf(roundsNumber-1) + "," 
+                String temp = playerXXName + "," 
+                        + playerOOName + ","
+                        + String.valueOf(roundsNumber-1) + "," 
                         + String.valueOf(xWins) + ","
                         + String.valueOf(oWins) + "," + moves;
-                mf.writeFileInDirectory(mode, temp);
-               moves = "";
+                 mf.writeFileInDirectory(mode, temp);
+                 moves = "";
             } catch (IOException ex) {
                 Logger.getLogger(BoardController.class.getName()).log(Level.SEVERE, null, ex);
             }
-                }, 
-                ()->{moves = "";});
-        
-         
+    }
+    
+    void resetMatchMoves()
+    {
+        moves = "";
     }
     
     public char[][] getSimulationBoard()
@@ -175,11 +187,9 @@ public class BoardController  {
         else return 0;
     }
 
-    void doComputerMove() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
-    protected boolean isThisAValidMove(int i ,int j)
+    protected boolean isThisIsAValidMove(int i ,int j)
     {
         if(simulationBoard[i][j] == '.' && isGameInProgress)
         {
@@ -190,4 +200,9 @@ public class BoardController  {
         }
     }
     
+    
+    public String getMoves()
+    {
+        return moves;
+    }
 }

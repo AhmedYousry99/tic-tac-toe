@@ -1,24 +1,17 @@
 package tictactoe.ui;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javax.annotation.Resource;
-import tictactoe.data.MainFileController;
-import tictactoe.domain.PlayingMode;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.ScreenController;
@@ -70,17 +63,25 @@ public class GamePlayBoard extends AnchorPane {
     protected final Text modeText;
     protected final Button btnLeave;
     protected final Button btnRematch;
+    protected final Button btnSaveMatch;
     
     BoardController boardController;
-    boolean play;
+    boolean play,saveTheMatch,isThisIsCurrentPlayerTurn;
     String modeName;
+    Thread replayThread;
+    
+    
     
 
     public GamePlayBoard(BoardController customController) {
         
+        isThisIsCurrentPlayerTurn = true;
         play = true;
+        saveTheMatch = false;
         boardController = customController;
         modeName = "Two Players Mode";
+        boardController.playerXXName = "PlayerX";
+        boardController.playerOOName = "PlayerO";
 
         backgroundImage = new ImageView();
         stack00 = new StackPane();
@@ -127,6 +128,7 @@ public class GamePlayBoard extends AnchorPane {
         modeText = new Text();
         btnLeave = new Button();
         btnRematch = new Button();
+        btnSaveMatch = new Button();
 
         boardController.resetBoard();
         
@@ -414,6 +416,10 @@ public class GamePlayBoard extends AnchorPane {
         btnLeave.setFont(new Font("Agency FB Bold", 48.0));
         btnLeave.setOnAction((e) -> {
             new CustomDialogBase("Are you sure you want to leave?", "Leave", "Cancel", () -> {
+                if(customController instanceof ReplayMatchController)
+                {
+                    replayThread.stop();
+                }
                 ScreenController.popScreen();
             },() -> {
                 
@@ -423,11 +429,21 @@ public class GamePlayBoard extends AnchorPane {
         btnRematch.setLayoutX(1265.0);
         btnRematch.setLayoutY(885.0);
         btnRematch.setMnemonicParsing(false);
-        btnRematch.setPrefHeight(57.0);
+        btnRematch.setPrefHeight(85.0);
         btnRematch.setPrefWidth(210.0);
         btnRematch.setStyle("-fx-background-color: #D38CC4;");
-        btnRematch.setText("Rematch");
-        btnRematch.setFont(new Font("Agency FB Bold", 48.0));
+        btnRematch.setText("Play Again");
+        btnRematch.setFont(new Font("Agency FB Bold", 30.0));
+        
+        
+        btnSaveMatch.setLayoutX(1265.0);
+        btnSaveMatch.setLayoutY(780.0);
+        btnSaveMatch.setMnemonicParsing(false);
+        btnSaveMatch.setPrefHeight(85.0);
+        btnSaveMatch.setPrefWidth(210.0);
+        btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
+        btnSaveMatch.setText("Save Match");
+        btnSaveMatch.setFont(new Font("Agency FB Bold", 30.0));
 
         
         updateUIAfterWin();
@@ -476,66 +492,90 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(modeText);
         getChildren().add(btnLeave);
         getChildren().add(btnRematch);
+        getChildren().add(btnSaveMatch);
         
         
-        
-        if(customController instanceof SinglePlayerModeController)
+        if(customController instanceof ReplayMatchController)
+        {
+            isThisIsCurrentPlayerTurn = false;
+            btnSaveMatch.setVisible(false);
+            btnRematch.setVisible(false);
+            modeName = "Replay Mode";
+            modeText.setLayoutX(580);
+            playMatchFromHistory();
+            
+        }
+        else if(customController instanceof SinglePlayerModeController)
         {
             modeText.setLayoutX(400.0);
             modeText.setFont(new Font("Agency FB", 76.0));
+            boardController.playerOOName = "Computer";
             playerOONameText.setText("Computer");
             playerOONameText.setLayoutX(1180);
             switch(((SinglePlayerModeController) customController).getDifficultyLevel())
             {
                 case EASY:
                     modeName = "Single Palyer Mode (EASY)";
-                    //modeText.setText("Single Palyer Mode (EASY)");
                     break;
                 case INTERMEDIATE:
                     modeName = "Single Palyer Mode (INTERMEDIATE)";
-                    //modeText.setText("Single Palyer Mode (INTERMEDIATE)");
                     break;
                 case DIFFICULT:
                     modeName = "Single Palyer Mode (DIFFICULT)";
-                    //modeText.setText("Single Palyer Mode (INTERMEDIATE)");
                     break;
             }
         }else if(customController instanceof BoardController)
         {
             modeName = "Two Players Mode";
-             //modeText.setText("Two Players Mode");
         }
          
         modeText.setText(modeName);
+            
+            
+        //logic    
+    
         btnRematch.setDisable(true);
         btnRematch.setOnAction((e)->{
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
+            resetSaveMatchBtn();
+            boardController.resetMatchMoves();
             btnRematch.setDisable(true);
         });
         
+
+        btnSaveMatch.setOnAction((e)->{
+            btnSaveMatch.setStyle("-fx-background-color: #96D38C;");
+            btnSaveMatch.setText("Recording...");
+            saveTheMatch = true;
+            btnSaveMatch.setDisable(true);
+        });
         
-        //logic     
-        stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
-        stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
+        if(isThisIsCurrentPlayerTurn)
+        {
+            stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
-        stack02.setOnMouseClicked((event)->{ButtonAction(0, 2);});
-        
-        stack10.setOnMouseClicked((event)->{ButtonAction(1, 0);});
-        
-        stack11.setOnMouseClicked((event)->{ButtonAction(1, 1);});
-        
-        stack12.setOnMouseClicked((event)->{ButtonAction(1, 2);});
-     
-        stack20.setOnMouseClicked((event)->{ButtonAction(2, 0);});
-        
-        stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
-        
-        stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
-    
+            stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
+
+            stack02.setOnMouseClicked((event)->{ButtonAction(0, 2);});
+
+            stack10.setOnMouseClicked((event)->{ButtonAction(1, 0);});
+
+            stack11.setOnMouseClicked((event)->{ButtonAction(1, 1);});
+
+            stack12.setOnMouseClicked((event)->{ButtonAction(1, 2);});
+
+            stack20.setOnMouseClicked((event)->{ButtonAction(2, 0);});
+
+            stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
+
+            stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
+        }
 
     }
+    
+    
     
     void ButtonAction(int i,int j)
     {
@@ -555,7 +595,7 @@ public class GamePlayBoard extends AnchorPane {
     
     private void doButtonActionOnSinglePlayerMode(int i,int j)
     {
-        if(boardController.isThisAValidMove(i, j))
+        if(boardController.isThisIsAValidMove(i, j))
         {
             if(play)
             {
@@ -566,7 +606,7 @@ public class GamePlayBoard extends AnchorPane {
             if(boardController.getBoardState(boardController.getSimulationBoard()) == -1){
                     PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
                     pause.setOnFinished(e -> {
-                        boardController.doComputerMove();
+                        ((SinglePlayerModeController)boardController).doComputerMove();
                         resetBoardBaseOnSimulationBoard();
                         actionWhenGetBoardState();
                         play = true;
@@ -602,9 +642,7 @@ public class GamePlayBoard extends AnchorPane {
     private void doStuffOnGetResult(int winner)
     {
         boardController.isGameInProgress = false;
-        
-        
-        
+
         String url = "videos/draw.mp4";
         if(winner == 0)
         {
@@ -622,9 +660,11 @@ public class GamePlayBoard extends AnchorPane {
         updateUIAfterWin();  
         
         ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
-        boardController.showDialogToSaveMatch(modeName,winner);
-        
-        
+        if(saveTheMatch)
+        {
+            boardController.saveMatch(modeName, winner);
+        }
+
     }
     
     
@@ -694,6 +734,47 @@ public class GamePlayBoard extends AnchorPane {
         if(i == 2 && j == 1 && symbol == '.'){x21.setOpacity(0);o21.setOpacity(0);}
         if(i == 2 && j == 2 && symbol == '.'){x22.setOpacity(0);o22.setOpacity(0);}
            
+    }
+    
+    private void resetSaveMatchBtn()
+    {
+        btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
+        btnSaveMatch.setText("Save Match");
+        saveTheMatch = false;
+        btnSaveMatch.setDisable(false);
+    }
+    
+    
+    private void playMatchFromHistory()
+    {
+        String[] movesFromFile = boardController.getMoves().split(",");
+        playerXXNameText.setText(movesFromFile[0]);
+        playerOONameText.setText(movesFromFile[1]);
+        roundNumberText.setText("Round : "+ movesFromFile[2]);
+        playerXXWinsText.setText("Wins : " + movesFromFile[3]);
+        playerOOWinsText.setText("Wins : " + movesFromFile[4]);
+        
+        
+        
+        replayThread = new Thread(()->{
+            
+            char player;
+            for(int k = 5;k < movesFromFile.length;k++)
+            {
+                try {
+                Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                int i = Integer.valueOf(movesFromFile[k].charAt(0))-'0';
+                int j = Integer.valueOf(movesFromFile[k].charAt(1))-'0';
+                if(k % 2 == 1)player = 'x';
+                else player = 'o';
+
+                setOpacityBasedOnIndex(player,i,j,1);
+            }
+        });
+        replayThread.start();
     }
     
 }

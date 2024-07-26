@@ -1,5 +1,9 @@
 package tictactoe.ui;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,6 +20,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import tictactoe.data.MainFileController;
+import tictactoe.domain.FileController;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
 
@@ -26,9 +32,12 @@ public class HistoryScreenFXMLBase extends StackPane {
     protected final Text text;
     protected final VBox vBox;
     protected final Label label;
+    protected final Label emptyListLabel;
     protected final ListView<HBox> listView;
     protected final Button backButton;
     private ObservableList<HBox> hboxs;
+    private ArrayList<CustomListTile> listTiles;
+    
 
     public HistoryScreenFXMLBase() {
 
@@ -37,29 +46,23 @@ public class HistoryScreenFXMLBase extends StackPane {
         text = new Text();
         vBox = new VBox();
         label = new Label();
+        listTiles = new ArrayList();
+        emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames(listTiles, this) ? "You haven't saved any recordings yet." : "Failed to load recorded games");
+        
+        System.out.println(listTiles.size());
+        
         hboxs = FXCollections.observableArrayList(
-            new CustomListTile[]{
-                new CustomListTile("Two Players Mode Sun Jul 23 21_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Mon Jul 24 19_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Teus Jul 25 11_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Wen Jul 26 2_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Thu Jul 27 5_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Sun Jul 23 21_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Mon Jul 24 19_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Teus Jul 25 11_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Wen Jul 26 2_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Thu Jul 27 5_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Sun Jul 23 21_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Mon Jul 24 19_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Teus Jul 25 11_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Wen Jul 26 2_08_34 EET 2024", ()->{}),
-                new CustomListTile("Two Players Mode Thu Jul 27 5_08_34 EET 2024", ()->{}),
-                }
+            listTiles
         );
-
+        
         
         listView= new ListView(hboxs);
-
+        listView.setPlaceholder(emptyListLabel);
+        emptyListLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        emptyListLabel.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        emptyListLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        emptyListLabel.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+        emptyListLabel.setFont(new Font("Agency FB", 48.0));
         
 
         backButton = new Button();
@@ -85,6 +88,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         flowPane.setPrefWidth(1500.0);
         flowPane.setRowValignment(javafx.geometry.VPos.TOP);
         flowPane.setVgap(40.0);
+        setMargin(flowPane, new Insets(0, 20, 0, 20));
 
         text.setFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
@@ -108,6 +112,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         vBox.prefWidthProperty().bind(flowPane.widthProperty());
         listView.setStyle("-fx-background-color: #050046; -fx-background-insets: 0;");
         listView.setPrefHeight(500.0);
+       
         
         StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_LEFT);
         backButton.setAlignment(javafx.geometry.Pos.CENTER);

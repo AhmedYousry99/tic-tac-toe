@@ -5,9 +5,11 @@
  */
 package tictactoe.ui.util;
 
+import java.util.Stack;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import tictactoe.TicTacToe;
+import tictactoe.ui.StartScreenFXMLBase;
 
 
 
@@ -18,10 +20,30 @@ import tictactoe.TicTacToe;
 public class ScreenController {
     public static void pushScreen(Parent newRoot, Parent currentRoot){
         TicTacToe.primaryStage.getScene().setRoot(newRoot);
-        TicTacToe.roots.push(currentRoot);
+        if(currentRoot != null){
+            TicTacToe.roots.push(currentRoot);
+        }
     }
     
     public static void popScreen(){
         TicTacToe.primaryStage.getScene().setRoot(TicTacToe.roots.pop());
+    }
+    
+    public static void popUntil(Class screenClass) {
+        Stack<Parent> tempStack = (Stack<Parent>)TicTacToe.roots.clone();
+        Parent tempScreen = null;
+        while(!tempStack.isEmpty()){
+            if(tempStack.peek().getClass() == screenClass){
+                break;
+            }
+            tempScreen = TicTacToe.roots.pop();
+        }
+        if(screenClass == StartScreenFXMLBase.class && tempScreen != null){
+                TicTacToe.roots = tempStack;
+                pushScreen(tempScreen, null);
+            }
+        if(!tempStack.isEmpty()){
+            popScreen();
+        }
     }
 }

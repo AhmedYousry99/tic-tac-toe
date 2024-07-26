@@ -43,6 +43,7 @@ public class CustomDialogBase extends AnchorPane {
         text.setWrappingWidth(331.4700164794922);
         text.setFont(new Font("Agency FB", 24.0));
 
+        if(defaultFunc != null){
         defaultButton.setLayoutX(228.0);
         defaultButton.setLayoutY(184.0);
         defaultButton.setMnemonicParsing(false);
@@ -58,8 +59,14 @@ public class CustomDialogBase extends AnchorPane {
             defaultFunc.call();
             stage.close();
         });
+        getChildren().add(defaultButton);
+        }
 
-        cancelButton.setLayoutX(22.0);
+        if(defaultFunc == null){
+            cancelButton.setLayoutX(125.0);
+        }else{
+            cancelButton.setLayoutX(22.0);
+        }
         cancelButton.setLayoutY(184.0);
         cancelButton.setMnemonicParsing(false);
         cancelButton.setPrefHeight(25.0);
@@ -71,12 +78,12 @@ public class CustomDialogBase extends AnchorPane {
         cancelButton.setFont(new Font("Agency FB Bold", 18.0));
         cancelButton.setCancelButton(true);
         cancelButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            cancelFunc.call();
+            if(cancelFunc != null) cancelFunc.call();
             stage.close();
         });
 
         getChildren().add(text);
-        getChildren().add(defaultButton);
+        
         getChildren().add(cancelButton);
         stage.show();
     }

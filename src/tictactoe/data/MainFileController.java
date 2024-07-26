@@ -20,6 +20,7 @@ import tictactoe.domain.PlayingMode;
  */
 public class MainFileController implements FileController{
 
+    private String url = "src/tictactoe/data/files";
     static public ArrayList<File> storedMatches;
     
     static{
@@ -29,7 +30,9 @@ public class MainFileController implements FileController{
     public void writeFileInDirectory(String mode, String moves) throws IOException {
         
  
-        File file = new File("src/tictactoe/data/files/" + prepareName(mode) + ".txt");
+        File file = new File( url +"/" + prepareName(mode) + ".txt");
+        
+        createDirectoryIfNotExists();
         if(file.createNewFile())
         {
             FileOutputStream os = new FileOutputStream(file);
@@ -37,6 +40,7 @@ public class MainFileController implements FileController{
             os.write(data);
             os.close();
         }
+        
     }
     
     private String prepareName(String mode)
@@ -59,15 +63,29 @@ public class MainFileController implements FileController{
 
     @Override
     public void getfilesFromDirectory() throws IOException {
-        File file = new File("src/tictactoe/data/files");
-        System.out.println(file.getAbsolutePath());
+        
+        createDirectoryIfNotExists();
+        File file = new File(url);
         
         File[] all = file.listFiles();
-        
+
+        storedMatches.clear();
         for(File f : all)
         {
             storedMatches.add(f);
+        } 
+    }
+    
+ 
+    
+    private boolean createDirectoryIfNotExists()
+    {
+        File dir = new File(url);
+        if(!dir.exists())
+        {
+            return dir.mkdir();
         }
+        return true;
     }
     
 }
