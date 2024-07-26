@@ -24,6 +24,12 @@ public class SocketConnectionController implements ConnectionInterface{
     
     private Socket createdSocket;
     private PlayerDataHandler playerDataHandler;
+
+    public PlayerDataHandler getPlayerDataHandler()
+    {
+        return playerDataHandler;
+    }
+    
     private int port;
     private String addr;
   
@@ -96,6 +102,7 @@ public class SocketConnectionController implements ConnectionInterface{
             playerDataHandler.start();
         } catch (IOException ex) {
             Logger.getLogger(SocketConnectionController.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
        
     }
