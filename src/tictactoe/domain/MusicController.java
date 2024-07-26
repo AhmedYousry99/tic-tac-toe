@@ -36,6 +36,18 @@ public class MusicController {
         mediaPlayer.play();
       
     }
+
+    
+    public static void pauseMusic()
+    {
+        mediaPlayer.pause();
+    }
+    
+    public static void startMusic()
+    {
+        mediaPlayer.play();
+    }
+
         
    
 

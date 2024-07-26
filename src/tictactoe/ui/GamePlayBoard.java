@@ -659,6 +659,7 @@ public class GamePlayBoard extends AnchorPane {
          
         updateUIAfterWin();  
         
+        tictactoe.domain.MusicController.pauseMusic();
         ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
         if(saveTheMatch)
         {

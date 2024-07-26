@@ -62,9 +62,9 @@ public class VideoFXMLController{
    {
        if(!finished)
        {
+           tictactoe.domain.MusicController.startMusic();
            ScreenController.popScreen();
             mediaplayer.stop();
-            
             finished = true;
        }
        
