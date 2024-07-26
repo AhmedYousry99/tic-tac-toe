@@ -62,7 +62,11 @@ public class CustomDialogBase extends AnchorPane {
         getChildren().add(defaultButton);
         }
 
-        cancelButton.setLayoutX(22.0);
+        if(defaultFunc == null){
+            cancelButton.setLayoutX(125.0);
+        }else{
+            cancelButton.setLayoutX(22.0);
+        }
         cancelButton.setLayoutY(184.0);
         cancelButton.setMnemonicParsing(false);
         cancelButton.setPrefHeight(25.0);
