@@ -72,6 +72,16 @@ public class PlayerDataHandler extends Thread{
                         break;
                     case PLAYER_MOVE:
                         break;
+                    case REQUEST_TO_PLAY:
+                        break;
+                    case RESPONSE_TO_REQUEST_TO_PLAY:
+                        break;
+                    case DIALOG_REQUEST_TO_PLAY:
+                        break;
+                    case WAITING_REQUEST_TO_PLAY:
+                        break;
+                    case SCORE_BOARD:
+                        break;
                     case CHECK_SERVER:
                         break;
                     default:
