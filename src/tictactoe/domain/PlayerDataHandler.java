@@ -5,6 +5,7 @@
  */
 package tictactoe.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import tictactoe.ui.util.ScreenController;
 
 /**
  *
@@ -39,10 +41,12 @@ public class PlayerDataHandler extends Thread{
     }
     
     
-    public boolean sendMessage(String msg){
-        printStream.println(msg);
+    public boolean sendMessage(PlayerMessageBody msg) throws JsonProcessingException{
+        String newMessage = JSONParser.convertFromPlayerMessageBodyToJSON(msg);
+        printStream.println(newMessage);
         return printStream.checkError();
     }
+    
     protected String recieveMessage() throws IOException{
         String msg = null;
         msg = bufferedReader.readLine();
@@ -57,6 +61,22 @@ public class PlayerDataHandler extends Thread{
         while(true){
             try {
                 String msg = recieveMessage();
+                PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
+                switch(pl.getState())
+                {
+                    case LOG_IN:
+                        break;
+                    case SIGN_UP:
+                        break;
+                    case SIGN_UP_RESPONSE:
+                        break;
+                    case PLAYER_MOVE:
+                        break;
+                    case CHECK_SERVER:
+                        break;
+                    default:
+                        throw new AssertionError(pl.getState().name());
+                }
             } catch (IOException ex) {
                 Logger.getLogger(PlayerDataHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
