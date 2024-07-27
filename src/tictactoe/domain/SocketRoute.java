@@ -15,7 +15,7 @@ public enum SocketRoute {
     SIGN_UP,
     SIGN_UP_RESPONSE,
     PLAYER_MOVE,
-    ONLINE_PLAYERS,
+    ALL_PLAYERS,
     AVAILABLE_PLAYERS,
     LOG_OUT,
     SURRENDER,
