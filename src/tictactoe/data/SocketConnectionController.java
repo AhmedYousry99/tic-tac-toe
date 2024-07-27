@@ -73,7 +73,7 @@ public class SocketConnectionController implements ConnectionInterface{
      */
     public static SocketConnectionController initialize(String serverAddr) throws IllegalArgumentException, IOException{
         
-        if(instance != null){//basically restarts the server with different parameters
+        if(instance == null){//basically restarts the server with different parameters
             instance = new SocketConnectionController(serverAddr, 5005);
         }
         return instance;
