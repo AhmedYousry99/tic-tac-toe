@@ -6,6 +6,7 @@
 package tictactoe.data;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -13,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.Vector;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tictactoe.domain.ConnectionInterface;
@@ -55,7 +57,7 @@ public class SocketConnectionController implements ConnectionInterface{
      * @throws IllegalArgumentException if server address or port number were invalid
      * @throws IOException if an exception occurs while trying to communicate or receive data from client (Player)
      */
-    public static SocketConnectionController initialize(String serverAddr, int port) throws IllegalArgumentException, IOException{
+    public static SocketConnectionController initialize(String serverAddr, int port) throws IllegalArgumentException, IOException, ConnectException{
         
         if(instance == null){//basically restarts the server with different parameters
             instance = new SocketConnectionController(serverAddr, port);
@@ -71,7 +73,7 @@ public class SocketConnectionController implements ConnectionInterface{
      * @throws IllegalArgumentException if server address or port number were invalid
      * @throws IOException if an exception occurs while trying to communicate or receive data from client (Player)
      */
-    public static SocketConnectionController initialize(String serverAddr) throws IllegalArgumentException, IOException{
+    public static SocketConnectionController initialize(String serverAddr) throws IllegalArgumentException, IOException, ConnectException{
         
         if(instance == null){//basically restarts the server with different parameters
             instance = new SocketConnectionController(serverAddr, 5005);
@@ -79,7 +81,7 @@ public class SocketConnectionController implements ConnectionInterface{
         return instance;
     }
     
-    private SocketConnectionController(String addr, int port) throws UnknownHostException, IllegalArgumentException, IOException{
+    private SocketConnectionController(String addr, int port) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException{
             if(addr.split("[.]").length != 4) throw new IllegalArgumentException("invalid IP address");
             this.addr = addr;
             if (port < 0 || port > 0xFFFF) throw new IllegalArgumentException("Invalid port value");
@@ -112,19 +114,19 @@ public class SocketConnectionController implements ConnectionInterface{
     }
 
     @Override
-    public void connectToServer(String ip) throws UnknownHostException, IllegalArgumentException, IOException
+    public void connectToServer(String ip) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException
     {
          initialize(ip);
     }
 
     @Override
-    public void connectToServer(String playerIp, int playerPort) throws UnknownHostException, IllegalArgumentException, IOException
+    public void connectToServer(String playerIp, int playerPort) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException
     {
         initialize(playerIp, playerPort);
     }
     
     @Override
-    public void disconnectFromServer() throws IOException
+    public void disconnectFromServer() throws IOException, ConnectException
     {
         close();
     }
