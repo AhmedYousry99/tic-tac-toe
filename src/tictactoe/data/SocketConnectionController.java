@@ -39,8 +39,8 @@ public class SocketConnectionController implements ConnectionInterface{
         return instance;
     }
     //The instance of playerDataHandler in the singleton SocketConnectionController
-    private static PlayerDataHandler playerDataHandler;
-    public static PlayerDataHandler getPlayerDataHandler()
+    private PlayerDataHandler playerDataHandler;
+    public PlayerDataHandler getPlayerDataHandler()
     {
         return playerDataHandler;
     }
@@ -84,8 +84,8 @@ public class SocketConnectionController implements ConnectionInterface{
             this.addr = addr;
             if (port < 0 || port > 0xFFFF) throw new IllegalArgumentException("Invalid port value");
             createdSocket = new Socket();
-            createdSocket.connect(new InetSocketAddress(addr, port), 5000);
-            createdSocket.setSoTimeout(5000);
+            createdSocket.connect(new InetSocketAddress(addr, port));
+//            createdSocket.setSoTimeout(5000);
             this.port = createdSocket.getLocalPort();
             playerDataHandler = new PlayerDataHandler(createdSocket);
             playerDataHandler.start();
