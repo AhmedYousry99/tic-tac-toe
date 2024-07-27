@@ -46,8 +46,10 @@ public class LoginScreenBase extends AnchorPane {
         setPrefHeight(1000.0);
         setPrefWidth(1500.0);
 
-        imageView.setFitHeight(1000.0);
-        imageView.setFitWidth(1500.0);
+        imageView.setPickOnBounds(true);
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
+        
         imageView.setImage(new Image(
                 ResourcesLocation.class.
                         getResource("images/backgrounds/main.jpg").toExternalForm()));
@@ -73,7 +75,7 @@ public class LoginScreenBase extends AnchorPane {
         text0.setFont(new Font("Agency FB Bold", 40.0));
 
         usernameTxtField.setEditable(true);
-        usernameTxtField.setLayoutX(614.0);
+        usernameTxtField.setLayoutX(600.0);
         usernameTxtField.setLayoutY(402.0);
         usernameTxtField.setPrefHeight(49.0);
         usernameTxtField.setPrefWidth(318.0);
@@ -111,7 +113,7 @@ public class LoginScreenBase extends AnchorPane {
         hyperlink.setFont(new Font("Agency FB", 28.0));
 
         passwordField.setEditable(true);
-        passwordField.setLayoutX(605.0);
+        passwordField.setLayoutX(600.0);
         passwordField.setLayoutY(576.0);
         passwordField.setPrefHeight(49.0);
         passwordField.setPrefWidth(318.0);
