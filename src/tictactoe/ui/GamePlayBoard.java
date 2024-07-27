@@ -1,6 +1,7 @@
 package tictactoe.ui;
 
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
@@ -12,6 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.JSONParser;
+import tictactoe.domain.PlayerMessageBody;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.ScreenController;
@@ -777,5 +781,30 @@ public class GamePlayBoard extends AnchorPane {
         });
         replayThread.start();
     }
+    
+    void doOnlineMove()
+    {
+        new Thread(()->{
+            while (true) {                
+                try {
+                    String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(str);
+                    switch(pl.getState())
+                    {
+                        case PLAYER_MOVE:
+                        {
+                            
+                            break;
+                        }
+                    }
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }).start();
+    }
+    
     
 }

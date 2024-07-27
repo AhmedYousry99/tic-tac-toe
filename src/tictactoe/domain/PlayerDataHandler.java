@@ -47,7 +47,7 @@ public class PlayerDataHandler extends Thread{
         return printStream.checkError();
     }
     
-    protected String recieveMessage() throws IOException{
+    public String recieveMessage() throws IOException{
         String msg = null;
         msg = bufferedReader.readLine();
         System.out.println(msg);
@@ -70,11 +70,6 @@ public class PlayerDataHandler extends Thread{
                         break;
                     case SIGN_UP_RESPONSE:
                         break;
-                    case PLAYER_MOVE:
-                    {
-                        
-                        break;
-                    }
                     case CHECK_SERVER:
                         break;
                     case LOG_IN_RESPONSE:
