@@ -3,6 +3,8 @@ package tictactoe.ui;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
@@ -14,6 +16,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
+import tictactoe.ui.util.CustomDialogBase;
+import tictactoe.ui.util.CustomDialogSuccess;
+
 
 public class LoginScreenBase extends AnchorPane {
 
@@ -27,6 +32,33 @@ public class LoginScreenBase extends AnchorPane {
     protected final PasswordField passwordField;
     protected final Button backButton;
 
+    public boolean validation(){
+        String username, password;
+        username = usernameTxtField.getText();
+        password = passwordField.getText();
+        
+        if(username.equals("")|| password.equals(""))
+        {
+            
+        loginButton.setOnAction((e) -> {
+            new CustomDialogBase("Invalid data, can't leave fields empty", "Okay", "Cancel", () -> {
+                
+            },() -> {
+                ScreenController.popScreen();
+            });
+        });
+        }
+        else {
+             loginButton.setOnAction((e) -> {
+            new CustomDialogSuccess("Successful login", "Okay", () -> {
+                
+            });
+        });
+        }
+       
+        
+        return true;        
+    }
     public LoginScreenBase() {
 
         imageView = new ImageView();
@@ -79,6 +111,13 @@ public class LoginScreenBase extends AnchorPane {
         usernameTxtField.setPrefWidth(318.0);
         usernameTxtField.setPromptText("Enter username...");
         usernameTxtField.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
+        
+         usernameTxtField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                usernameTxtField.getText();
+            }
+        });
 
         text1.setFill(javafx.scene.paint.Color.valueOf("#f2f0f0"));
         text1.setLayoutX(695.0);
@@ -99,16 +138,19 @@ public class LoginScreenBase extends AnchorPane {
         loginButton.setText("Login");
         loginButton.setTextFill(javafx.scene.paint.Color.valueOf("#f2efef"));
         loginButton.setFont(new Font("Agency FB Bold", 36.0));
-        
-        hyperlink.setOnAction((event) -> {
-            ScreenController.pushScreen(new SignupScreenBase(), this);
+        loginButton.addEventHandler(ActionEvent.ACTION, (e) -> {
+            validation();
         });
-
+        
+       
         hyperlink.setLayoutX(628.0);
         hyperlink.setLayoutY(831.0);
         hyperlink.setText("Don't have an account? Signup!");
         hyperlink.setTextFill(javafx.scene.paint.Color.valueOf("#fcfafa"));
         hyperlink.setFont(new Font("Agency FB", 28.0));
+         hyperlink.setOnAction((event) -> {
+            ScreenController.pushScreen(new SignupScreenBase(), this);
+        });
 
         passwordField.setEditable(true);
         passwordField.setLayoutX(605.0);
@@ -116,6 +158,12 @@ public class LoginScreenBase extends AnchorPane {
         passwordField.setPrefHeight(49.0);
         passwordField.setPrefWidth(318.0);
         passwordField.setPromptText("Enter password...");
+        passwordField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                passwordField.getText();
+            }
+        });
 
         backButton.setLayoutX(51.0);
         backButton.setLayoutY(877.0);
