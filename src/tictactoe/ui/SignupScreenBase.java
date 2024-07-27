@@ -48,10 +48,10 @@ public class SignupScreenBase extends AnchorPane {
         setPrefWidth(1500.0);
         getStyleClass().add("button");
 
-        imageView.setFitHeight(1000.0);
-        imageView.setFitWidth(1500.0);
-        imageView.setLayoutX(-4.0);
-        imageView.setLayoutY(-1.0);
+        imageView.setPickOnBounds(true);
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
+        
         imageView.setImage(new Image(
                 ResourcesLocation.class.
                         getResource("images/backgrounds/main.jpg").toExternalForm()));
