@@ -1,5 +1,8 @@
 package tictactoe.ui.util;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoe.TicTacToe;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.ConnectionInterface;
 import tictactoe.ui.GamePlayBoard;
 
 public class CustomDialogWithTextFieldBase extends AnchorPane {
@@ -68,9 +73,20 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         okButton.setFont(new Font("Agency FB Bold", 18.0));
         okButton.setDefaultButton(true);
         okButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            if(validateInput(textField1.getText())){
-                stage.close();
-                ScreenController.pushScreen(newRoot, currentRoot);
+            String ip = textField1.getText();
+            if(validateInput(ip)){
+                try {
+                    
+                    okButton.setDisable(true);
+                    cancelButton.setDisable(true);
+                    SocketConnectionController.initialize(ip);
+                    stage.close();
+                    ScreenController.pushScreen(newRoot, currentRoot);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(CustomDialogWithTextFieldBase.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CustomDialogWithTextFieldBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -93,6 +109,7 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         getChildren().add(okButton);
         getChildren().add(cancelButton);
         stage.show();
+        
     }
     
         private boolean validateInput(String ip){
