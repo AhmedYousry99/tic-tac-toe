@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,36 +22,45 @@ import org.json.JSONObject;
 public class PlayerDataHandler extends Thread{
     
     protected BufferedReader bufferedReader;
-    protected OutputStreamWriter outputStreamWriter;
+    protected PrintStream printStream;
     //data to be sent
     protected String msg;
+
+    public String getMsg()
+    {
+        return msg;
+    }
+    
+    private int tick;
     
     public PlayerDataHandler(Socket socket) throws IOException{
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());  
+        printStream = new PrintStream(socket.getOutputStream());
+        tick = 0;
     }
     
     
-    public boolean sendMessage(String msg) throws IOException{
-        boolean success = true;
-            outputStreamWriter.write(msg);
-        return success;
+    public boolean sendMessage(String msg){
+        printStream.println(msg);
+        return printStream.checkError();
     }
-    public boolean recieveMessage() throws IOException{
-        boolean success = true;
-        String msg = bufferedReader.readLine();
+    protected String recieveMessage() throws IOException{
+        String msg = null;
+        msg = bufferedReader.readLine();
         System.out.println(msg);
-        return success;
+        return msg;
     }
 
     @Override
     public void run()
     {
         super.run();
-        try {
-            recieveMessage();
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerDataHandler.class.getName()).log(Level.SEVERE, null, ex);
+        while(true){
+            try {
+                String msg = recieveMessage();
+            } catch (IOException ex) {
+                Logger.getLogger(PlayerDataHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

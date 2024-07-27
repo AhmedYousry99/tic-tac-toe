@@ -18,9 +18,9 @@ import org.json.JSONObject;
  */
 public interface ConnectionInterface{
     
-    public abstract boolean connectToServer(String ip) throws UnknownHostException, IOException;
-    public abstract  boolean connectToServer(String ip, int port) throws UnknownHostException, IOException;
-    public abstract  boolean disconnectFromServer();
-//    public boolean checkConnection();
+    public abstract void connectToServer(String ip) throws UnknownHostException, IllegalArgumentException, IOException;
+    public abstract  void connectToServer(String ip, int port) throws UnknownHostException, IllegalArgumentException, IOException;
+    public abstract  void disconnectFromServer() throws IOException;
+//    public abstract void checkConnection();
     
 }

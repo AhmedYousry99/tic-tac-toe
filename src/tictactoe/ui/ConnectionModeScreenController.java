@@ -5,6 +5,8 @@
  */
 package tictactoe.ui;
 
+import tictactoe.domain.ConnectionInterface;
+
 
 
 /**
@@ -13,5 +15,8 @@ package tictactoe.ui;
  */
 public class ConnectionModeScreenController{
     
+  
 
+    
+    
 }
