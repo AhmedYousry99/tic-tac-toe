@@ -71,8 +71,31 @@ public class PlayerDataHandler extends Thread{
                     case SIGN_UP_RESPONSE:
                         break;
                     case PLAYER_MOVE:
+                    {
+                        
                         break;
+                    }
                     case CHECK_SERVER:
+                        break;
+                    case LOG_IN_RESPONSE:
+                        break;
+                    case AVAILABLE_PLAYERS:
+                        break;
+                    case LOG_OUT:
+                        break;
+                    case ALL_PLAYERS:
+                        break;
+                    case SURRENDER:
+                        break;
+                    case REQUEST_TO_PLAY:
+                        break;
+                    case RESPONSE_TO_REQUEST_TO_PLAY:
+                        break;
+                    case DIALOG_REQUEST_TO_PLAY:
+                        break;
+                    case WAITING_REQUEST_TO_PLAY:
+                        break;
+                    case SCORE_BOARD:
                         break;
                     default:
                         throw new AssertionError(pl.getState().name());
@@ -82,6 +105,8 @@ public class PlayerDataHandler extends Thread{
             }
         }
     }
+    
+
     
     
 }
