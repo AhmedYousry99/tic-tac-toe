@@ -19,19 +19,6 @@ import tictactoe.domain.SocketRoute;
  */
 public class CustomPlayerListController {
     
-    static void handleInvite(CustomPlayerListTile customPlayerListTile, Player player){
-        try {
-            SocketConnectionController  scc = SocketConnectionController.getInstance();
-            PlayerMessageBody pl = new PlayerMessageBody();
-            pl.setState(SocketRoute.REQUEST_TO_PLAY);
-            pl.setOpponentName(player.getUsername());
-            scc.getPlayerDataHandler().sendMessage(pl);
-            scc.setPlayerDataHandlerFunction(customPlayerListTile::receiveResponse);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(CustomPlayerListController.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (JsonProcessingException ex) {
-                Logger.getLogger(CustomPlayerListController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
+
     
 }

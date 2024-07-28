@@ -5,6 +5,11 @@
  */
 package tictactoe.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,9 +19,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.JSONParser;
 import tictactoe.domain.Player;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
+import tictactoe.ui.util.CustomDialogBase;
+import tictactoe.ui.util.ScreenController;
+import tictactoe.ui.util.VoidCallableParameterizedPMB;
 
 /**
  *
@@ -29,11 +39,11 @@ public class CustomPlayerListTile extends HBox{
     protected final Button AvailableDisabledButton;
     protected final Button inviteButton;
     protected final Region spacer;
-    Player player;
+    Player opponent;
     
 
 
-    public CustomPlayerListTile(Player player)
+    public CustomPlayerListTile(Player player, VoidCallableParameterizedPMB func)
     {
         nameLabel = new Label();
         OnlineDisabledButton = new Button();
@@ -103,10 +113,11 @@ public class CustomPlayerListTile extends HBox{
         System.out.println(tempInvBtnState);
         inviteButton.setStyle((tempInvBtnState ? "-fx-background-color: D38CC4; " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
         inviteButton.setPickOnBounds(tempInvBtnState);
+        inviteButton.setOnAction((event) -> {
+            PlayerMessageBody pl = new PlayerMessageBody();
+            pl.setOpponentName(player.getUsername());
+            func.call(pl);
+        });
     }
-    
-    public void receiveResponse(PlayerMessageBody pl){
-        
-    }
-    
+
 }
