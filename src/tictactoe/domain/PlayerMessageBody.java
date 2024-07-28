@@ -140,12 +140,6 @@ public class PlayerMessageBody extends Player{
         super();
     }
 
-    public String getOpponentName() {
-        return opponentName;
-    }
 
-    public void setOpponentName(String opponentName) {
-        this.opponentName = opponentName;
-    }
     
 }
