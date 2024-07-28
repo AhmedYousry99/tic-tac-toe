@@ -1,7 +1,13 @@
 package tictactoe.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,8 +22,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.JSONParser;
 import tictactoe.domain.Player;
 import tictactoe.domain.PlayerMessageBody;
+import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.CustomPlayerListTile;
 import tictactoe.ui.util.CustomDialogBase;
@@ -137,23 +146,101 @@ public class PlayersScreenBase extends StackPane {
         
     }
     
-public void addPlayersToList(PlayerMessageBody pl){
-    ArrayList<Player> temp = pl.getPlayers();
-    if(pl.getPlayers() == null){
+    public void addPlayersToList(PlayerMessageBody pl){
+        ArrayList<Player> temp = pl.getPlayers();
+        if(pl.getPlayers() == null){
+
+        }
+        else if(temp.isEmpty()){
+            listPlaceholdertLabel.setText("There are no registered players.");
+        }else{
+            for(Player player : temp){
+            listTiles.add(new CustomPlayerListTile(player));
+        }
+            listView.setItems(FXCollections.observableArrayList(
+                listTiles
+            ));
+        }
+
+    }
+
+
+    void  observeFromServer()
+    {
+        Thread myTh = new Thread(()->{
+           while(true)
+           {
+               try {
+                   
+                   String msg =SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
+                   switch(pl.getState())
+                   {
+                       case REQUEST_TO_PLAY:
+                       {
+                           new CustomDialogBase(pl.getUsername() + " wants to play a match with you.",
+                                   "Accept", "Refuse"
+                                   , () -> {
+                                        try {
+                                            pl.setState(SocketRoute.RESPONSE_TO_REQUEST_TO_PLAY);
+                                            pl.setOpponentName(pl.getOpponentName());
+                                            pl.setResponse(true);
+                                            int symbol = new Random().nextInt(2);
+                                            if(symbol == 0)pl.setPlayerSymbol(false);
+                                            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                                            ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(!pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                                        } catch (InstantiationException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (JsonProcessingException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                   }
+                                   , ()->{
+                                       try {
+                                            pl.setState(SocketRoute.RESPONSE_TO_REQUEST_TO_PLAY);
+                                            pl.setOpponentName(pl.getOpponentName());
+                                            pl.setResponse(false);
+                                            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);                                        } catch (InstantiationException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (JsonProcessingException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                   });
+                           break;
+                       }
+                       case RESPONSE_TO_REQUEST_TO_PLAY:
+                       {
+                           if(pl.getResponse())
+                           {
+                               ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                           }else
+                           {
+                               new CustomDialogBase("Request refused.", null, "Ok", null, null);
+                           }
+                           break;
+                       }
+                   }
+               } catch (InstantiationException ex) {
+                   Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+               } catch (IOException ex) {
+                   Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+        });
         
-    }
-    else if(temp.isEmpty()){
-        listPlaceholdertLabel.setText("There are no registered players.");
-    }else{
-        for(Player player : temp){
-        listTiles.add(new CustomPlayerListTile(player));
-    }
-        listView.setItems(FXCollections.observableArrayList(
-            listTiles
-        ));
+        Platform.runLater(myTh);
     }
     
-}
+    
+    public void doActionOnAccept()
+    {
+        
+    }
+    
+    public void doActionOnRefuse()
+    {
+        
+    }
 
 public void signout(PlayerMessageBody pl){
     //ScreenController.popUntil(ConnectionModeScreenBase.class);

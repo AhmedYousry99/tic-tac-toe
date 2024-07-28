@@ -108,4 +108,8 @@ public class CustomPlayerListTile extends HBox{
         
     }
     
+    public void receiveResponse(PlayerMessageBody pl){
+        
+    }
+    
 }

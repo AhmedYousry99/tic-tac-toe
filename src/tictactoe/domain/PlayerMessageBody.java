@@ -21,6 +21,7 @@ public class PlayerMessageBody extends Player{
     private int gameBoardState;
     private String message;
     private String opponentName;
+    private boolean playerSymbol;
 
 
     public String getOpponentName() {
@@ -134,6 +135,14 @@ public class PlayerMessageBody extends Player{
 
     public void setResponse(boolean response) {
         this.response = response;
+    }
+
+    public boolean isPlayerSymbol() {
+        return playerSymbol;
+    }
+
+    public void setPlayerSymbol(boolean playerSymbol) {
+        this.playerSymbol = playerSymbol;
     }
 
     
