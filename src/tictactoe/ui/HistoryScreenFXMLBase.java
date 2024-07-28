@@ -36,7 +36,7 @@ public class HistoryScreenFXMLBase extends StackPane {
     protected final ListView<HBox> listView;
     protected final Button backButton;
     private ObservableList<HBox> hboxs;
-    private ArrayList<CustomListTile> listTiles;
+    private ArrayList<CustomHistoryListTile> listTiles;
     
 
     public HistoryScreenFXMLBase() {
@@ -67,9 +67,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         backButton = new Button();
 
    
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
+ 
 
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);

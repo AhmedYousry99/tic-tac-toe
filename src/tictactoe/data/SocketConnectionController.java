@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import tictactoe.domain.ConnectionInterface;
 import tictactoe.domain.PlayerDataHandler;
+import tictactoe.ui.util.VoidCallableParameterizedPMB;
 
 /**
  *
@@ -42,6 +43,11 @@ public class SocketConnectionController implements ConnectionInterface{
     }
     //The instance of playerDataHandler in the singleton SocketConnectionController
     private PlayerDataHandler playerDataHandler;
+
+    public void setPlayerDataHandlerFunction(VoidCallableParameterizedPMB vcppmb)
+    {
+        playerDataHandler.setVcppmb(vcppmb);
+    }
     public PlayerDataHandler getPlayerDataHandler()
     {
         return playerDataHandler;
@@ -90,7 +96,6 @@ public class SocketConnectionController implements ConnectionInterface{
 //            createdSocket.setSoTimeout(5000);
             this.port = createdSocket.getLocalPort();
             playerDataHandler = new PlayerDataHandler(createdSocket);
-            playerDataHandler.start();
     }
     
     //instance getters and setters
@@ -108,7 +113,6 @@ public class SocketConnectionController implements ConnectionInterface{
     {
         //NOTE: this should throw an exception because the thread will be waiting for a player to connect
         createdSocket.close();
-        playerDataHandler.stop();
         playerDataHandler = null;
         SocketConnectionController.setInstance(null);
     }
