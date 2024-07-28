@@ -143,7 +143,7 @@ public class PlayersScreenBase extends StackPane {
         getChildren().add(flowPane);
         getChildren().add(backButton);
         getChildren().add(scoreboardButton);
-        
+
     }
     
     public void addPlayersToList(PlayerMessageBody pl){
@@ -155,7 +155,7 @@ public class PlayersScreenBase extends StackPane {
             listPlaceholdertLabel.setText("There are no registered players.");
         }else{
             for(Player player : temp){
-            listTiles.add(new CustomPlayerListTile(player));
+            listTiles.add(new CustomPlayerListTile(player, this::sendRequest));
         }
             listView.setItems(FXCollections.observableArrayList(
                 listTiles
@@ -163,22 +163,54 @@ public class PlayersScreenBase extends StackPane {
         }
 
     }
+    
+    public void sendRequest(PlayerMessageBody pl){
+        try {
+            System.out.println("request sent.");
+            pl.setState(SocketRoute.REQUEST_TO_PLAY);
+            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 
-    void  observeFromServer()
+    public void  observeFromServer()
     {
-        Thread myTh = new Thread(()->{
-           while(true)
+       
+       Thread myTh = new myThread();
+        
+        //Platform.runLater(myTh);
+        myTh.start();
+    }
+
+    class myThread extends Thread{
+
+        @Override
+        public void run() {
+            super.run(); //To change body of generated methods, choose Tools | Templates.
+            while(true)
            {
-               try {
+              try {
                    
-                   String msg =SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   String msg = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   System.out.println(msg);
                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
                    switch(pl.getState())
                    {
+                       case ALL_PLAYERS:
+                       {
+                           System.out.println("get all");
+                           addPlayersToList(pl);
+                           break;
+                       }
                        case REQUEST_TO_PLAY:
                        {
-                           new CustomDialogBase(pl.getUsername() + " wants to play a match with you.",
+                           Platform.runLater(()->{
+                           
+                               new CustomDialogBase(pl.getOpponentName()+ " wants to play a match with you.",
                                    "Accept", "Refuse"
                                    , () -> {
                                         try {
@@ -188,7 +220,7 @@ public class PlayersScreenBase extends StackPane {
                                             int symbol = new Random().nextInt(2);
                                             if(symbol == 0)pl.setPlayerSymbol(false);
                                             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
-                                            ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(!pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                                            ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(!pl.isPlayerSymbol(),pl.getOpponentName())), PlayersScreenBase.this);
                                         } catch (InstantiationException ex) {
                                             Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
                                         } catch (JsonProcessingException ex) {
@@ -206,16 +238,27 @@ public class PlayersScreenBase extends StackPane {
                                             Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
                                         }
                                    });
+                           
+                           });
+                           
                            break;
                        }
                        case RESPONSE_TO_REQUEST_TO_PLAY:
                        {
+                           System.out.println("request received.");
                            if(pl.getResponse())
                            {
-                               ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                               
+                               ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), PlayersScreenBase.this);
+                               stop();
+                               
                            }else
                            {
-                               new CustomDialogBase("Request refused.", null, "Ok", null, null);
+                               Platform.runLater(()->{
+                                   new CustomDialogBase("Request refused.", null, "Ok", null, null);
+                               });
+                               
+                               
                            }
                            break;
                        }
@@ -226,19 +269,9 @@ public class PlayersScreenBase extends StackPane {
                    Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
                }
            }
-        });
+        }
         
-        Platform.runLater(myTh);
-    }
-    
-    
-    public void doActionOnAccept()
-    {
         
-    }
-    
-    public void doActionOnRefuse()
-    {
         
     }
 
