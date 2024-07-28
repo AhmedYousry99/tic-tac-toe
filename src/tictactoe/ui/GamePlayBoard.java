@@ -508,6 +508,7 @@ public class GamePlayBoard extends AnchorPane {
             {
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
             }
+            modeName = "Online Mode";
             doOnlineMove();
         }
         else if(customController instanceof ReplayMatchController)
@@ -576,8 +577,7 @@ public class GamePlayBoard extends AnchorPane {
         });
         
         
-        if(boardController.isThisIsCurrentPlayerTurn)
-        {
+
             stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
             stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
@@ -595,7 +595,7 @@ public class GamePlayBoard extends AnchorPane {
             stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
 
             stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
-        }
+
 
     }
     
@@ -604,7 +604,7 @@ public class GamePlayBoard extends AnchorPane {
     void ButtonAction(int i,int j)
     {
         
-        if(boardController.isThisIsAValidMove(i, j))
+        if(boardController.isThisIsCurrentPlayerTurn && boardController.isThisIsAValidMove(i, j))
         {
             if(boardController instanceof OnlineModeController)
             {
@@ -613,6 +613,7 @@ public class GamePlayBoard extends AnchorPane {
                 PlayerMessageBody pl = new PlayerMessageBody();
                 pl.setState(SocketRoute.PLAYER_MOVE);
                 pl.setMove(((OnlineModeController)boardController).convertMoveToStirng(i, j));
+                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
                 try {
                     SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
                 } catch (InstantiationException ex) {
@@ -841,9 +842,9 @@ public class GamePlayBoard extends AnchorPane {
                     { 
                         case PLAYER_MOVE:
                         {
-                            
-                            int i = pl.getMove().charAt(0);
-                            int j = pl.getMove().charAt(1);
+                            System.out.println("move received.");
+                            int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
+                            int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
                             boardController.setMove(i, j);
                             resetBoardBaseOnSimulationBoard();
                             actionWhenGetBoardState();
