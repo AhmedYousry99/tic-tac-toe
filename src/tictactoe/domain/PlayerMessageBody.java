@@ -17,24 +17,15 @@ public class PlayerMessageBody extends Player{
     private boolean response;
     private String move;
     private ArrayList<ScoreBoardItem> scoreBoardItem;
+    private int gameBoardState;
+    
 
     public PlayerMessageBody()
     {
         super();
     }
     
-    public PlayerMessageBody(SocketRoute state, String move, boolean isRquestAccepted, boolean isServerAwake, ArrayList<ScoreBoardItem> scoreBoardItem) {
-        this.state = state;
-        this.move = move;
-        this.scoreBoardItem = scoreBoardItem;
-    }
-
-    public PlayerMessageBody(SocketRoute state, String move, boolean isRquestAccepted, boolean isServerAwake, ArrayList<ScoreBoardItem> scoreBoardItem, String username, String password, int score, boolean isPlaying, boolean isActive) {
-        super(username, password, score, isPlaying, isActive);
-        this.state = state;
-        this.move = move;
-        this.scoreBoardItem = scoreBoardItem;
-    }
+   
 
     
     
@@ -110,6 +101,14 @@ public class PlayerMessageBody extends Player{
 
     public void setResponse(boolean response) {
         this.response = response;
+    }
+
+    public int getGameBoardState() {
+        return gameBoardState;
+    }
+
+    public void setGameBoardState(int gameBoardState) {
+        this.gameBoardState = gameBoardState;
     }
     
     

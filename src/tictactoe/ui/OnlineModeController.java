@@ -10,5 +10,19 @@ package tictactoe.ui;
  * @author Kerolos Raouf
  */
 public class OnlineModeController extends BoardController{
+    public boolean currentPlayerSymbol;
+
+    public OnlineModeController(boolean symbol)
+    {
+        currentPlayerSymbol = symbol;
+    }
+    
+    public String convertMoveToStirng(int i,int j)
+    {
+        String str = "";
+        str += String.valueOf(i);
+        str += String.valueOf(j);
+        return str;
+    }
     
 }

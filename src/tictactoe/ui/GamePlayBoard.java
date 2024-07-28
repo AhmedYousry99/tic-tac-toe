@@ -1,6 +1,7 @@
 package tictactoe.ui;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import javafx.util.Duration;
 import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.JSONParser;
 import tictactoe.domain.PlayerMessageBody;
+import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.ScreenController;
@@ -70,23 +72,23 @@ public class GamePlayBoard extends AnchorPane {
     protected final Button btnSaveMatch;
     
     BoardController boardController;
-    boolean play,saveTheMatch,isThisIsCurrentPlayerTurn;
+    boolean play,saveTheMatch,isTransitionStarted;
     String modeName;
     Thread replayThread;
+    
     
     
     
 
     public GamePlayBoard(BoardController customController) {
         
-        isThisIsCurrentPlayerTurn = true;
         play = true;
         saveTheMatch = false;
         boardController = customController;
         modeName = "Two Players Mode";
         boardController.playerXXName = "Player X";
         boardController.playerOOName = "Player O";
-
+        isTransitionStarted = false;
         backgroundImage = new ImageView();
         stack00 = new StackPane();
         x00 = new ImageView();
@@ -496,10 +498,19 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(btnRematch);
         getChildren().add(btnSaveMatch);
         
-        
-        if(customController instanceof ReplayMatchController)
+        if(customController instanceof OnlineModeController)
         {
-            isThisIsCurrentPlayerTurn = false;
+            if(((OnlineModeController) customController).currentPlayerSymbol)
+            {
+                ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = true;
+            }else
+            {
+                ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
+            }
+            doOnlineMove();
+        }
+        else if(customController instanceof ReplayMatchController)
+        {
             btnSaveMatch.setVisible(false);
             btnRematch.setVisible(false);
             modeName = "Replay Mode";
@@ -539,10 +550,19 @@ public class GamePlayBoard extends AnchorPane {
     
         btnRematch.setDisable(true);
         btnRematch.setOnAction((e)->{
+            if(boardController instanceof OnlineModeController)
+            {
+                
+            }else
+            {
+                boardController.isThisIsCurrentPlayerTurn = true;
+            }
+            
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
             resetSaveMatchBtn();
             boardController.resetMatchMoves();
+            isTransitionStarted = false;
             btnRematch.setDisable(true);
         });
         
@@ -555,7 +575,7 @@ public class GamePlayBoard extends AnchorPane {
         });
         
         
-        if(isThisIsCurrentPlayerTurn)
+        if(boardController.isThisIsCurrentPlayerTurn)
         {
             stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
@@ -582,41 +602,69 @@ public class GamePlayBoard extends AnchorPane {
     
     void ButtonAction(int i,int j)
     {
-        if(boardController instanceof SinglePlayerModeController)
-        {
-            
-            doButtonActionOnSinglePlayerMode(i,j);
-            
-        }else
-        {
-            boardController.setMove(i, j);
-            resetBoardBaseOnSimulationBoard();
-            actionWhenGetBoardState();
-        } 
-        actionWhenGetBoardState();
-    }
-    
-    private void doButtonActionOnSinglePlayerMode(int i,int j)
-    {
+        
         if(boardController.isThisIsAValidMove(i, j))
         {
-            if(play)
+            if(boardController instanceof OnlineModeController)
             {
                 boardController.setMove(i, j);
                 resetBoardBaseOnSimulationBoard();
+                PlayerMessageBody pl = new PlayerMessageBody();
+                pl.setState(SocketRoute.PLAYER_MOVE);
+                pl.setMove(((OnlineModeController)boardController).convertMoveToStirng(i, j));
+                try {
+                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+                boardController.isThisIsCurrentPlayerTurn = false;
+                actionWhenGetBoardState();
+
             }
-                
-            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1){
-                    PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
+            else if(boardController instanceof SinglePlayerModeController)
+            {
+
+                doButtonActionOnSinglePlayerMode(i,j);
+                actionWhenGetBoardState();
+
+            }else
+            {
+                boardController.setMove(i, j);
+                resetBoardBaseOnSimulationBoard();
+                actionWhenGetBoardState();
+            } 
+        }
+
+    }
+    
+    
+    private void doButtonActionOnSinglePlayerMode(int i,int j)
+    {
+        if(!isTransitionStarted)
+        {
+            isTransitionStarted = true;
+            if(boardController.isThisIsCurrentPlayerTurn)
+            {
+                boardController.setMove(i, j);
+                resetBoardBaseOnSimulationBoard();
+                boardController.isThisIsCurrentPlayerTurn = false;
+            }
+            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1)
+            {
+                    PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
                     pause.setOnFinished(e -> {
                         ((SinglePlayerModeController)boardController).doComputerMove();
                         resetBoardBaseOnSimulationBoard();
                         actionWhenGetBoardState();
-                        play = true;
+                        boardController.isThisIsCurrentPlayerTurn = true;
+                        isTransitionStarted = false;
                     });
                     pause.play();
-            }    
+            }  
         }
+        
     }
     
     
@@ -626,20 +674,19 @@ public class GamePlayBoard extends AnchorPane {
         
         if(boardController.isGameInProgress)
         {
-           switch(result)
-           {
-            case 0 :
-                doStuffOnGetResult(0);
-                break;
-            case 1:
-                doStuffOnGetResult(1);
-                break;
-            case 2:
-                doStuffOnGetResult(2);
-                break;
-            } 
-        }
-        
+            switch(result)
+            {
+                case 0 :
+                    doStuffOnGetResult(0);
+                    break;
+                case 1:
+                    doStuffOnGetResult(1);
+                    break;
+                case 2:
+                    doStuffOnGetResult(2);
+                    break;
+             } 
+        } 
     }
     
     private void doStuffOnGetResult(int winner)
@@ -790,10 +837,16 @@ public class GamePlayBoard extends AnchorPane {
                     String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
                     PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(str);
                     switch(pl.getState())
-                    {
+                    { 
                         case PLAYER_MOVE:
                         {
                             
+                            int i = pl.getMove().charAt(0);
+                            int j = pl.getMove().charAt(1);
+                            boardController.setMove(i, j);
+                            resetBoardBaseOnSimulationBoard();
+                            actionWhenGetBoardState();
+                            boardController.isThisIsCurrentPlayerTurn = true;
                             break;
                         }
                     }
