@@ -63,7 +63,7 @@ public class CustomPlayerListTile extends HBox{
         AvailableDisabledButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         AvailableDisabledButton.setMnemonicParsing(false);
         AvailableDisabledButton.setPrefWidth(125.0);
-        AvailableDisabledButton.setText("Available");
+        AvailableDisabledButton.setText("Playing");
         AvailableDisabledButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         AvailableDisabledButton.setTextFill(javafx.scene.paint.Color.WHITE);
         AvailableDisabledButton.setFont(new Font("Agency FB Bold", 24.0));
@@ -95,14 +95,17 @@ public class CustomPlayerListTile extends HBox{
         getChildren().add(spacer);
         getChildren().add(inviteButton);
         HBox.setMargin(inviteButton, new Insets(0.0, 20.0, 0.0, 0.0));
-                OnlineDisabledButton.setStyle((player.isIsActive() ? "-fx-background-color: rgba(142, 211, 140, 1); " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
+        
+        //System.out.println(player.isIsActive() + " " + player.isIsPlaying());
+        
+        OnlineDisabledButton.setStyle((player.isIsActive() ? "-fx-background-color: rgba(142, 211, 140, 1); " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
         
         AvailableDisabledButton.setStyle((player.isIsPlaying() ? "-fx-background-color: rgba(142, 211, 140, 1); " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
         
         boolean tempInvBtnState = player.isIsActive() && !player.isIsPlaying();
-        System.out.println(tempInvBtnState);
+        //System.out.println(tempInvBtnState);
         inviteButton.setStyle((tempInvBtnState ? "-fx-background-color: D38CC4; " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
-        inviteButton.setPickOnBounds(tempInvBtnState);
+        
     }
     
 }

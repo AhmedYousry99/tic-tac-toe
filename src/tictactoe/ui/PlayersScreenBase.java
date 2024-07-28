@@ -32,7 +32,6 @@ public class PlayersScreenBase extends StackPane {
     protected final ListView listView;
     protected final Button backButton;
     protected final Button scoreboardButton;
-    protected final Button replayMatchButton;
     protected final Label listPlaceholdertLabel;
     protected ArrayList<CustomPlayerListTile> listTiles;
 
@@ -54,7 +53,6 @@ public class PlayersScreenBase extends StackPane {
         listView.setPlaceholder(listPlaceholdertLabel);
         backButton = new Button();
         scoreboardButton = new Button();
-        replayMatchButton = new Button();
         
         //extra
         imageView.fitHeightProperty().bind(this.heightProperty());
@@ -126,19 +124,6 @@ public class PlayersScreenBase extends StackPane {
         scoreboardButton.setFont(new Font("Agency FB Bold", 48.0));
         StackPane.setMargin(scoreboardButton, new Insets(0.0, 0.0, 20.0, 0.0));
 
-        StackPane.setAlignment(replayMatchButton, javafx.geometry.Pos.BOTTOM_RIGHT);
-        replayMatchButton.setAlignment(javafx.geometry.Pos.CENTER);
-        replayMatchButton.setCancelButton(true);
-        replayMatchButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        replayMatchButton.setMnemonicParsing(false);
-        replayMatchButton.setPrefHeight(91.0);
-        replayMatchButton.setPrefWidth(280.0);
-        replayMatchButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        replayMatchButton.setText("Replay Match");
-        replayMatchButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        replayMatchButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        replayMatchButton.setFont(new Font("Agency FB Bold", 48.0));
-        StackPane.setMargin(replayMatchButton, new Insets(0.0, 50.0, 20.0, 0.0));
 
         getChildren().add(imageView);
         flowPane.getChildren().add(text);
@@ -149,7 +134,6 @@ public class PlayersScreenBase extends StackPane {
         getChildren().add(flowPane);
         getChildren().add(backButton);
         getChildren().add(scoreboardButton);
-        getChildren().add(replayMatchButton);
         
     }
     
@@ -172,6 +156,6 @@ public void addPlayersToList(PlayerMessageBody pl){
 }
 
 public void signout(PlayerMessageBody pl){
-    ScreenController.popUntil(ConnectionModeScreenBase.class);
+    //ScreenController.popUntil(ConnectionModeScreenBase.class);
 }
 }

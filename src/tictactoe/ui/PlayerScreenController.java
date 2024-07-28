@@ -56,10 +56,9 @@ public class PlayerScreenController {
             Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
             Platform.runLater(th);
             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.LOG_OUT);
-            ScreenController.popUntil(ConnectionModeScreenBase.class);
-                    TicTacToe.primaryStage.setOnCloseRequest((e) -> {
-                        th.stop();
-        });
+            //System.out.println("done");
+            ScreenController.popScreen();
+            ScreenController.popScreen();
         } catch (InstantiationException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JsonProcessingException ex) {
