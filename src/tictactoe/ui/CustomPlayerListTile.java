@@ -105,4 +105,8 @@ public class CustomPlayerListTile extends HBox{
         inviteButton.setPickOnBounds(tempInvBtnState);
     }
     
+    public void receiveResponse(PlayerMessageBody pl){
+        
+    }
+    
 }

@@ -11,10 +11,12 @@ package tictactoe.ui;
  */
 public class OnlineModeController extends BoardController{
     public boolean currentPlayerSymbol;
+    public String opponentName;
 
-    public OnlineModeController(boolean symbol)
+    public OnlineModeController(boolean symbol, String name)
     {
         currentPlayerSymbol = symbol;
+        opponentName = name;
     }
     
     public String convertMoveToStirng(int i,int j)
