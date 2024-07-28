@@ -14,7 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.PlayerDataHandler;
+import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
@@ -50,7 +52,8 @@ public class LoginScreenBase extends AnchorPane {
          return false;
         }
         else {
-            //PlayerDataHandler pdh = new PlayerDataHandler();
+            
+            LoginScreenController.login(username, password, this);
             
 //             loginButton.setOnAction((e) -> {
 //            new CustomDialogSuccess("Successful login", "Okay", () -> {
@@ -193,4 +196,23 @@ public class LoginScreenBase extends AnchorPane {
         getChildren().add(backButton);
 
     }
+    
+        public void getLoginResponse(PlayerMessageBody pl)
+   { 
+       if(pl.getResponse())
+       { 
+          CustomDialogSuccess cds = new CustomDialogSuccess("Login successful","Okay",  () -> {
+               ScreenController.pushScreen(new PlayersScreenBase(), this);
+            });
+       }
+       else {
+           CustomDialogBase cdb = new CustomDialogBase("Invalid username or password","Okay","Cancel",() -> {
+                
+            },() -> {
+                ScreenController.popScreen();
+            });
+       }
+      
+    }
+        
 }

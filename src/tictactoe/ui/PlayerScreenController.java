@@ -26,7 +26,6 @@ public class PlayerScreenController {
     
     public static void getAllPlayers(List<CustomPlayerListTile> listTiles, PlayersScreenBase playersScreenBase){
         try {
-            SocketConnectionController.initialize("172.16.14.195");
             SocketConnectionController.getInstance().setPlayerDataHandlerFunction(playersScreenBase::addPlayersToList);
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.ALL_PLAYERS);

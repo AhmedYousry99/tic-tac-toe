@@ -109,23 +109,7 @@ public class PlayerDataHandler implements Runnable{
     }
 
     
-   public void getLoginResponse(boolean response)
-   {
-       if(response)
-       { 
-          CustomDialogSuccess cds = new CustomDialogSuccess("Login successful","Okay",  () -> {
-                
-            });
-       }
-       else {
-           CustomDialogBase cdb = new CustomDialogBase("Invalid username or password","Okay","Cancel",() -> {
-                
-            },() -> {
-                ScreenController.popScreen();
-            });
-       }
-      
-    }
+  
   
     
 }

@@ -6,11 +6,22 @@
 package tictactoe.ui;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.PlayerMessageBody;
+import tictactoe.domain.SocketRoute;
+import tictactoe.ui.util.CustomDialogBase;
+import tictactoe.ui.util.CustomDialogSuccess;
+import tictactoe.ui.util.ScreenController;
+import tictactoe.TicTacToe;
 
 
 public class LoginScreenController  {
@@ -29,4 +40,25 @@ public class LoginScreenController  {
        loginStage.show();
     }
     
+   
+public static void login(String username, String passowrd, LoginScreenBase loginScreenBase){
+        try {
+            SocketConnectionController.getInstance().setPlayerDataHandlerFunction(loginScreenBase::getLoginResponse);
+            PlayerMessageBody pl = new PlayerMessageBody();
+            pl.setPassword(passowrd);
+            pl.setUsername(username);
+            pl.setState(SocketRoute.LOG_IN);
+ 
+            Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
+            Platform.runLater(th);
+            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.LOG_IN_RESPONSE);
+            TicTacToe.primaryStage.setOnCloseRequest((e)->{
+                th.stop();
+            });
+        } catch (InstantiationException ex) {
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
 }
