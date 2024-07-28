@@ -508,7 +508,7 @@ public class GamePlayBoard extends AnchorPane {
             {
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
             }
-            //doOnlineMove();
+            doOnlineMove();
         }
         else if(customController instanceof ReplayMatchController)
         {
@@ -859,7 +859,9 @@ public class GamePlayBoard extends AnchorPane {
             }
         });
         
-        Platform.runLater(myTh);
+        Platform.runLater(() -> {
+            myTh.start();
+        });
     }
     
     

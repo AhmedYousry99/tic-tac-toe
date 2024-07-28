@@ -267,6 +267,7 @@ public class PlayersScreenBase extends StackPane {
                                
                                ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), PlayersScreenBase.this);
                                stop();
+                               
                            }else
                            {
                                Platform.runLater(()->{
