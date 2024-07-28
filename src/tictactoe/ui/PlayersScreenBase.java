@@ -159,7 +159,7 @@ public class PlayersScreenBase extends StackPane {
         getChildren().add(backButton);
         getChildren().add(scoreboardButton);
         getChildren().add(replayMatchButton);
-        
+        observeFromServer();
     }
     
     public void addPlayersToList(PlayerMessageBody pl){
@@ -171,7 +171,7 @@ public class PlayersScreenBase extends StackPane {
             listPlaceholdertLabel.setText("There are no registered players.");
         }else{
             for(Player player : temp){
-            listTiles.add(new CustomPlayerListTile(player));
+            listTiles.add(new CustomPlayerListTile(player, this::sendRequest));
         }
             listView.setItems(FXCollections.observableArrayList(
                 listTiles
@@ -179,19 +179,39 @@ public class PlayersScreenBase extends StackPane {
         }
 
     }
+    
+    public void sendRequest(PlayerMessageBody pl){
+        try {
+            System.out.println("working");
+            pl.setState(SocketRoute.REQUEST_TO_PLAY);
+            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 
-    void  observeFromServer()
+    public void  observeFromServer()
     {
+       
         Thread myTh = new Thread(()->{
-           while(true)
+          while(true)
            {
-               try {
+              try {
                    
-                   String msg =SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   String msg = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   System.out.println(msg);
                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
                    switch(pl.getState())
                    {
+                       case ALL_PLAYERS:
+                       {
+                           System.out.println("get all");
+                           addPlayersToList(pl);
+                           break;
+                       }
                        case REQUEST_TO_PLAY:
                        {
                            new CustomDialogBase(pl.getUsername() + " wants to play a match with you.",
@@ -226,6 +246,7 @@ public class PlayersScreenBase extends StackPane {
                        }
                        case RESPONSE_TO_REQUEST_TO_PLAY:
                        {
+                           
                            if(pl.getResponse())
                            {
                                ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), this);
@@ -244,19 +265,10 @@ public class PlayersScreenBase extends StackPane {
            }
         });
         
-        Platform.runLater(myTh);
+        //Platform.runLater(myTh);
+        myTh.start();
     }
-    
-    
-    public void doActionOnAccept()
-    {
-        
-    }
-    
-    public void doActionOnRefuse()
-    {
-        
-    }
+
 
 public void signout(PlayerMessageBody pl){
     ScreenController.popUntil(ConnectionModeScreenBase.class);

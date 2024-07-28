@@ -28,15 +28,9 @@ public class PlayerScreenController {
     
     public static void getAllPlayers(List<CustomPlayerListTile> listTiles, PlayersScreenBase playersScreenBase){
         try {
-            SocketConnectionController.getInstance().setPlayerDataHandlerFunction(playersScreenBase::addPlayersToList);
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.ALL_PLAYERS);
-            Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
-            Platform.runLater(th);
             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.ALL_PLAYERS);
-                    TicTacToe.primaryStage.setOnCloseRequest((e) -> {
-                        th.stop();
-        });
         } catch (InstantiationException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JsonProcessingException ex) {
