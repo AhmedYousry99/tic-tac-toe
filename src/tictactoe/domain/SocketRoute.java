@@ -11,7 +11,9 @@ package tictactoe.domain;
  */
 public enum SocketRoute {
     LOG_IN,
+    LOG_IN_RESPONSE,
     SIGN_UP,
+    SIGN_UP_RESPONSE,
     PLAYER_MOVE,
     REQUEST_TO_PLAY,
     RESPONSE_TO_REQUEST_TO_PLAY,

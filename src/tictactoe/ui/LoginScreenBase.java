@@ -14,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.domain.PlayerDataHandler;
+import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
 import tictactoe.ui.util.CustomDialogBase;
@@ -36,27 +38,27 @@ public class LoginScreenBase extends AnchorPane {
         String username, password;
         username = usernameTxtField.getText();
         password = passwordField.getText();
-        
-        if(username.equals("")|| password.equals(""))
+        if(username.trim().isEmpty()|| password.trim().isEmpty())
         {
-            
-        loginButton.setOnAction((e) -> {
+          loginButton.setOnAction((e) -> {
             new CustomDialogBase("Invalid data, can't leave fields empty", "Okay", "Cancel", () -> {
                 
             },() -> {
                 ScreenController.popScreen();
             });
         });
+         return false;
         }
         else {
-             loginButton.setOnAction((e) -> {
-            new CustomDialogSuccess("Successful login", "Okay", () -> {
-                
-            });
-        });
+            //PlayerDataHandler pdh = new PlayerDataHandler();
+            
+//             loginButton.setOnAction((e) -> {
+//            new CustomDialogSuccess("Successful login", "Okay", () -> {
+//                
+//            });
+//        });
         }
        
-        
         return true;        
     }
     public LoginScreenBase() {

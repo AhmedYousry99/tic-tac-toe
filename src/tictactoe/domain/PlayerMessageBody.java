@@ -15,8 +15,7 @@ public class PlayerMessageBody extends Player{
     
     private SocketRoute state;
     private String move;
-    private boolean isRquestAccepted;
-    private boolean isServerAwake;
+    private boolean response;
     private ArrayList<ScoreBoardItem> scoreBoardItem;
 
     public PlayerMessageBody()
@@ -27,8 +26,6 @@ public class PlayerMessageBody extends Player{
     public PlayerMessageBody(SocketRoute state, String move, boolean isRquestAccepted, boolean isServerAwake, ArrayList<ScoreBoardItem> scoreBoardItem) {
         this.state = state;
         this.move = move;
-        this.isRquestAccepted = isRquestAccepted;
-        this.isServerAwake = isServerAwake;
         this.scoreBoardItem = scoreBoardItem;
     }
 
@@ -36,8 +33,7 @@ public class PlayerMessageBody extends Player{
         super(username, password, score, isPlaying, isActive);
         this.state = state;
         this.move = move;
-        this.isRquestAccepted = isRquestAccepted;
-        this.isServerAwake = isServerAwake;
+        
         this.scoreBoardItem = scoreBoardItem;
     }
 
@@ -82,6 +78,38 @@ public class PlayerMessageBody extends Player{
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public SocketRoute getState() {
+        return state;
+    }
+
+    public void setState(SocketRoute state) {
+        this.state = state;
+    }
+
+    public String getMove() {
+        return move;
+    }
+
+    public void setMove(String move) {
+        this.move = move;
+    }
+
+    public boolean isResponse() {
+        return response;
+    }
+
+    public void setResponse(boolean response) {
+        this.response = response;
+    }
+
+    public ArrayList<ScoreBoardItem> getScoreBoardItem() {
+        return scoreBoardItem;
+    }
+
+    public void setScoreBoardItem(ArrayList<ScoreBoardItem> scoreBoardItem) {
+        this.scoreBoardItem = scoreBoardItem;
     }
     
     

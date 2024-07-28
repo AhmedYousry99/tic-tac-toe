@@ -34,7 +34,8 @@ public class SignupScreenBase extends AnchorPane {
         String username = usernametxtField.getText();
         String password = passwordField.getText();
         String confirmPass = confirmField.getText();
-        if(username.equals("")|| !password.equals(confirmPass))
+        if(username.trim().isEmpty()|| !password.equals(confirmPass) || password.trim().isEmpty()
+                || confirmPass.trim().isEmpty())
         {
            signupButton.setOnAction((e) -> {
             new CustomDialogBase("Invalid data try again", "Okay", "Cancel", () -> {
@@ -45,11 +46,13 @@ public class SignupScreenBase extends AnchorPane {
         });
         }
         else {
-            signupButton.setOnAction((e)->{
+           
+                signupButton.setOnAction((e)->{
                 new CustomDialogSuccess("Successful signup","Okay", ()->{
                     ScreenController.popScreen();
                 });
             });
+           
         }
         return true;
     }
