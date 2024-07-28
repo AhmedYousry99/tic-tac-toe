@@ -1,7 +1,13 @@
 package tictactoe.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,8 +22,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.JSONParser;
 import tictactoe.domain.Player;
 import tictactoe.domain.PlayerMessageBody;
+import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.CustomPlayerListTile;
 import tictactoe.ui.util.CustomDialogBase;
@@ -55,14 +64,16 @@ public class PlayersScreenBase extends StackPane {
         backButton = new Button();
         scoreboardButton = new Button();
         replayMatchButton = new Button();
+        
+        //extra
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
 
         setPrefHeight(1000.0);
         setPrefWidth(1500.0);
 
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
-        imageView.setFitHeight(1000.0);
-        imageView.setFitWidth(1500.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
         imageView.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/main.jpg").toExternalForm()));
@@ -97,7 +108,7 @@ public class PlayersScreenBase extends StackPane {
         backButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         backButton.setMnemonicParsing(false);
         backButton.setPrefWidth(200.0);
-        backButton.getStylesheets().add("resources/css/application.css");
+        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         backButton.setText("Back");
         backButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -105,7 +116,9 @@ public class PlayersScreenBase extends StackPane {
         StackPane.setMargin(backButton, new Insets(0.0, 0.0, 20.0, 50.0));
         backButton.setOnAction((e) -> {
             new CustomDialogBase("Are you sure you want to leave? you will be signed out.", "Leave", "Cancel", () -> {
-           ScreenController.popUntil(ConnectionModeScreenBase.class); }, null);
+           PlayerScreenController.signOut(this); 
+            
+            }, null);
         });
 
         StackPane.setAlignment(scoreboardButton, javafx.geometry.Pos.BOTTOM_CENTER);
@@ -115,7 +128,7 @@ public class PlayersScreenBase extends StackPane {
         scoreboardButton.setMnemonicParsing(false);
         scoreboardButton.setPrefHeight(91.0);
         scoreboardButton.setPrefWidth(316.0);
-        scoreboardButton.getStylesheets().add("../resources/css/application.css");
+        scoreboardButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         scoreboardButton.setText("ScoreBoard");
         scoreboardButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         scoreboardButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -129,7 +142,7 @@ public class PlayersScreenBase extends StackPane {
         replayMatchButton.setMnemonicParsing(false);
         replayMatchButton.setPrefHeight(91.0);
         replayMatchButton.setPrefWidth(280.0);
-        replayMatchButton.getStylesheets().add("../resources/css/application.css");
+        replayMatchButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         replayMatchButton.setText("Replay Match");
         replayMatchButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         replayMatchButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -149,18 +162,103 @@ public class PlayersScreenBase extends StackPane {
         
     }
     
-public void addPlayersToList(PlayerMessageBody pl){
-    ArrayList<Player> temp = pl.getPlayers();
-    if(temp.isEmpty()){
-        listPlaceholdertLabel.setText("There are no registered players.");
-    }else{
-        for(Player player : temp){
-        listTiles.add(new CustomPlayerListTile(player));
+    public void addPlayersToList(PlayerMessageBody pl){
+        ArrayList<Player> temp = pl.getPlayers();
+        if(pl.getPlayers() == null){
+
+        }
+        else if(temp.isEmpty()){
+            listPlaceholdertLabel.setText("There are no registered players.");
+        }else{
+            for(Player player : temp){
+            listTiles.add(new CustomPlayerListTile(player));
+        }
+            listView.setItems(FXCollections.observableArrayList(
+                listTiles
+            ));
+        }
+
     }
-        listView.setItems(FXCollections.observableArrayList(
-            listTiles
-        ));
+
+
+    void  observeFromServer()
+    {
+        Thread myTh = new Thread(()->{
+           while(true)
+           {
+               try {
+                   
+                   String msg =SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                   PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
+                   switch(pl.getState())
+                   {
+                       case REQUEST_TO_PLAY:
+                       {
+                           new CustomDialogBase(pl.getUsername() + " wants to play a match with you.",
+                                   "Accept", "Refuse"
+                                   , () -> {
+                                        try {
+                                            pl.setState(SocketRoute.RESPONSE_TO_REQUEST_TO_PLAY);
+                                            pl.setOpponentName(pl.getOpponentName());
+                                            pl.setResponse(true);
+                                            int symbol = new Random().nextInt(2);
+                                            if(symbol == 0)pl.setPlayerSymbol(false);
+                                            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                                            ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(!pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                                        } catch (InstantiationException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (JsonProcessingException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                   }
+                                   , ()->{
+                                       try {
+                                            pl.setState(SocketRoute.RESPONSE_TO_REQUEST_TO_PLAY);
+                                            pl.setOpponentName(pl.getOpponentName());
+                                            pl.setResponse(false);
+                                            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);                                        } catch (InstantiationException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (JsonProcessingException ex) {
+                                            Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                   });
+                           break;
+                       }
+                       case RESPONSE_TO_REQUEST_TO_PLAY:
+                       {
+                           if(pl.getResponse())
+                           {
+                               ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), this);
+                           }else
+                           {
+                               new CustomDialogBase("Request refused.", null, "Ok", null, null);
+                           }
+                           break;
+                       }
+                   }
+               } catch (InstantiationException ex) {
+                   Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+               } catch (IOException ex) {
+                   Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+        });
+        
+        Platform.runLater(myTh);
     }
     
+    
+    public void doActionOnAccept()
+    {
+        
+    }
+    
+    public void doActionOnRefuse()
+    {
+        
+    }
+
+public void signout(PlayerMessageBody pl){
+    ScreenController.popUntil(ConnectionModeScreenBase.class);
 }
 }

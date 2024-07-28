@@ -21,6 +21,7 @@ public class PlayerMessageBody extends Player{
     private int gameBoardState;
     private String message;
     private String opponentName;
+    private boolean playerSymbol;
 
 
     public String getOpponentName() {
@@ -37,13 +38,23 @@ public class PlayerMessageBody extends Player{
     {
         return message;
     }
+    
+     public int getGameBoardState()
+    {
+        return gameBoardState;
+    }
 
+    public void setGameBoardState(int gameBoardState)
+    {
+        this.gameBoardState = gameBoardState;
+    }
+  
     public void setMessage(String message)
     {
         this.message = message;
     }
-    
 
+    
     public ArrayList<Player> getPlayers()
     {
         return players;
@@ -126,12 +137,12 @@ public class PlayerMessageBody extends Player{
         this.response = response;
     }
 
-    public int getGameBoardState() {
-        return gameBoardState;
+    public boolean isPlayerSymbol() {
+        return playerSymbol;
     }
 
-    public void setGameBoardState(int gameBoardState) {
-        this.gameBoardState = gameBoardState;
+    public void setPlayerSymbol(boolean playerSymbol) {
+        this.playerSymbol = playerSymbol;
     }
 
     
@@ -140,6 +151,4 @@ public class PlayerMessageBody extends Player{
         super();
     }
 
-
-    
 }

@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.domain.PlayerMessageBody;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.CustomDialogSuccess;
@@ -47,11 +48,7 @@ public class SignupScreenBase extends AnchorPane {
         }
         else {
            
-                signupButton.setOnAction((e)->{
-                new CustomDialogSuccess("Successful signup","Okay", ()->{
-                    ScreenController.popScreen();
-                });
-            });
+           SignupScreenController.signup(username, password,this);
            
         }
         return true;
@@ -197,6 +194,22 @@ public class SignupScreenBase extends AnchorPane {
 
     }
 
- 
+   public void getSignupResponse(PlayerMessageBody pl)
+   { 
+       if(pl.getResponse())
+       { 
+          CustomDialogSuccess cds = new CustomDialogSuccess("Signup successful","Okay",  () -> {
+               ScreenController.pushScreen(new LoginScreenBase(), this);
+            });
+       }
+       else {
+           CustomDialogBase cdb = new CustomDialogBase("Username already exists","Okay","Cancel",() -> {
+                
+            },() -> {
+                ScreenController.popUntil(ConnectionModeScreenBase.class);
+            });
+       }
+      
+    }
 
 }

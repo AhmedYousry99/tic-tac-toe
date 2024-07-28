@@ -11,11 +11,13 @@ import tictactoe.ui.PlayersScreenBase;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import tictactoe.TicTacToe;
 import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
 import tictactoe.ui.CustomPlayerListTile;
+import tictactoe.ui.util.ScreenController;
 
 
 /**
@@ -30,10 +32,33 @@ public class PlayerScreenController {
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.ALL_PLAYERS);
             Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
-            th.start();
+            Platform.runLater(th);
             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.ALL_PLAYERS);
                     TicTacToe.primaryStage.setOnCloseRequest((e) -> {
-                    th.stop();
+                        th.stop();
+        });
+        } catch (InstantiationException ex) {
+            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+       public static void signOut(PlayersScreenBase playersScreenBase){
+        try {
+            SocketConnectionController.getInstance().setPlayerDataHandlerFunction(playersScreenBase::signout);
+            PlayerMessageBody pl= new PlayerMessageBody();
+            pl.setState(SocketRoute.LOG_OUT);
+            Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
+            Platform.runLater(th);
+            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.LOG_OUT);
+            ScreenController.popUntil(ConnectionModeScreenBase.class);
+                    TicTacToe.primaryStage.setOnCloseRequest((e) -> {
+                        th.stop();
         });
         } catch (InstantiationException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
