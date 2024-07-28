@@ -143,6 +143,7 @@ public class PlayersScreenBase extends StackPane {
         getChildren().add(flowPane);
         getChildren().add(backButton);
         getChildren().add(scoreboardButton);
+        observeFromServer();
 
     }
     
