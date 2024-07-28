@@ -83,7 +83,7 @@ public class ConnectionModeScreenBase extends StackPane {
         onlineButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
         onlineButton.setFont(new Font("Agency FB Bold", 36.0));
         onlineButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-      new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", this, new PlayersScreenBase());
+      new CustomDialogWithTextFieldBase( "Enter your IP address", "Ok", "Cancel", this, new LoginScreenBase());
             
         });
                 
