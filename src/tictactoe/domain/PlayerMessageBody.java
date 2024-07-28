@@ -17,18 +17,31 @@ public class PlayerMessageBody extends Player{
     private boolean response;
     private String move;
     private ArrayList<ScoreBoardItem> scoreBoardItem;
+    private ArrayList<Player> players;
     private int gameBoardState;
-    
+    private String message;
 
-    public PlayerMessageBody()
+
+    public String getMessage()
     {
-        super();
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
     }
     
-   
 
-    
-    
+    public ArrayList<Player> getPlayers()
+    {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players)
+    {
+        this.players = players;
+    }
     
     public String getUsername() {
         return username;
@@ -111,6 +124,9 @@ public class PlayerMessageBody extends Player{
         this.gameBoardState = gameBoardState;
     }
     
-    
+        public PlayerMessageBody()
+    {
+        super();
+    }
     
 }

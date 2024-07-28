@@ -27,4 +27,6 @@ public enum SocketRoute {
     CHECK_SERVER,
     GAME_BOARD_STATE,
     INITIALIZE_PLAYERS,
+    ERROR_OCCURED,
+
 }
