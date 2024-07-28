@@ -20,6 +20,8 @@ public class PlayerMessageBody extends Player{
     private ArrayList<Player> players;
     private int gameBoardState;
     private String message;
+    private String opponentName;
+
 
 
     public String getMessage()
@@ -127,6 +129,14 @@ public class PlayerMessageBody extends Player{
         public PlayerMessageBody()
     {
         super();
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
     }
     
 }
