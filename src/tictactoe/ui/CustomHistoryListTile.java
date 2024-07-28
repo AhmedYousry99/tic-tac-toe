@@ -24,7 +24,7 @@ import tictactoe.ui.util.VoidCallable;
  *
  * @author Shyasuo
  */
-public class CustomListTile extends HBox{
+public class CustomHistoryListTile extends HBox{
     
     protected final Button replayButton;
     protected final HBox hBox;
@@ -32,7 +32,7 @@ public class CustomListTile extends HBox{
     protected final Region spacer;
     private final File file;
 
-    public CustomListTile(File file, VoidCallable function) {
+    public CustomHistoryListTile(File file, VoidCallable function) {
         hBox = new HBox();
         label = new Label();
         replayButton = new Button();

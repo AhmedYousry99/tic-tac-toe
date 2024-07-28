@@ -1,6 +1,8 @@
 package tictactoe.ui;
 
 import static com.sun.javafx.scene.control.skin.Utils.getResource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -9,7 +11,10 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.DifficultyLevel;
+import tictactoe.domain.PlayerDataHandler;
+import tictactoe.domain.PlayerMessageBody;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.ScreenController;
 
@@ -22,6 +27,7 @@ public class ChooseLevelFXMLBase extends StackPane {
     protected final Button intermediateButton;
     protected final Button difficultButton;
     protected final Button backButton;
+    
 
     public ChooseLevelFXMLBase() {
 
@@ -129,4 +135,7 @@ public class ChooseLevelFXMLBase extends StackPane {
         getChildren().add(flowPane);
 
     }
+    
+    
+
 }
