@@ -53,6 +53,12 @@ public class PlayerDataHandler implements Runnable{
         tick = 0;
     }
     
+    public boolean sendMessage(PlayerMessageBody msg) throws JsonProcessingException{
+        String newMessage = JSONParser.convertFromPlayerMessageBodyToJSON(msg);
+        expectedRoute = response;
+        printStream.println(newMessage);
+        return printStream.checkError();
+    }
     
     public boolean sendMessage(PlayerMessageBody msg, SocketRoute response) throws JsonProcessingException{
         String newMessage = JSONParser.convertFromPlayerMessageBodyToJSON(msg);
@@ -61,7 +67,7 @@ public class PlayerDataHandler implements Runnable{
         return printStream.checkError();
     }
     
-    protected String recieveMessage() throws IOException{
+    public String recieveMessage() throws IOException{
         String msg = null;
         msg = bufferedReader.readLine();
         System.out.println(msg);
@@ -93,22 +99,7 @@ public class PlayerDataHandler implements Runnable{
         }
         
     }
-//    private void getAllPlayers(PlayerMessageBody pl)
-//    {
-//        String msg;
-//        try{
-//             try {
-//                pl.setPlayers(DBAccess.getAllPlayers());
-//            } catch (SQLException ex) {
-//                pl.setMessage("Couldn't get all players at the moment , please try again");
-//                pl.setState(SocketRoute.ERROR_OCCURED);
-//                Logger.getLogger(PlayerHandler.class.getName()).log(Level.SEVERE, null, ex);
-//            } 
-//             msg = JSONParser.convertFromPlayerMessageBodyToJSON(pl);
-//             printStream.println(msg);
-//        }catch (JsonProcessingException ex) {
-//            Logger.getLogger(PlayerHandler.class.getName()).log(Level.SEVERE, null, ex);
-//        }  
-//    }
+
+    
     
 }

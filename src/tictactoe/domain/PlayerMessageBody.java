@@ -16,7 +16,11 @@ public class PlayerMessageBody extends Player{
     private SocketRoute state;
     private boolean response;
     private String move;
+    private ArrayList<ScoreBoardItem> scoreBoardItem;
+    private ArrayList<Player> players;
+    private int gameBoardState;
     private String message;
+
 
     public String getMessage()
     {
@@ -27,8 +31,7 @@ public class PlayerMessageBody extends Player{
     {
         this.message = message;
     }
-    private ArrayList<ScoreBoardItem> scoreBoardItem;
-    private ArrayList<Player> players;
+    
 
     public ArrayList<Player> getPlayers()
     {
@@ -111,6 +114,14 @@ public class PlayerMessageBody extends Player{
 
     public void setResponse(boolean response) {
         this.response = response;
+    }
+
+    public int getGameBoardState() {
+        return gameBoardState;
+    }
+
+    public void setGameBoardState(int gameBoardState) {
+        this.gameBoardState = gameBoardState;
     }
     
         public PlayerMessageBody()

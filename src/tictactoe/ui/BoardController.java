@@ -28,7 +28,7 @@ public class BoardController  {
     protected char[][] simulationBoard;
     boolean isGameInProgress;
     protected String moves;
-    
+    public boolean isThisIsCurrentPlayerTurn;
     
     public BoardController()
     {
@@ -39,6 +39,7 @@ public class BoardController  {
         playerXXName = "";
         playerOOName = "";
         
+        isThisIsCurrentPlayerTurn = true;
         isGameInProgress = true;
         currentPlayer = 1;
         simulationBoard = new char[3][3];
