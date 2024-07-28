@@ -54,12 +54,7 @@ public class LoginScreenBase extends AnchorPane {
         else {
             
             LoginScreenController.login(username, password, this);
-            
-//             loginButton.setOnAction((e) -> {
-//            new CustomDialogSuccess("Successful login", "Okay", () -> {
-//                
-//            });
-//        });
+
         }
        
         return true;        
