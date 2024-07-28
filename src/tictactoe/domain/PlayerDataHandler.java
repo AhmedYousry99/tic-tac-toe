@@ -61,7 +61,7 @@ public class PlayerDataHandler implements Runnable{
 
     
     public boolean sendMessage(PlayerMessageBody msg) throws JsonProcessingException{
-        String newMessage =JSONParser.convertFromPlayerMessageBodyToJSON(msg);
+        String newMessage = JSONParser.convertFromPlayerMessageBodyToJSON(msg);
         printStream.println(newMessage);
         return printStream.checkError();
     }

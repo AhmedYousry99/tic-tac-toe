@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -831,7 +832,7 @@ public class GamePlayBoard extends AnchorPane {
     
     void doOnlineMove()
     {
-        new Thread(()->{
+        Thread myTh = new Thread(()->{
             while (true) {                
                 try {
                     String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
@@ -856,7 +857,9 @@ public class GamePlayBoard extends AnchorPane {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }).start();
+        });
+        
+        Platform.runLater(myTh);
     }
     
     

@@ -22,6 +22,7 @@ public class PlayerMessageBody extends Player{
     private String message;
     private String opponentName;
 
+
     public String getOpponentName() {
         return opponentName;
     }
@@ -29,6 +30,7 @@ public class PlayerMessageBody extends Player{
     public void setOpponentName(String opponentName) {
         this.opponentName = opponentName;
     }
+
 
 
     public String getMessage()
@@ -136,6 +138,14 @@ public class PlayerMessageBody extends Player{
         public PlayerMessageBody()
     {
         super();
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
     }
     
 }
