@@ -37,13 +37,23 @@ public class PlayerMessageBody extends Player{
     {
         return message;
     }
+    
+     public int getGameBoardState()
+    {
+        return gameBoardState;
+    }
 
+    public void setGameBoardState(int gameBoardState)
+    {
+        this.gameBoardState = gameBoardState;
+    }
+  
     public void setMessage(String message)
     {
         this.message = message;
     }
-    
 
+    
     public ArrayList<Player> getPlayers()
     {
         return players;
@@ -124,14 +134,6 @@ public class PlayerMessageBody extends Player{
 
     public void setResponse(boolean response) {
         this.response = response;
-    }
-
-    public int getGameBoardState() {
-        return gameBoardState;
-    }
-
-    public void setGameBoardState(int gameBoardState) {
-        this.gameBoardState = gameBoardState;
     }
 
     

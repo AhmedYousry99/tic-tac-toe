@@ -90,8 +90,8 @@ public class PlayerDataHandler implements Runnable{
             System.out.println("going to await message");
             String msg = recieveMessage();
             PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
-            if(pl.getState() == expectedRoute){
-                vcppmb.call(pl);
+            if(pl.getState() == expectedRoute || pl.getState() == expectedRoute.ERROR_OCCURED){
+                if(vcppmb != null) vcppmb.call(pl);
                 System.out.println("message gotten");
                 run = false;
             }

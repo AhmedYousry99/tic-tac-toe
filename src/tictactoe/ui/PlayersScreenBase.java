@@ -55,14 +55,16 @@ public class PlayersScreenBase extends StackPane {
         backButton = new Button();
         scoreboardButton = new Button();
         replayMatchButton = new Button();
+        
+        //extra
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
 
         setPrefHeight(1000.0);
         setPrefWidth(1500.0);
 
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);
-        imageView.setFitHeight(1000.0);
-        imageView.setFitWidth(1500.0);
         imageView.setPickOnBounds(true);
         imageView.setSmooth(false);
         imageView.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/main.jpg").toExternalForm()));
@@ -97,7 +99,7 @@ public class PlayersScreenBase extends StackPane {
         backButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         backButton.setMnemonicParsing(false);
         backButton.setPrefWidth(200.0);
-        backButton.getStylesheets().add("resources/css/application.css");
+        backButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         backButton.setText("Back");
         backButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         backButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -105,7 +107,9 @@ public class PlayersScreenBase extends StackPane {
         StackPane.setMargin(backButton, new Insets(0.0, 0.0, 20.0, 50.0));
         backButton.setOnAction((e) -> {
             new CustomDialogBase("Are you sure you want to leave? you will be signed out.", "Leave", "Cancel", () -> {
-           ScreenController.popUntil(ConnectionModeScreenBase.class); }, null);
+           PlayerScreenController.signOut(this); 
+            
+            }, null);
         });
 
         StackPane.setAlignment(scoreboardButton, javafx.geometry.Pos.BOTTOM_CENTER);
@@ -115,7 +119,7 @@ public class PlayersScreenBase extends StackPane {
         scoreboardButton.setMnemonicParsing(false);
         scoreboardButton.setPrefHeight(91.0);
         scoreboardButton.setPrefWidth(316.0);
-        scoreboardButton.getStylesheets().add("../resources/css/application.css");
+        scoreboardButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         scoreboardButton.setText("ScoreBoard");
         scoreboardButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         scoreboardButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -129,7 +133,7 @@ public class PlayersScreenBase extends StackPane {
         replayMatchButton.setMnemonicParsing(false);
         replayMatchButton.setPrefHeight(91.0);
         replayMatchButton.setPrefWidth(280.0);
-        replayMatchButton.getStylesheets().add("../resources/css/application.css");
+        replayMatchButton.getStylesheets().add("/tictactoe/resources/css/application.css");
         replayMatchButton.setText("Replay Match");
         replayMatchButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         replayMatchButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
@@ -151,7 +155,10 @@ public class PlayersScreenBase extends StackPane {
     
 public void addPlayersToList(PlayerMessageBody pl){
     ArrayList<Player> temp = pl.getPlayers();
-    if(temp.isEmpty()){
+    if(pl.getPlayers() == null){
+        
+    }
+    else if(temp.isEmpty()){
         listPlaceholdertLabel.setText("There are no registered players.");
     }else{
         for(Player player : temp){
@@ -162,5 +169,9 @@ public void addPlayersToList(PlayerMessageBody pl){
         ));
     }
     
+}
+
+public void signout(PlayerMessageBody pl){
+    ScreenController.popUntil(ConnectionModeScreenBase.class);
 }
 }

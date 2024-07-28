@@ -34,9 +34,9 @@ public class ScreenController {
         Parent tempScreen = null;
         while(!tempStack.isEmpty()){
             if(tempStack.peek().getClass() == screenClass){
+                tempScreen = TicTacToe.roots.pop();
                 break;
             }
-            tempScreen = TicTacToe.roots.pop();
         }
         if(screenClass == StartScreenFXMLBase.class && tempScreen != null){
                 TicTacToe.roots = tempStack;
