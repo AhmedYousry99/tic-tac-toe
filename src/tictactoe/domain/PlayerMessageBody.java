@@ -14,31 +14,34 @@ import java.util.ArrayList;
 public class PlayerMessageBody extends Player{
     
     private SocketRoute state;
-    private String move;
     private boolean response;
+    private String move;
     private ArrayList<ScoreBoardItem> scoreBoardItem;
+    private ArrayList<Player> players;
+    private int gameBoardState;
+    private String message;
 
-    public PlayerMessageBody()
+
+    public String getMessage()
     {
-        super();
-    }
-    
-    public PlayerMessageBody(SocketRoute state, String move, boolean isRquestAccepted, boolean isServerAwake, ArrayList<ScoreBoardItem> scoreBoardItem) {
-        this.state = state;
-        this.move = move;
-        this.scoreBoardItem = scoreBoardItem;
+        return message;
     }
 
-    public PlayerMessageBody(SocketRoute state, String move, boolean isRquestAccepted, boolean isServerAwake, ArrayList<ScoreBoardItem> scoreBoardItem, String username, String password, int score, boolean isPlaying, boolean isActive) {
-        super(username, password, score, isPlaying, isActive);
-        this.state = state;
-        this.move = move;
-        
-        this.scoreBoardItem = scoreBoardItem;
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+    
+
+    public ArrayList<Player> getPlayers()
+    {
+        return players;
     }
 
-    
-    
+    public void setPlayers(ArrayList<Player> players)
+    {
+        this.players = players;
+    }
     
     public String getUsername() {
         return username;
@@ -96,14 +99,6 @@ public class PlayerMessageBody extends Player{
         this.move = move;
     }
 
-    public boolean isResponse() {
-        return response;
-    }
-
-    public void setResponse(boolean response) {
-        this.response = response;
-    }
-
     public ArrayList<ScoreBoardItem> getScoreBoardItem() {
         return scoreBoardItem;
     }
@@ -111,7 +106,27 @@ public class PlayerMessageBody extends Player{
     public void setScoreBoardItem(ArrayList<ScoreBoardItem> scoreBoardItem) {
         this.scoreBoardItem = scoreBoardItem;
     }
+
+    public boolean getResponse() {
+        return response;
+    }
+
+    public void setResponse(boolean response) {
+        this.response = response;
+    }
+
+    public int getGameBoardState() {
+        return gameBoardState;
+    }
+
+    public void setGameBoardState(int gameBoardState) {
+        this.gameBoardState = gameBoardState;
+    }
+
     
-    
+        public PlayerMessageBody()
+    {
+        super();
+    }
     
 }

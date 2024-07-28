@@ -21,14 +21,14 @@ import tictactoe.ui.util.ScreenController;
 public class HistoryScreenFXMLController {
     
     
-    static boolean getRecordedGames(List<CustomListTile> listTiles, HistoryScreenFXMLBase historyScreenFXMLBase){
+    static boolean getRecordedGames(List<CustomHistoryListTile> listTiles, HistoryScreenFXMLBase historyScreenFXMLBase){
         boolean found;
         String tempName;
         try {
             new MainFileController().getfilesFromDirectory();
             for(File matchFile: MainFileController.storedMatches){
                 tempName = matchFile.getName().split("[.]")[0];
-                listTiles.add(new CustomListTile(matchFile, () -> {
+                listTiles.add(new CustomHistoryListTile(matchFile, () -> {
                                 try {
                 ScreenController.pushScreen(new GamePlayBoard(new ReplayMatchController(new MainFileController().readFile(matchFile))), historyScreenFXMLBase);
             } catch (IOException ex) {

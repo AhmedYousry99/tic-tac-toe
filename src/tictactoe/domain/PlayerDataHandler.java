@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,19 +17,32 @@ import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.CustomDialogSuccess;
 import tictactoe.ui.util.ScreenController;
 
-
+import tictactoe.ui.util.VoidCallableParameterizedPMB;
 
 
 /**
  *
  * @author Shyasuo
  */
-public class PlayerDataHandler extends Thread{
+public class PlayerDataHandler implements Runnable{
     
     protected BufferedReader bufferedReader;
     protected PrintStream printStream;
     //data to be sent
     protected String msg;
+    protected SocketRoute expectedRoute;
+    private boolean run;
+    protected VoidCallableParameterizedPMB vcppmb;
+
+    public VoidCallableParameterizedPMB getVcppmb()
+    {
+        return vcppmb;
+    }
+
+    public void setVcppmb(VoidCallableParameterizedPMB vcppmb)
+    {
+        this.vcppmb = vcppmb;
+    }
 
     public String getMsg()
     {
@@ -43,16 +55,25 @@ public class PlayerDataHandler extends Thread{
     public PlayerDataHandler(Socket socket) throws IOException{
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         printStream = new PrintStream(socket.getOutputStream());
+        expectedRoute = SocketRoute.ALL_PLAYERS;
         tick = 0;
     }
-    
+
     
     public boolean sendMessage(PlayerMessageBody msg) throws JsonProcessingException{
         String newMessage =JSONParser.convertFromPlayerMessageBodyToJSON(msg);
         printStream.println(newMessage);
         return printStream.checkError();
     }
-    protected String recieveMessage() throws IOException{
+    
+    public boolean sendMessage(PlayerMessageBody msg, SocketRoute response) throws JsonProcessingException{
+        String newMessage = JSONParser.convertFromPlayerMessageBodyToJSON(msg);
+        expectedRoute = response;
+        printStream.println(newMessage);
+        return printStream.checkError();
+    }
+    
+    public String recieveMessage() throws IOException{
         String msg = null;
         msg = bufferedReader.readLine();
         System.out.println(msg);
@@ -62,23 +83,31 @@ public class PlayerDataHandler extends Thread{
     @Override
     public void run()
     {
-        super.run();
-        while(true){
+        run = true;
+        while(run){
             try {
-                String msg = recieveMessage();
-                PlayerMessageBody pl =JSONParser.convertFromJSONToPlayerMessageBody(msg);
-               switch(pl.getState())
-               {
-                   case LOG_IN_RESPONSE:
-                   {
-                     
-                   }    
-               }
+
+            System.out.println("going to await message");
+            String msg = recieveMessage();
+            PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
+            if(pl.getState() == expectedRoute){
+                vcppmb.call(pl);
+                System.out.println("message gotten");
+                run = false;
+            }
+
             } catch (IOException ex) {
                 Logger.getLogger(PlayerDataHandler.class.getName()).log(Level.SEVERE, null, ex);
+             PlayerMessageBody pl = new PlayerMessageBody();
+             pl.setState(SocketRoute.ERROR_OCCURED);
+             pl.setMessage(ex.getMessage());
+             run = false;
+             vcppmb.call(pl);
             }
         }
+        
     }
+
     
    public void getLoginResponse(boolean response)
    {
