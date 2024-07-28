@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.GamePlayBoard;
-import tictactoe.ui.LoginScreenBase;
 import tictactoe.ui.StartScreenFXMLBase;
 import tictactoe.ui.util.StaticNames;
 
