@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import tictactoe.data.SocketConnectionController;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.GamePlayBoard;
 import tictactoe.ui.StartScreenFXMLBase;
@@ -51,6 +52,14 @@ public class TicTacToe extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        SocketConnectionController.getInstance().disconnectFromServer();
+    }
+    
+    
 
     /**
      * @param args the command line arguments

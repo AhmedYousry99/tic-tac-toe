@@ -117,6 +117,7 @@ public class CustomPlayerListTile extends HBox{
         
         //System.out.println(tempInvBtnState);
         inviteButton.setStyle((tempInvBtnState ? "-fx-background-color: D38CC4; " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
+        inviteButton.setDisable(!tempInvBtnState);
         inviteButton.setPickOnBounds(tempInvBtnState);
         inviteButton.setOnAction((event) -> {
             PlayerMessageBody pl = new PlayerMessageBody();

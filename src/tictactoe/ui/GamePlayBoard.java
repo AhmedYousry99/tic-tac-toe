@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import tictactoe.TicTacToe;
 import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.JSONParser;
 import tictactoe.domain.PlayerMessageBody;
@@ -848,6 +849,9 @@ public class GamePlayBoard extends AnchorPane {
             }
         });
         replayThread.start();
+        TicTacToe.primaryStage.setOnCloseRequest((e) -> {
+        replayThread.stop();
+        });
     }
     
     void doOnlineMove()

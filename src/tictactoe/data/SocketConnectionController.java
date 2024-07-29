@@ -92,7 +92,7 @@ public class SocketConnectionController implements ConnectionInterface{
             this.addr = addr;
             if (port < 0 || port > 0xFFFF) throw new IllegalArgumentException("Invalid port value");
             createdSocket = new Socket();
-            createdSocket.connect(new InetSocketAddress(addr, port));
+            createdSocket.connect(new InetSocketAddress(addr, port), 2000);
 //            createdSocket.setSoTimeout(5000);
             this.port = createdSocket.getLocalPort();
             playerDataHandler = new PlayerDataHandler(createdSocket);

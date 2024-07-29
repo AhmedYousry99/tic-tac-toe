@@ -22,6 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.TicTacToe;
 import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.JSONParser;
 import tictactoe.domain.Player;
@@ -151,18 +152,22 @@ public class PlayersScreenBase extends StackPane {
     
     public void addPlayersToList(PlayerMessageBody pl){
         ArrayList<Player> temp = pl.getPlayers();
-        if(pl.getPlayers() == null){
-
+        if(temp == null){
+            listPlaceholdertLabel.setText("Couldn't fetch players from server");  
         }
         else if(temp.isEmpty()){
             listPlaceholdertLabel.setText("There are no registered players.");
         }else{
+            listTiles = new ArrayList<>();
             for(Player player : temp){
+                
             listTiles.add(new CustomPlayerListTile(player, this::sendRequest));
         }
+            Platform.runLater(() -> {
             listView.setItems(FXCollections.observableArrayList(
                 listTiles
             ));
+            });
         }
 
     }
@@ -184,6 +189,9 @@ public class PlayersScreenBase extends StackPane {
     {
        
        Thread myTh = new myThread();
+        TicTacToe.primaryStage.setOnCloseRequest((e) -> {
+            myTh.stop();
+        });
         
         //Platform.runLater(myTh);
         myTh.start();
