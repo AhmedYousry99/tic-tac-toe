@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.Player;
 import tictactoe.domain.PlayerDataHandler;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
@@ -35,6 +36,7 @@ public class LoginScreenBase extends AnchorPane {
     protected final Hyperlink hyperlink;
     protected final PasswordField passwordField;
     protected final Button backButton;
+    public static Player currentUser;
 
     public boolean validation(){
         String username, password;
@@ -199,6 +201,12 @@ public class LoginScreenBase extends AnchorPane {
           CustomDialogSuccess cds = new CustomDialogSuccess("Login successful","Okay",  () -> {
                ScreenController.pushScreen(new PlayersScreenBase(), this);
             });
+          currentUser = new Player();
+          currentUser.setUsername(pl.getUsername());
+          currentUser.setPassword(pl.getPassword());
+          currentUser.setScore(pl.getScore());
+          currentUser.setIsActive(pl.isIsActive());
+          currentUser.setIsPlaying(pl.isIsPlaying());
        }
        else {
            CustomDialogBase cdb = new CustomDialogBase("Invalid username or password","Okay","Cancel",() -> {

@@ -203,6 +203,18 @@ public class PlayersScreenBase extends StackPane {
                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
                    switch(pl.getState())
                    {
+                       case PLAY_AGAIN:
+                       {
+                           if(onlineModeController.currentPlayerSymbol)onlineModeController.isThisIsCurrentPlayerTurn = true;
+                            else onlineModeController.isThisIsCurrentPlayerTurn = false;
+                            onlineModeController.resetBoard();
+                            gamePlayBoard.resetBoardBaseOnSimulationBoard();
+                            gamePlayBoard.resetSaveMatchBtn();
+                            onlineModeController.resetMatchMoves();
+       
+                            gamePlayBoard.btnRematch.setDisable(true);
+                           break;
+                       }
                        case PLAYER_MOVE:
                         {
                             System.out.println("move received.");

@@ -28,5 +28,6 @@ public enum SocketRoute {
     GAME_BOARD_STATE,
     INITIALIZE_PLAYERS,
     ERROR_OCCURED,
+    PLAY_AGAIN,
 
 }

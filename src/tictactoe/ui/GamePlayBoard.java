@@ -504,10 +504,16 @@ public class GamePlayBoard extends AnchorPane {
             if(((OnlineModeController) customController).currentPlayerSymbol)
             {
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = true;
+                boardController.playerXXName = "X : " + LoginScreenBase.currentUser.getUsername();
+                boardController.playerOOName = "O : " + ((OnlineModeController) customController).opponentName;
             }else
             {
+                boardController.playerOOName = "O : " + LoginScreenBase.currentUser.getUsername();
+                boardController.playerXXName = "X : " + ((OnlineModeController) customController).opponentName;
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
             }
+            
+
             modeName = "Online Mode";
             //doOnlineMove();
         }
@@ -554,7 +560,18 @@ public class GamePlayBoard extends AnchorPane {
         btnRematch.setOnAction((e)->{
             if(boardController instanceof OnlineModeController)
             {
-                
+                if(((OnlineModeController)boardController).currentPlayerSymbol)boardController.isThisIsCurrentPlayerTurn = true;
+                else boardController.isThisIsCurrentPlayerTurn = false;
+                PlayerMessageBody pl = new PlayerMessageBody();
+                pl.setState(SocketRoute.PLAY_AGAIN);
+                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
+                try {
+                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }    
             }else
             {
                 boardController.isThisIsCurrentPlayerTurn = true;
@@ -792,7 +809,7 @@ public class GamePlayBoard extends AnchorPane {
            
     }
     
-    private void resetSaveMatchBtn()
+    public void resetSaveMatchBtn()
     {
         btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
         btnSaveMatch.setText("Save Match");

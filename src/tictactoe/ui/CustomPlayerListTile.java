@@ -50,6 +50,7 @@ public class CustomPlayerListTile extends HBox{
         AvailableDisabledButton = new Button();
         inviteButton = new Button();
         spacer = new Region();
+        opponent = player;
         setHgrow(spacer, Priority.ALWAYS);
         nameLabel.setAlignment(javafx.geometry.Pos.CENTER);
         nameLabel.setMaxWidth(Double.MAX_VALUE);
@@ -112,7 +113,8 @@ public class CustomPlayerListTile extends HBox{
         
         AvailableDisabledButton.setStyle((player.isIsPlaying() ? "-fx-background-color: rgba(142, 211, 140, 1); " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
         
-        boolean tempInvBtnState = player.isIsActive() && !player.isIsPlaying();
+        boolean tempInvBtnState = !LoginScreenBase.currentUser.getUsername().equals(opponent.getUsername()) && (player.isIsActive() && !player.isIsPlaying());
+        
         //System.out.println(tempInvBtnState);
         inviteButton.setStyle((tempInvBtnState ? "-fx-background-color: D38CC4; " : "-fx-background-color: rgba(125, 125, 125, 1);") + "-fx-background-radius: 10;");
         inviteButton.setPickOnBounds(tempInvBtnState);
