@@ -25,56 +25,56 @@ import tictactoe.ui.util.ScreenController;
 
 public class GamePlayBoard extends AnchorPane {
 
-    protected final ImageView backgroundImage;
-    protected final StackPane stack00;
-    protected final ImageView x00;
-    protected final ImageView o00;
-    protected final ImageView action00;
-    protected final StackPane stack01;
-    protected final ImageView x01;
-    protected final ImageView o01;
-    protected final ImageView action01;
-    protected final StackPane stack02;
-    protected final ImageView x02;
-    protected final ImageView o02;
-    protected final ImageView action02;
-    protected final StackPane stack10;
-    protected final ImageView x10;
-    protected final ImageView o10;
-    protected final ImageView action10;
-    protected final StackPane stack11;
-    protected final ImageView x11;
-    protected final ImageView o11;
-    protected final ImageView action11;
-    protected final StackPane stack12;
-    protected final ImageView x12;
-    protected final ImageView o12;
-    protected final ImageView action12;
-    protected final StackPane stack20;
-    protected final ImageView x20;
-    protected final ImageView o20;
-    protected final ImageView action20;
-    protected final StackPane stack21;
-    protected final ImageView x21;
-    protected final ImageView o21;
-    protected final ImageView action21;
-    protected final StackPane stack22;
-    protected final ImageView x22;
-    protected final ImageView o22;
-    protected final ImageView action22;
-    protected final Text playerXXNameText;
-    protected final Text playerXXWinsText;
-    protected final Text playerOONameText;
-    protected final Text playerOOWinsText;
-    protected final Text roundNumberText;
-    protected final Text modeText;
-    protected final Button btnLeave;
-    protected final Button btnRematch;
-    protected final Button btnSaveMatch;
+    public final ImageView backgroundImage;
+    public final StackPane stack00;
+    public final ImageView x00;
+    public final ImageView o00;
+    public final ImageView action00;
+    public final StackPane stack01;
+    public final ImageView x01;
+    public final ImageView o01;
+    public final ImageView action01;
+    public final StackPane stack02;
+    public final ImageView x02;
+    public final ImageView o02;
+    public final ImageView action02; 
+    public final StackPane stack10;
+    public final ImageView x10;
+    public final ImageView o10;
+    public final ImageView action10;
+    public final StackPane stack11;
+    public final ImageView x11;
+    public final ImageView o11;
+    public final ImageView action11;
+    public final StackPane stack12;
+    public final ImageView x12;
+    public final ImageView o12;
+    public final ImageView action12;
+    public final StackPane stack20;
+    public final ImageView x20;
+    public final ImageView o20;
+    public final ImageView action20;
+    public final StackPane stack21;
+    public final ImageView x21;
+    public final ImageView o21;
+    public final ImageView action21;
+    public final StackPane stack22;
+    public final ImageView x22;
+    public final ImageView o22;
+    public final ImageView action22;
+    public final Text playerXXNameText;
+    public final Text playerXXWinsText;
+    public final Text playerOONameText;
+    public final Text playerOOWinsText;
+    public final Text roundNumberText;
+    public final Text modeText;
+    public final Button btnLeave;
+    public final Button btnRematch;
+    public final Button btnSaveMatch;
     
-    BoardController boardController;
-    boolean play,saveTheMatch,isTransitionStarted;
-    String modeName;
+    public BoardController boardController;
+    public boolean play,saveTheMatch,isTransitionStarted;
+    public String modeName;
     Thread replayThread;
     
     
@@ -509,7 +509,7 @@ public class GamePlayBoard extends AnchorPane {
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
             }
             modeName = "Online Mode";
-            doOnlineMove();
+            //doOnlineMove();
         }
         else if(customController instanceof ReplayMatchController)
         {
@@ -608,20 +608,22 @@ public class GamePlayBoard extends AnchorPane {
         {
             if(boardController instanceof OnlineModeController)
             {
-                boardController.setMove(i, j);
+                ((OnlineModeController)boardController).setMoveToOnline(i, j,((OnlineModeController)boardController).currentPlayerSymbol);
                 resetBoardBaseOnSimulationBoard();
                 PlayerMessageBody pl = new PlayerMessageBody();
                 pl.setState(SocketRoute.PLAYER_MOVE);
                 pl.setMove(((OnlineModeController)boardController).convertMoveToStirng(i, j));
                 pl.setOpponentName(((OnlineModeController)boardController).opponentName);
+                System.out.println(((OnlineModeController)boardController).opponentName);
                 try {
                     SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                    boardController.isThisIsCurrentPlayerTurn = false;
                 } catch (InstantiationException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (JsonProcessingException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 }    
-                boardController.isThisIsCurrentPlayerTurn = false;
+                
                 actionWhenGetBoardState();
 
             }
@@ -670,7 +672,7 @@ public class GamePlayBoard extends AnchorPane {
     }
     
     
-    private void actionWhenGetBoardState()
+    public void actionWhenGetBoardState()
     {
         int result = boardController.getBoardState(boardController.getSimulationBoard());
         
@@ -739,7 +741,7 @@ public class GamePlayBoard extends AnchorPane {
 
     }
     
-    private void resetBoardBaseOnSimulationBoard()
+    public void resetBoardBaseOnSimulationBoard()
     {
         char[][] simulationBoard = boardController.getSimulationBoard();
         for(int i = 0;i < 3;i++)
@@ -845,7 +847,7 @@ public class GamePlayBoard extends AnchorPane {
                             System.out.println("move received.");
                             int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
                             int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
-                            boardController.setMove(i, j);
+                            ((OnlineModeController)boardController).setMoveToOnline(i, j,!((OnlineModeController)boardController).currentPlayerSymbol);
                             resetBoardBaseOnSimulationBoard();
                             actionWhenGetBoardState();
                             boardController.isThisIsCurrentPlayerTurn = true;

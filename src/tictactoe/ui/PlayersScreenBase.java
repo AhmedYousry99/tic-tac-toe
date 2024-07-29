@@ -43,6 +43,8 @@ public class PlayersScreenBase extends StackPane {
     protected final Button scoreboardButton;
     protected final Label listPlaceholdertLabel;
     protected ArrayList<CustomPlayerListTile> listTiles;
+    public static GamePlayBoard gamePlayBoard;
+    public static OnlineModeController onlineModeController;
 
     public PlayersScreenBase() {
 
@@ -201,9 +203,19 @@ public class PlayersScreenBase extends StackPane {
                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(msg);
                    switch(pl.getState())
                    {
+                       case PLAYER_MOVE:
+                        {
+                            System.out.println("move received.");
+                            int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
+                            int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
+                            onlineModeController.setMoveToOnline(i, j, !onlineModeController.currentPlayerSymbol);
+                            gamePlayBoard.resetBoardBaseOnSimulationBoard();
+                            gamePlayBoard.actionWhenGetBoardState();
+                            onlineModeController.isThisIsCurrentPlayerTurn = true;
+                            break;
+                        }
                        case ALL_PLAYERS:
                        {
-                           System.out.println("get all");
                            addPlayersToList(pl);
                            break;
                        }
@@ -218,10 +230,12 @@ public class PlayersScreenBase extends StackPane {
                                             pl.setState(SocketRoute.RESPONSE_TO_REQUEST_TO_PLAY);
                                             pl.setOpponentName(pl.getOpponentName());
                                             pl.setResponse(true);
-                                            int symbol = new Random().nextInt(2);
-                                            if(symbol == 0)pl.setPlayerSymbol(false);
+                                            pl.setPlayerSymbol(false);
                                             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
-                                            ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(!pl.isPlayerSymbol(),pl.getOpponentName())), PlayersScreenBase.this);
+                                            
+                                            onlineModeController = new OnlineModeController(false,pl.getOpponentName());
+                                            gamePlayBoard = new GamePlayBoard(onlineModeController);
+                                            ScreenController.pushScreen(gamePlayBoard, PlayersScreenBase.this);
                                         } catch (InstantiationException ex) {
                                             Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
                                         } catch (JsonProcessingException ex) {
@@ -249,9 +263,10 @@ public class PlayersScreenBase extends StackPane {
                            System.out.println("request received.");
                            if(pl.getResponse())
                            {
-                               
-                               ScreenController.pushScreen(new GamePlayBoard(new OnlineModeController(pl.isPlayerSymbol(),pl.getOpponentName())), PlayersScreenBase.this);
-                               stop();
+                               onlineModeController = new OnlineModeController(true,pl.getOpponentName());
+                               gamePlayBoard = new GamePlayBoard(onlineModeController);
+                               ScreenController.pushScreen(gamePlayBoard, PlayersScreenBase.this);
+                               //stop();
                                
                            }else
                            {
@@ -269,6 +284,7 @@ public class PlayersScreenBase extends StackPane {
                } catch (IOException ex) {
                    Logger.getLogger(PlayersScreenBase.class.getName()).log(Level.SEVERE, null, ex);
                }
+              
            }
         }
         

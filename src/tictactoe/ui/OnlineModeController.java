@@ -19,6 +19,18 @@ public class OnlineModeController extends BoardController{
         opponentName = name;
     }
     
+    public void setMoveToOnline(int i ,int j,boolean symbol)
+    {
+        addToMoves(i, j);
+        if(symbol)
+        {
+            simulationBoard[i][j] = 'x';         
+        }else
+        {
+            simulationBoard[i][j] = 'o';
+        }
+    }
+    
     public String convertMoveToStirng(int i,int j)
     {
         String str = "";
