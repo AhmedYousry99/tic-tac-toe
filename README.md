@@ -12,3 +12,13 @@
 ## Tech Used
 
 JavaFX, Derby Database, Netbeans.
+
+## Game Preview
+
+![image](https://github.com/user-attachments/assets/8438e401-17b0-45ef-85fe-97e1f32aedd7)
+
+## Contributers
+- Kerolos Raouf
+- Ahmed Yousry
+- Eman Ali
+- Nada Ghazala
