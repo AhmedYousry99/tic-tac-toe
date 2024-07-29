@@ -48,7 +48,9 @@ public class PlayerScreenController {
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.LOG_OUT);
             Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
-            Platform.runLater(th);
+            Platform.runLater(() -> {
+                th.start();
+            });
             SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.LOG_OUT);
             //System.out.println("done");
             ScreenController.popScreen();

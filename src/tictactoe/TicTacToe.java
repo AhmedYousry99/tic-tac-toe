@@ -56,7 +56,8 @@ public class TicTacToe extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        SocketConnectionController.getInstance().disconnectFromServer();
+        if(SocketConnectionController.isInitialized())
+            SocketConnectionController.getInstance().disconnectFromServer();
     }
     
     

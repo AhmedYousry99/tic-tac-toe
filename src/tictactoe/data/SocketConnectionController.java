@@ -33,6 +33,10 @@ public class SocketConnectionController implements ConnectionInterface{
   
     //Singleton instance of SocketConnectionController
     private static SocketConnectionController instance;  
+    
+    public static boolean isInitialized(){
+        return !(instance == null);
+    }
     private static void setInstance(SocketConnectionController instance)
     {
         SocketConnectionController.instance = instance;

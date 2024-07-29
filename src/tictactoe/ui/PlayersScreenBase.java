@@ -41,7 +41,7 @@ public class PlayersScreenBase extends StackPane {
     protected final VBox vBox;
     protected final ListView listView;
     protected final Button backButton;
-    protected final Button scoreboardButton;
+//    protected final Button scoreboardButton;
     protected final Label listPlaceholdertLabel;
     protected ArrayList<CustomPlayerListTile> listTiles;
     public static GamePlayBoard gamePlayBoard;
@@ -64,7 +64,7 @@ public class PlayersScreenBase extends StackPane {
         listView= new ListView();
         listView.setPlaceholder(listPlaceholdertLabel);
         backButton = new Button();
-        scoreboardButton = new Button();
+//        scoreboardButton = new Button();
         
         //extra
         imageView.fitHeightProperty().bind(this.heightProperty());
@@ -122,19 +122,19 @@ public class PlayersScreenBase extends StackPane {
             }, null);
         });
 
-        StackPane.setAlignment(scoreboardButton, javafx.geometry.Pos.BOTTOM_CENTER);
-        scoreboardButton.setAlignment(javafx.geometry.Pos.CENTER);
-        scoreboardButton.setCancelButton(true);
-        scoreboardButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        scoreboardButton.setMnemonicParsing(false);
-        scoreboardButton.setPrefHeight(91.0);
-        scoreboardButton.setPrefWidth(316.0);
-        scoreboardButton.getStylesheets().add("/tictactoe/resources/css/application.css");
-        scoreboardButton.setText("ScoreBoard");
-        scoreboardButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        scoreboardButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        scoreboardButton.setFont(new Font("Agency FB Bold", 48.0));
-        StackPane.setMargin(scoreboardButton, new Insets(0.0, 0.0, 20.0, 0.0));
+//        StackPane.setAlignment(scoreboardButton, javafx.geometry.Pos.BOTTOM_CENTER);
+//        scoreboardButton.setAlignment(javafx.geometry.Pos.CENTER);
+//        scoreboardButton.setCancelButton(true);
+//        scoreboardButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+//        scoreboardButton.setMnemonicParsing(false);
+//        scoreboardButton.setPrefHeight(91.0);
+//        scoreboardButton.setPrefWidth(316.0);
+//        scoreboardButton.getStylesheets().add("/tictactoe/resources/css/application.css");
+//        scoreboardButton.setText("ScoreBoard");
+//        scoreboardButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+//        scoreboardButton.setTextFill(javafx.scene.paint.Color.valueOf("#d9d9d9"));
+//        scoreboardButton.setFont(new Font("Agency FB Bold", 48.0));
+//        StackPane.setMargin(scoreboardButton, new Insets(0.0, 0.0, 20.0, 0.0));
 
 
         getChildren().add(imageView);
@@ -145,7 +145,7 @@ public class PlayersScreenBase extends StackPane {
         flowPane.getChildren().add(vBox);
         getChildren().add(flowPane);
         getChildren().add(backButton);
-        getChildren().add(scoreboardButton);
+//        getChildren().add(scoreboardButton);
         observeFromServer();
 
     }
@@ -163,11 +163,9 @@ public class PlayersScreenBase extends StackPane {
                 
             listTiles.add(new CustomPlayerListTile(player, this::sendRequest));
         }
-            Platform.runLater(() -> {
             listView.setItems(FXCollections.observableArrayList(
                 listTiles
             ));
-            });
         }
 
     }
@@ -236,7 +234,8 @@ public class PlayersScreenBase extends StackPane {
                         }
                        case ALL_PLAYERS:
                        {
-                           addPlayersToList(pl);
+                           Platform.runLater(()->{addPlayersToList(pl);});
+                           
                            break;
                        }
                        case REQUEST_TO_PLAY:
