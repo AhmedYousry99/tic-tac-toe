@@ -5,15 +5,16 @@
  */
 package tictactoe;
 
+import tictactoe.domain.MusicController;
 import java.util.Stack;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import tictactoe.data.SocketConnectionController;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.GamePlayBoard;
-import tictactoe.ui.LoginScreenBase;
 import tictactoe.ui.StartScreenFXMLBase;
 import tictactoe.ui.util.StaticNames;
 
@@ -37,15 +38,29 @@ public class TicTacToe extends Application {
         primaryStage.getIcons().add(new Image(ResourcesLocation.class.
                         getResource("images/icons/xo_icon.png").toExternalForm()));
 
+        
+        
         Scene scene = new Scene(root, 1500, 1000);
         scene.getStylesheets().add("tictactoe/resources/css/listview.css");
         roots = new Stack();
-        
+
+          
+        MusicController music = new MusicController();
+
         primaryStage.setResizable(false);
         primaryStage.setTitle(StaticNames.TIC_TAC_TOE);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        if(SocketConnectionController.isInitialized())
+            SocketConnectionController.getInstance().disconnectFromServer();
+    }
+    
+    
 
     /**
      * @param args the command line arguments

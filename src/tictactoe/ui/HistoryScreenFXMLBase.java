@@ -36,7 +36,7 @@ public class HistoryScreenFXMLBase extends StackPane {
     protected final ListView<HBox> listView;
     protected final Button backButton;
     private ObservableList<HBox> hboxs;
-    private ArrayList<CustomListTile> listTiles;
+    private ArrayList<CustomHistoryListTile> listTiles;
     
 
     public HistoryScreenFXMLBase() {
@@ -49,7 +49,6 @@ public class HistoryScreenFXMLBase extends StackPane {
         listTiles = new ArrayList();
         emptyListLabel = new Label(HistoryScreenFXMLController.getRecordedGames(listTiles, this) ? "You haven't saved any recordings yet." : "Failed to load recorded games");
         
-        System.out.println(listTiles.size());
         
         hboxs = FXCollections.observableArrayList(
             listTiles
@@ -68,9 +67,7 @@ public class HistoryScreenFXMLBase extends StackPane {
         backButton = new Button();
 
    
-        //extra
-        imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.fitWidthProperty().bind(this.widthProperty());
+ 
 
         imageView.setCache(true);
         imageView.setCacheHint(javafx.scene.CacheHint.SPEED);

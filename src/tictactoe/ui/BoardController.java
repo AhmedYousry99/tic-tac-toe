@@ -22,13 +22,13 @@ import tictactoe.ui.util.CustomDialogBase;
 public class BoardController  {
 
     
-    protected int currentPlayer;
+    public int currentPlayer;
     String playerXXName,playerOOName;
     int playerXXWins,playerOOWins,roundsNumber;
     protected char[][] simulationBoard;
     boolean isGameInProgress;
     protected String moves;
-    
+    public boolean isThisIsCurrentPlayerTurn;
     
     public BoardController()
     {
@@ -39,6 +39,7 @@ public class BoardController  {
         playerXXName = "";
         playerOOName = "";
         
+        isThisIsCurrentPlayerTurn = true;
         isGameInProgress = true;
         currentPlayer = 1;
         simulationBoard = new char[3][3];
@@ -57,19 +58,16 @@ public class BoardController  {
     void setMove(int i ,int j)
     {
 
-        if(isThisIsAValidMove(i, j))
+        addToMoves(i, j);
+        if(currentPlayer == 1)
         {
-            addToMoves(i, j);
-            if(currentPlayer == 1)
-            {
-                simulationBoard[i][j] = 'x';
-                currentPlayer = 0;
+            simulationBoard[i][j] = 'x';
+            currentPlayer = 0;
                 
-            }else
-            {
-                simulationBoard[i][j] = 'o';
-                currentPlayer = 1;
-            }
+        }else
+        {
+            simulationBoard[i][j] = 'o';
+            currentPlayer = 1;
         }
     }
     

@@ -16,3 +16,7 @@
 .list-view{
     
 }
+
+.list-view .button:disabled{
+    -fx-opacity: 1;
+}

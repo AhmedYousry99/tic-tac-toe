@@ -1,9 +1,12 @@
 package tictactoe.ui;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,77 +15,82 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import tictactoe.TicTacToe;
+import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.JSONParser;
+import tictactoe.domain.PlayerMessageBody;
+import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.ScreenController;
 
 public class GamePlayBoard extends AnchorPane {
 
-    protected final ImageView backgroundImage;
-    protected final StackPane stack00;
-    protected final ImageView x00;
-    protected final ImageView o00;
-    protected final ImageView action00;
-    protected final StackPane stack01;
-    protected final ImageView x01;
-    protected final ImageView o01;
-    protected final ImageView action01;
-    protected final StackPane stack02;
-    protected final ImageView x02;
-    protected final ImageView o02;
-    protected final ImageView action02;
-    protected final StackPane stack10;
-    protected final ImageView x10;
-    protected final ImageView o10;
-    protected final ImageView action10;
-    protected final StackPane stack11;
-    protected final ImageView x11;
-    protected final ImageView o11;
-    protected final ImageView action11;
-    protected final StackPane stack12;
-    protected final ImageView x12;
-    protected final ImageView o12;
-    protected final ImageView action12;
-    protected final StackPane stack20;
-    protected final ImageView x20;
-    protected final ImageView o20;
-    protected final ImageView action20;
-    protected final StackPane stack21;
-    protected final ImageView x21;
-    protected final ImageView o21;
-    protected final ImageView action21;
-    protected final StackPane stack22;
-    protected final ImageView x22;
-    protected final ImageView o22;
-    protected final ImageView action22;
-    protected final Text playerXXNameText;
-    protected final Text playerXXWinsText;
-    protected final Text playerOONameText;
-    protected final Text playerOOWinsText;
-    protected final Text roundNumberText;
-    protected final Text modeText;
-    protected final Button btnLeave;
-    protected final Button btnRematch;
-    protected final Button btnSaveMatch;
+    public final ImageView backgroundImage;
+    public final StackPane stack00;
+    public final ImageView x00;
+    public final ImageView o00;
+    public final ImageView action00;
+    public final StackPane stack01;
+    public final ImageView x01;
+    public final ImageView o01;
+    public final ImageView action01;
+    public final StackPane stack02;
+    public final ImageView x02;
+    public final ImageView o02;
+    public final ImageView action02; 
+    public final StackPane stack10;
+    public final ImageView x10;
+    public final ImageView o10;
+    public final ImageView action10;
+    public final StackPane stack11;
+    public final ImageView x11;
+    public final ImageView o11;
+    public final ImageView action11;
+    public final StackPane stack12;
+    public final ImageView x12;
+    public final ImageView o12;
+    public final ImageView action12;
+    public final StackPane stack20;
+    public final ImageView x20;
+    public final ImageView o20;
+    public final ImageView action20;
+    public final StackPane stack21;
+    public final ImageView x21;
+    public final ImageView o21;
+    public final ImageView action21;
+    public final StackPane stack22;
+    public final ImageView x22;
+    public final ImageView o22;
+    public final ImageView action22;
+    public final Text playerXXNameText;
+    public final Text playerXXWinsText;
+    public final Text playerOONameText;
+    public final Text playerOOWinsText;
+    public final Text roundNumberText;
+    public final Text modeText;
+    public final Button btnLeave;
+    public final Button btnRematch;
+    public final Button btnSaveMatch;
     
-    BoardController boardController;
-    boolean play,saveTheMatch,isThisIsCurrentPlayerTurn;
-    String modeName;
+    public BoardController boardController;
+    public boolean play,saveTheMatch,isTransitionStarted;
+    public String modeName;
     Thread replayThread;
+    
     
     
     
 
     public GamePlayBoard(BoardController customController) {
         
-        isThisIsCurrentPlayerTurn = true;
         play = true;
         saveTheMatch = false;
         boardController = customController;
         modeName = "Two Players Mode";
-        boardController.playerXXName = "PlayerX";
-        boardController.playerOOName = "PlayerO";
-
+        boardController.playerXXName = "Player X";
+        boardController.playerOOName = "Player O";
+        isTransitionStarted = false;
         backgroundImage = new ImageView();
         stack00 = new StackPane();
         x00 = new ImageView();
@@ -361,7 +369,6 @@ public class GamePlayBoard extends AnchorPane {
         playerXXNameText.setLayoutY(125.0);
         playerXXNameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         playerXXNameText.setStrokeWidth(0.0);
-        playerXXNameText.setText("PlayerX");
         playerXXNameText.setFont(new Font("Agency FB", 100.0));
 
         playerXXWinsText.setFill(javafx.scene.paint.Color.WHITE);
@@ -377,7 +384,6 @@ public class GamePlayBoard extends AnchorPane {
         playerOONameText.setLayoutY(122.0);
         playerOONameText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         playerOONameText.setStrokeWidth(0.0);
-        playerOONameText.setText("PlayerO");
         playerOONameText.setFont(new Font("Agency FB", 100.0));
 
         playerOOWinsText.setFill(javafx.scene.paint.Color.WHITE);
@@ -494,10 +500,26 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(btnRematch);
         getChildren().add(btnSaveMatch);
         
-        
-        if(customController instanceof ReplayMatchController)
+        if(customController instanceof OnlineModeController)
         {
-            isThisIsCurrentPlayerTurn = false;
+            if(((OnlineModeController) customController).currentPlayerSymbol)
+            {
+                ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = true;
+                boardController.playerXXName = "X : " + LoginScreenBase.currentUser.getUsername();
+                boardController.playerOOName = "O : " + ((OnlineModeController) customController).opponentName;
+            }else
+            {
+                boardController.playerOOName = "O : " + LoginScreenBase.currentUser.getUsername();
+                boardController.playerXXName = "X : " + ((OnlineModeController) customController).opponentName;
+                ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
+            }
+            
+
+            modeName = "Online Mode";
+            //doOnlineMove();
+        }
+        else if(customController instanceof ReplayMatchController)
+        {
             btnSaveMatch.setVisible(false);
             btnRematch.setVisible(false);
             modeName = "Replay Mode";
@@ -510,7 +532,6 @@ public class GamePlayBoard extends AnchorPane {
             modeText.setLayoutX(400.0);
             modeText.setFont(new Font("Agency FB", 76.0));
             boardController.playerOOName = "Computer";
-            playerOONameText.setText("Computer");
             playerOONameText.setLayoutX(1180);
             switch(((SinglePlayerModeController) customController).getDifficultyLevel())
             {
@@ -530,16 +551,38 @@ public class GamePlayBoard extends AnchorPane {
         }
          
         modeText.setText(modeName);
+        playerXXNameText.setText(boardController.playerXXName);
+        playerOONameText.setText(boardController.playerOOName);
             
             
         //logic    
     
         btnRematch.setDisable(true);
         btnRematch.setOnAction((e)->{
+            if(boardController instanceof OnlineModeController)
+            {
+                if(((OnlineModeController)boardController).currentPlayerSymbol)boardController.isThisIsCurrentPlayerTurn = true;
+                else boardController.isThisIsCurrentPlayerTurn = false;
+                PlayerMessageBody pl = new PlayerMessageBody();
+                pl.setState(SocketRoute.PLAY_AGAIN);
+                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
+                try {
+                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+            }else
+            {
+                boardController.isThisIsCurrentPlayerTurn = true;
+            }
+            
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
             resetSaveMatchBtn();
             boardController.resetMatchMoves();
+            isTransitionStarted = false;
             btnRematch.setDisable(true);
         });
         
@@ -552,8 +595,7 @@ public class GamePlayBoard extends AnchorPane {
         });
         
         
-        if(isThisIsCurrentPlayerTurn)
-        {
+
             stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
         
             stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
@@ -571,7 +613,7 @@ public class GamePlayBoard extends AnchorPane {
             stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
 
             stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
-        }
+
 
     }
     
@@ -579,68 +621,99 @@ public class GamePlayBoard extends AnchorPane {
     
     void ButtonAction(int i,int j)
     {
-        if(boardController instanceof SinglePlayerModeController)
+        
+        if(boardController.isThisIsCurrentPlayerTurn && boardController.isThisIsAValidMove(i, j))
         {
-            
-            doButtonActionOnSinglePlayerMode(i,j);
-            
-        }else
-        {
-            boardController.setMove(i, j);
-            resetBoardBaseOnSimulationBoard();
-            actionWhenGetBoardState();
-        } 
-        actionWhenGetBoardState();
-    }
-    
-    private void doButtonActionOnSinglePlayerMode(int i,int j)
-    {
-        if(boardController.isThisIsAValidMove(i, j))
-        {
-            if(play)
+            if(boardController instanceof OnlineModeController)
+            {
+                ((OnlineModeController)boardController).setMoveToOnline(i, j,((OnlineModeController)boardController).currentPlayerSymbol);
+                resetBoardBaseOnSimulationBoard();
+                PlayerMessageBody pl = new PlayerMessageBody();
+                pl.setState(SocketRoute.PLAYER_MOVE);
+                pl.setMove(((OnlineModeController)boardController).convertMoveToStirng(i, j));
+                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
+                System.out.println(((OnlineModeController)boardController).opponentName);
+                try {
+                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                    boardController.isThisIsCurrentPlayerTurn = false;
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+                
+                actionWhenGetBoardState();
+
+            }
+            else if(boardController instanceof SinglePlayerModeController)
+            {
+
+                doButtonActionOnSinglePlayerMode(i,j);
+                actionWhenGetBoardState();
+
+            }else
             {
                 boardController.setMove(i, j);
                 resetBoardBaseOnSimulationBoard();
+                actionWhenGetBoardState();
+            } 
+        }
+
+    }
+    
+    
+    private void doButtonActionOnSinglePlayerMode(int i,int j)
+    {
+        if(!isTransitionStarted)
+        {
+            isTransitionStarted = true;
+            if(boardController.isThisIsCurrentPlayerTurn)
+            {
+                boardController.setMove(i, j);
+                resetBoardBaseOnSimulationBoard();
+                boardController.isThisIsCurrentPlayerTurn = false;
             }
-                
-            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1){
-                    PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
+            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1)
+            {
+                    PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
                     pause.setOnFinished(e -> {
                         ((SinglePlayerModeController)boardController).doComputerMove();
                         resetBoardBaseOnSimulationBoard();
                         actionWhenGetBoardState();
-                        play = true;
+                        boardController.isThisIsCurrentPlayerTurn = true;
+                        isTransitionStarted = false;
                     });
                     pause.play();
-            }    
+            }  
         }
+        
     }
     
     
-    private void actionWhenGetBoardState()
+    public void actionWhenGetBoardState()
     {
         int result = boardController.getBoardState(boardController.getSimulationBoard());
         
         if(boardController.isGameInProgress)
         {
-           switch(result)
-           {
-            case 0 :
-                doStuffOnGetResult(0);
-                break;
-            case 1:
-                doStuffOnGetResult(1);
-                break;
-            case 2:
-                doStuffOnGetResult(2);
-                break;
-            } 
-        }
-        
+            switch(result)
+            {
+                case 0 :
+                    doStuffOnGetResult(0);
+                    break;
+                case 1:
+                    doStuffOnGetResult(1);
+                    break;
+                case 2:
+                    doStuffOnGetResult(2);
+                    break;
+             } 
+        } 
     }
     
     private void doStuffOnGetResult(int winner)
     {
+        btnSaveMatch.setDisable(true);
         boardController.isGameInProgress = false;
 
         String url = "videos/draw.mp4";
@@ -659,6 +732,7 @@ public class GamePlayBoard extends AnchorPane {
          
         updateUIAfterWin();  
         
+        tictactoe.domain.MusicController.pauseMusic();
         ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
         if(saveTheMatch)
         {
@@ -685,7 +759,7 @@ public class GamePlayBoard extends AnchorPane {
 
     }
     
-    private void resetBoardBaseOnSimulationBoard()
+    public void resetBoardBaseOnSimulationBoard()
     {
         char[][] simulationBoard = boardController.getSimulationBoard();
         for(int i = 0;i < 3;i++)
@@ -736,7 +810,7 @@ public class GamePlayBoard extends AnchorPane {
            
     }
     
-    private void resetSaveMatchBtn()
+    public void resetSaveMatchBtn()
     {
         btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
         btnSaveMatch.setText("Save Match");
@@ -775,6 +849,44 @@ public class GamePlayBoard extends AnchorPane {
             }
         });
         replayThread.start();
+        TicTacToe.primaryStage.setOnCloseRequest((e) -> {
+        replayThread.stop();
+        });
     }
+    
+    void doOnlineMove()
+    {
+        Thread myTh = new Thread(()->{
+            while (true) {                
+                try {
+                    String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(str);
+                    switch(pl.getState())
+                    { 
+                        case PLAYER_MOVE:
+                        {
+                            System.out.println("move received.");
+                            int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
+                            int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
+                            ((OnlineModeController)boardController).setMoveToOnline(i, j,!((OnlineModeController)boardController).currentPlayerSymbol);
+                            resetBoardBaseOnSimulationBoard();
+                            actionWhenGetBoardState();
+                            boardController.isThisIsCurrentPlayerTurn = true;
+                            break;
+                        }
+                    }
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        Platform.runLater(() -> {
+            myTh.start();
+        });
+    }
+    
     
 }
