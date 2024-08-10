@@ -16,6 +16,11 @@ public class Player {
     protected boolean isPlaying, isActive;
     
     public Player(){}
+    
+    public static Player fromPlayerMessageBody(PlayerMessageBody pl){
+        Player player = new Player(pl.getUsername(), pl.getPassword() , pl.getScore(), pl.isIsPlaying(), pl.isIsActive());
+        return player;
+    }
 
     public Player(String username, String password, int score, boolean isPlaying, boolean isActive) {
         this.username = username;

@@ -1,5 +1,8 @@
 package tictactoe.ui;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.resources.ResourcesLocation;
 import tictactoe.ui.util.CustomDialogBase;
@@ -54,7 +58,7 @@ public class SignupScreenBase extends AnchorPane {
         return true;
     }
     public SignupScreenBase() {
-
+        SignupScreenController.signupScreenBase = this;
         imageView = new ImageView();
         text = new Text();
         text0 = new Text();
@@ -207,6 +211,11 @@ public class SignupScreenBase extends AnchorPane {
                 
             },() -> {
                 ScreenController.popUntil(ConnectionModeScreenBase.class);
+               try {
+                   SocketConnectionController.getInstance().disconnectFromServer();
+               } catch (IOException | InstantiationException ex) {
+                   Logger.getLogger(SignupScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+               }
             });
        }
       

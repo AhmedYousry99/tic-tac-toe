@@ -98,6 +98,7 @@ public class CustomPlayerListTile extends HBox{
         inviteButton.setDisable(player.isIsPlaying() && !player.isIsActive());
         inviteButton.setPickOnBounds(!player.isIsPlaying() && player.isIsActive());
         
+        
         setAlignment(javafx.geometry.Pos.CENTER);
         setPrefHeight(50.0);
         getChildren().add(nameLabel);
