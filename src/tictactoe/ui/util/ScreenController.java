@@ -7,9 +7,7 @@ package tictactoe.ui.util;
 
 import java.util.Stack;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import tictactoe.TicTacToe;
-import tictactoe.ui.StartScreenFXMLBase;
 
 
 
@@ -33,17 +31,13 @@ public class ScreenController {
         Stack<Parent> tempStack = (Stack<Parent>)TicTacToe.roots.clone();
         Parent tempScreen = null;
         while(!tempStack.isEmpty()){
-            if(tempStack.peek().getClass() == screenClass){
-                tempScreen = TicTacToe.roots.pop();
-                break;
-            }
-        }
-        if(screenClass == StartScreenFXMLBase.class && tempScreen != null){
+            System.out.println("Stack size: "+ tempStack.size() + ", Peak: " + tempStack.peek());
+            tempScreen = tempStack.pop();
+            if(tempScreen.getClass() == screenClass){
                 TicTacToe.roots = tempStack;
                 pushScreen(tempScreen, null);
+                break;
             }
-        if(!tempStack.isEmpty()){
-            popScreen();
         }
     }
 }

@@ -88,5 +88,9 @@ public class CustomDialogBase extends AnchorPane {
         stage.show();
     }
     
-    
+    public static void onPrintComplete(boolean success){
+        if(!success){
+            new CustomDialogBase("Message Couldn't be sent, try again later", null, "Ok", null, null);
+        }
+    }
 }

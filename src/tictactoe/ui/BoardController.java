@@ -71,7 +71,7 @@ public class BoardController  {
         }
     }
     
-    void resetBoard()
+    public void resetBoard()
     {
         currentPlayer = 1;
         isGameInProgress = true;
@@ -156,7 +156,7 @@ public class BoardController  {
             }
     }
     
-    void resetMatchMoves()
+    public void resetMatchMoves()
     {
         moves = "";
     }

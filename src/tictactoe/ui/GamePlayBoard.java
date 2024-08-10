@@ -1,6 +1,5 @@
 package tictactoe.ui;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,6 +17,7 @@ import javafx.util.Duration;
 import tictactoe.TicTacToe;
 import tictactoe.data.SocketConnectionController;
 import tictactoe.domain.JSONParser;
+import tictactoe.domain.PlayerDataHandler;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
 import tictactoe.resources.ResourcesLocation;
@@ -38,7 +38,7 @@ public class GamePlayBoard extends AnchorPane {
     public final StackPane stack02;
     public final ImageView x02;
     public final ImageView o02;
-    public final ImageView action02; 
+    public final ImageView action02;
     public final StackPane stack10;
     public final ImageView x10;
     public final ImageView o10;
@@ -72,18 +72,17 @@ public class GamePlayBoard extends AnchorPane {
     public final Button btnLeave;
     public final Button btnRematch;
     public final Button btnSaveMatch;
-    
-    public BoardController boardController;
-    public boolean play,saveTheMatch,isTransitionStarted;
+
+    public static BoardController boardController;
+    public boolean play, saveTheMatch, isTransitionStarted;
     public String modeName;
     Thread replayThread;
-    
-    
-    
-    
 
-    public GamePlayBoard(BoardController customController) {
-        
+    public GamePlayBoard(BoardController customController)
+    {
+        if (customController instanceof OnlineModeController) {
+            OnlineModeController.gamePlayBoard = this;
+        }
         play = true;
         saveTheMatch = false;
         boardController = customController;
@@ -139,15 +138,14 @@ public class GamePlayBoard extends AnchorPane {
         btnSaveMatch = new Button();
 
         boardController.resetBoard();
-        
-        setId("AnchorPane");
 
+        setId("AnchorPane");
 
         backgroundImage.setPickOnBounds(true);
         backgroundImage.setImage(new Image(ResourcesLocation.class.getResource("images/backgrounds/board.png").toExternalForm()));
         backgroundImage.fitHeightProperty().bind(this.heightProperty());
         backgroundImage.fitWidthProperty().bind(this.widthProperty());
-        
+
         stack00.setLayoutX(464.0);
         stack00.setLayoutY(258.0);
         stack00.setPrefHeight(150.0);
@@ -406,11 +404,8 @@ public class GamePlayBoard extends AnchorPane {
         modeText.setLayoutX(480.0);
         modeText.setLayoutY(963.0);
         modeText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        modeText.setStrokeWidth(0.0);   
+        modeText.setStrokeWidth(0.0);
         modeText.setFont(new Font("Agency FB", 96.0));
-        
-        
-        
 
         btnLeave.setLayoutX(23.0);
         btnLeave.setLayoutY(887.0);
@@ -422,13 +417,21 @@ public class GamePlayBoard extends AnchorPane {
         btnLeave.setFont(new Font("Agency FB Bold", 48.0));
         btnLeave.setOnAction((e) -> {
             new CustomDialogBase("Are you sure you want to leave?", "Leave", "Cancel", () -> {
-                if(customController instanceof ReplayMatchController)
-                {
+                if (boardController instanceof ReplayMatchController) {
                     replayThread.stop();
                 }
+                if (boardController instanceof OnlineModeController) {
+                    if (boardController.isGameInProgress) {
+                        ((OnlineModeController) boardController).surrender();
+                    } else {
+                        ((OnlineModeController) boardController).leaveMatch();
+                    }
+                   this.boardController = null;
+                }
+                PlayerScreenController.getAllPlayers();
                 ScreenController.popScreen();
-            },() -> {
-                
+            }, () -> {
+
             });
         });
 
@@ -440,8 +443,7 @@ public class GamePlayBoard extends AnchorPane {
         btnRematch.setStyle("-fx-background-color: #D38CC4;");
         btnRematch.setText("Play Again");
         btnRematch.setFont(new Font("Agency FB Bold", 30.0));
-        
-        
+
         btnSaveMatch.setLayoutX(1265.0);
         btnSaveMatch.setLayoutY(780.0);
         btnSaveMatch.setMnemonicParsing(false);
@@ -451,7 +453,6 @@ public class GamePlayBoard extends AnchorPane {
         btnSaveMatch.setText("Save Match");
         btnSaveMatch.setFont(new Font("Agency FB Bold", 30.0));
 
-        
         updateUIAfterWin();
         getChildren().add(backgroundImage);
         stack00.getChildren().add(x00);
@@ -499,42 +500,33 @@ public class GamePlayBoard extends AnchorPane {
         getChildren().add(btnLeave);
         getChildren().add(btnRematch);
         getChildren().add(btnSaveMatch);
-        
-        if(customController instanceof OnlineModeController)
-        {
-            if(((OnlineModeController) customController).currentPlayerSymbol)
-            {
-                ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = true;
+
+        if (customController instanceof OnlineModeController) {
+            if (((OnlineModeController) boardController).currentPlayerSymbol) {
+                ((OnlineModeController) boardController).isThisIsCurrentPlayerTurn = true;
                 boardController.playerXXName = "X : " + LoginScreenBase.currentUser.getUsername();
                 boardController.playerOOName = "O : " + ((OnlineModeController) customController).opponentName;
-            }else
-            {
+            } else {
                 boardController.playerOOName = "O : " + LoginScreenBase.currentUser.getUsername();
                 boardController.playerXXName = "X : " + ((OnlineModeController) customController).opponentName;
                 ((OnlineModeController) customController).isThisIsCurrentPlayerTurn = false;
             }
-            
 
             modeName = "Online Mode";
             //doOnlineMove();
-        }
-        else if(customController instanceof ReplayMatchController)
-        {
+        } else if (customController instanceof ReplayMatchController) {
             btnSaveMatch.setVisible(false);
             btnRematch.setVisible(false);
             modeName = "Replay Mode";
             modeText.setLayoutX(580);
             playMatchFromHistory();
-            
-        }
-        else if(customController instanceof SinglePlayerModeController)
-        {
+
+        } else if (customController instanceof SinglePlayerModeController) {
             modeText.setLayoutX(400.0);
             modeText.setFont(new Font("Agency FB", 76.0));
             boardController.playerOOName = "Computer";
             playerOONameText.setLayoutX(1180);
-            switch(((SinglePlayerModeController) customController).getDifficultyLevel())
-            {
+            switch (((SinglePlayerModeController) customController).getDifficultyLevel()) {
                 case EASY:
                     modeName = "Single Palyer Mode (EASY)";
                     break;
@@ -545,39 +537,37 @@ public class GamePlayBoard extends AnchorPane {
                     modeName = "Single Palyer Mode (DIFFICULT)";
                     break;
             }
-        }else if(customController instanceof BoardController)
-        {
+        } else if (customController instanceof BoardController) {
             modeName = "Two Players Mode";
         }
-         
+
         modeText.setText(modeName);
         playerXXNameText.setText(boardController.playerXXName);
         playerOONameText.setText(boardController.playerOOName);
-            
-            
+
         //logic    
-    
         btnRematch.setDisable(true);
-        btnRematch.setOnAction((e)->{
-            if(boardController instanceof OnlineModeController)
-            {
-                if(((OnlineModeController)boardController).currentPlayerSymbol)boardController.isThisIsCurrentPlayerTurn = true;
-                else boardController.isThisIsCurrentPlayerTurn = false;
+        btnRematch.setOnAction((e) -> {
+            if (boardController instanceof OnlineModeController) {
+                if (((OnlineModeController) boardController).currentPlayerSymbol) {
+                    boardController.isThisIsCurrentPlayerTurn = true;
+                } else {
+                    boardController.isThisIsCurrentPlayerTurn = false;
+                }
                 PlayerMessageBody pl = new PlayerMessageBody();
                 pl.setState(SocketRoute.PLAY_AGAIN);
-                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
+                pl.setOpponentName(((OnlineModeController) boardController).opponentName);
                 try {
-                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                    PlayerDataHandler.getInstance().sendMessage(pl, CustomDialogBase::onPrintComplete);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (JsonProcessingException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
-                }    
-            }else
-            {
+                }
+            } else {
                 boardController.isThisIsCurrentPlayerTurn = true;
             }
-            
+
             boardController.resetBoard();
             resetBoardBaseOnSimulationBoard();
             resetSaveMatchBtn();
@@ -585,120 +575,120 @@ public class GamePlayBoard extends AnchorPane {
             isTransitionStarted = false;
             btnRematch.setDisable(true);
         });
-        
 
-        btnSaveMatch.setOnAction((e)->{
+        btnSaveMatch.setOnAction((e) -> {
             btnSaveMatch.setStyle("-fx-background-color: #96D38C;");
             btnSaveMatch.setText("Recording...");
             saveTheMatch = true;
             btnSaveMatch.setDisable(true);
         });
-        
-        
 
-            stack00.setOnMouseClicked((event)->{ButtonAction(0, 0);});
-        
-            stack01.setOnMouseClicked((event)->{ButtonAction(0, 1);});
+        stack00.setOnMouseClicked((event) -> {
+            ButtonAction(0, 0);
+        });
 
-            stack02.setOnMouseClicked((event)->{ButtonAction(0, 2);});
+        stack01.setOnMouseClicked((event) -> {
+            ButtonAction(0, 1);
+        });
 
-            stack10.setOnMouseClicked((event)->{ButtonAction(1, 0);});
+        stack02.setOnMouseClicked((event) -> {
+            ButtonAction(0, 2);
+        });
 
-            stack11.setOnMouseClicked((event)->{ButtonAction(1, 1);});
+        stack10.setOnMouseClicked((event) -> {
+            ButtonAction(1, 0);
+        });
 
-            stack12.setOnMouseClicked((event)->{ButtonAction(1, 2);});
+        stack11.setOnMouseClicked((event) -> {
+            ButtonAction(1, 1);
+        });
 
-            stack20.setOnMouseClicked((event)->{ButtonAction(2, 0);});
+        stack12.setOnMouseClicked((event) -> {
+            ButtonAction(1, 2);
+        });
 
-            stack21.setOnMouseClicked((event)->{ButtonAction(2, 1);});
+        stack20.setOnMouseClicked((event) -> {
+            ButtonAction(2, 0);
+        });
 
-            stack22.setOnMouseClicked((event)->{ButtonAction(2, 2);});
+        stack21.setOnMouseClicked((event) -> {
+            ButtonAction(2, 1);
+        });
 
+        stack22.setOnMouseClicked((event) -> {
+            ButtonAction(2, 2);
+        });
 
     }
-    
-    
-    
-    void ButtonAction(int i,int j)
+
+    void ButtonAction(int i, int j)
     {
-        
-        if(boardController.isThisIsCurrentPlayerTurn && boardController.isThisIsAValidMove(i, j))
-        {
-            if(boardController instanceof OnlineModeController)
-            {
-                ((OnlineModeController)boardController).setMoveToOnline(i, j,((OnlineModeController)boardController).currentPlayerSymbol);
+
+        if (boardController.isThisIsCurrentPlayerTurn && boardController.isThisIsAValidMove(i, j)) {
+            if (boardController instanceof OnlineModeController) {
+                ((OnlineModeController) boardController).setMoveToOnline(i, j, ((OnlineModeController) boardController).currentPlayerSymbol);
                 resetBoardBaseOnSimulationBoard();
                 PlayerMessageBody pl = new PlayerMessageBody();
                 pl.setState(SocketRoute.PLAYER_MOVE);
-                pl.setMove(((OnlineModeController)boardController).convertMoveToStirng(i, j));
-                pl.setOpponentName(((OnlineModeController)boardController).opponentName);
-                System.out.println(((OnlineModeController)boardController).opponentName);
+                pl.setMove(((OnlineModeController) boardController).convertMoveToStirng(i, j));
+                pl.setOpponentName(((OnlineModeController) boardController).opponentName);
+                System.out.println(((OnlineModeController) boardController).opponentName);
                 try {
-                    SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl);
+                    PlayerDataHandler.getInstance().sendMessage(pl, CustomDialogBase::onPrintComplete);
                     boardController.isThisIsCurrentPlayerTurn = false;
                 } catch (InstantiationException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (JsonProcessingException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
-                }    
-                
+                }
+
                 actionWhenGetBoardState();
 
-            }
-            else if(boardController instanceof SinglePlayerModeController)
-            {
+            } else if (boardController instanceof SinglePlayerModeController) {
 
-                doButtonActionOnSinglePlayerMode(i,j);
+                doButtonActionOnSinglePlayerMode(i, j);
                 actionWhenGetBoardState();
 
-            }else
-            {
+            } else {
                 boardController.setMove(i, j);
                 resetBoardBaseOnSimulationBoard();
                 actionWhenGetBoardState();
-            } 
+            }
         }
 
     }
-    
-    
-    private void doButtonActionOnSinglePlayerMode(int i,int j)
+
+    private void doButtonActionOnSinglePlayerMode(int i, int j)
     {
-        if(!isTransitionStarted)
-        {
+        if (!isTransitionStarted) {
             isTransitionStarted = true;
-            if(boardController.isThisIsCurrentPlayerTurn)
-            {
+            if (boardController.isThisIsCurrentPlayerTurn) {
                 boardController.setMove(i, j);
                 resetBoardBaseOnSimulationBoard();
                 boardController.isThisIsCurrentPlayerTurn = false;
             }
-            if(boardController.getBoardState(boardController.getSimulationBoard()) == -1)
-            {
-                    PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-                    pause.setOnFinished(e -> {
-                        ((SinglePlayerModeController)boardController).doComputerMove();
-                        resetBoardBaseOnSimulationBoard();
-                        actionWhenGetBoardState();
-                        boardController.isThisIsCurrentPlayerTurn = true;
-                        isTransitionStarted = false;
-                    });
-                    pause.play();
-            }  
+            if (boardController.getBoardState(boardController.getSimulationBoard()) == -1) {
+                PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+                pause.setOnFinished(e -> {
+                    ((SinglePlayerModeController) boardController).doComputerMove();
+                    resetBoardBaseOnSimulationBoard();
+                    actionWhenGetBoardState();
+                    boardController.isThisIsCurrentPlayerTurn = true;
+                    isTransitionStarted = false;
+                });
+                pause.play();
+            }
         }
-        
+
     }
-    
-    
+
     public void actionWhenGetBoardState()
     {
         int result = boardController.getBoardState(boardController.getSimulationBoard());
-        
-        if(boardController.isGameInProgress)
-        {
-            switch(result)
-            {
-                case 0 :
+
+        if (boardController.isGameInProgress) {
+            switch (result) {
+                case 0:
                     doStuffOnGetResult(0);
                     break;
                 case 1:
@@ -707,109 +697,190 @@ public class GamePlayBoard extends AnchorPane {
                 case 2:
                     doStuffOnGetResult(2);
                     break;
-             } 
-        } 
+            }
+        }
     }
-    
-    private void doStuffOnGetResult(int winner)
+
+    void doStuffOnGetResult(int winner)
     {
         btnSaveMatch.setDisable(true);
         boardController.isGameInProgress = false;
-
+        String winnerName = "";
         String url = "videos/draw.mp4";
-        if(winner == 0)
-        {
+        if (winner == 0) {
+            winnerName = boardController.playerOOName;
             boardController.playerOOWins++;
             url = "videos/o_beats_x.mp4";
-        }else if(winner == 1)
-        {
+        } else if (winner == 1) {
+            winnerName = boardController.playerXXName;
             boardController.playerXXWins++;
             url = "videos/x_beats_o.mp4";
         }
+        winnerName = winnerName.substring(4);
+//        System.out.println("------------------------------------------> going to work");
+//        System.out.println("winner name: " + winnerName + ", current user: " + PlayerDataHandler.player.getUsername());
+        if(winnerName.equals(PlayerDataHandler.player.getUsername())){
+            ((OnlineModeController) boardController).countWin(winnerName);
+        } 
         boardController.roundsNumber++;
-        
-        btnRematch.setDisable(false);
-         
-        updateUIAfterWin();  
-        
+
+        if (!((OnlineModeController) boardController).opponentLeft) {
+            btnRematch.setDisable(false);
+        }
+
+        updateUIAfterWin();
+
         tictactoe.domain.MusicController.pauseMusic();
         ScreenController.pushScreen(new VideoFXMLBase(url, 10), this);
-        if(saveTheMatch)
-        {
+        if (saveTheMatch) {
             boardController.saveMatch(modeName, winner);
         }
 
     }
-    
-    
-    
-    
-            
-    
+
     private void updateUIAfterWin()
     {
         playerXXWinsText
-                .setText("Wins : " + String.valueOf(boardController.playerXXWins));
+            .setText("Wins : " + String.valueOf(boardController.playerXXWins));
         playerOOWinsText
-                .setText("Wins : " + String.valueOf(boardController.playerOOWins));
-          
+            .setText("Wins : " + String.valueOf(boardController.playerOOWins));
+
         int rounds = boardController.roundsNumber;
 
         roundNumberText.setText("Round : " + String.valueOf(rounds));
 
     }
-    
+
     public void resetBoardBaseOnSimulationBoard()
     {
         char[][] simulationBoard = boardController.getSimulationBoard();
-        for(int i = 0;i < 3;i++)
-        {
-            for(int j = 0;j < 3;j++)
-            {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 setOpacityBasedOnIndex(simulationBoard[i][j], i, j, 1);
             }
         }
-        
+
     }
-    
-    private void setOpacityBasedOnIndex(char symbol,int i,int j,double opacity)
+
+    private void setOpacityBasedOnIndex(char symbol, int i, int j, double opacity)
     {
-        
+
         /// set if X
-        if(i == 0 && j == 0 && symbol == 'x'){x00.setOpacity(opacity);o00.setOpacity(0);}
-        if(i == 0 && j == 1 && symbol == 'x'){x01.setOpacity(opacity);o01.setOpacity(0);}
-        if(i == 0 && j == 2 && symbol == 'x'){x02.setOpacity(opacity);o02.setOpacity(0);}
-        if(i == 1 && j == 0 && symbol == 'x'){x10.setOpacity(opacity);o10.setOpacity(0);}
-        if(i == 1 && j == 1 && symbol == 'x'){x11.setOpacity(opacity);o11.setOpacity(0);}
-        if(i == 1 && j == 2 && symbol == 'x'){x12.setOpacity(opacity);o12.setOpacity(0);}
-        if(i == 2 && j == 0 && symbol == 'x'){x20.setOpacity(opacity);o20.setOpacity(0);}
-        if(i == 2 && j == 1 && symbol == 'x'){x21.setOpacity(opacity);o21.setOpacity(0);}
-        if(i == 2 && j == 2 && symbol == 'x'){x22.setOpacity(opacity);o22.setOpacity(0);}
-        
+        if (i == 0 && j == 0 && symbol == 'x') {
+            x00.setOpacity(opacity);
+            o00.setOpacity(0);
+        }
+        if (i == 0 && j == 1 && symbol == 'x') {
+            x01.setOpacity(opacity);
+            o01.setOpacity(0);
+        }
+        if (i == 0 && j == 2 && symbol == 'x') {
+            x02.setOpacity(opacity);
+            o02.setOpacity(0);
+        }
+        if (i == 1 && j == 0 && symbol == 'x') {
+            x10.setOpacity(opacity);
+            o10.setOpacity(0);
+        }
+        if (i == 1 && j == 1 && symbol == 'x') {
+            x11.setOpacity(opacity);
+            o11.setOpacity(0);
+        }
+        if (i == 1 && j == 2 && symbol == 'x') {
+            x12.setOpacity(opacity);
+            o12.setOpacity(0);
+        }
+        if (i == 2 && j == 0 && symbol == 'x') {
+            x20.setOpacity(opacity);
+            o20.setOpacity(0);
+        }
+        if (i == 2 && j == 1 && symbol == 'x') {
+            x21.setOpacity(opacity);
+            o21.setOpacity(0);
+        }
+        if (i == 2 && j == 2 && symbol == 'x') {
+            x22.setOpacity(opacity);
+            o22.setOpacity(0);
+        }
+
         /// set if O
-        if(i == 0 && j == 0 && symbol == 'o'){x00.setOpacity(0);o00.setOpacity(opacity);}
-        if(i == 0 && j == 1 && symbol == 'o'){x01.setOpacity(0);o01.setOpacity(opacity);}
-        if(i == 0 && j == 2 && symbol == 'o'){x02.setOpacity(0);o02.setOpacity(opacity);}
-        if(i == 1 && j == 0 && symbol == 'o'){x10.setOpacity(0);o10.setOpacity(opacity);}
-        if(i == 1 && j == 1 && symbol == 'o'){x11.setOpacity(0);o11.setOpacity(opacity);}
-        if(i == 1 && j == 2 && symbol == 'o'){x12.setOpacity(0);o12.setOpacity(opacity);}
-        if(i == 2 && j == 0 && symbol == 'o'){x20.setOpacity(0);o20.setOpacity(opacity);}
-        if(i == 2 && j == 1 && symbol == 'o'){x21.setOpacity(0);o21.setOpacity(opacity);}
-        if(i == 2 && j == 2 && symbol == 'o'){x22.setOpacity(0);o22.setOpacity(opacity);}
-        
+        if (i == 0 && j == 0 && symbol == 'o') {
+            x00.setOpacity(0);
+            o00.setOpacity(opacity);
+        }
+        if (i == 0 && j == 1 && symbol == 'o') {
+            x01.setOpacity(0);
+            o01.setOpacity(opacity);
+        }
+        if (i == 0 && j == 2 && symbol == 'o') {
+            x02.setOpacity(0);
+            o02.setOpacity(opacity);
+        }
+        if (i == 1 && j == 0 && symbol == 'o') {
+            x10.setOpacity(0);
+            o10.setOpacity(opacity);
+        }
+        if (i == 1 && j == 1 && symbol == 'o') {
+            x11.setOpacity(0);
+            o11.setOpacity(opacity);
+        }
+        if (i == 1 && j == 2 && symbol == 'o') {
+            x12.setOpacity(0);
+            o12.setOpacity(opacity);
+        }
+        if (i == 2 && j == 0 && symbol == 'o') {
+            x20.setOpacity(0);
+            o20.setOpacity(opacity);
+        }
+        if (i == 2 && j == 1 && symbol == 'o') {
+            x21.setOpacity(0);
+            o21.setOpacity(opacity);
+        }
+        if (i == 2 && j == 2 && symbol == 'o') {
+            x22.setOpacity(0);
+            o22.setOpacity(opacity);
+        }
+
         /// set if Dot
-        if(i == 0 && j == 0 && symbol == '.'){x00.setOpacity(0);o00.setOpacity(0);}
-        if(i == 0 && j == 1 && symbol == '.'){x01.setOpacity(0);o01.setOpacity(0);}
-        if(i == 0 && j == 2 && symbol == '.'){x02.setOpacity(0);o02.setOpacity(0);}
-        if(i == 1 && j == 0 && symbol == '.'){x10.setOpacity(0);o10.setOpacity(0);}
-        if(i == 1 && j == 1 && symbol == '.'){x11.setOpacity(0);o11.setOpacity(0);}
-        if(i == 1 && j == 2 && symbol == '.'){x12.setOpacity(0);o12.setOpacity(0);}
-        if(i == 2 && j == 0 && symbol == '.'){x20.setOpacity(0);o20.setOpacity(0);}
-        if(i == 2 && j == 1 && symbol == '.'){x21.setOpacity(0);o21.setOpacity(0);}
-        if(i == 2 && j == 2 && symbol == '.'){x22.setOpacity(0);o22.setOpacity(0);}
-           
+        if (i == 0 && j == 0 && symbol == '.') {
+            x00.setOpacity(0);
+            o00.setOpacity(0);
+        }
+        if (i == 0 && j == 1 && symbol == '.') {
+            x01.setOpacity(0);
+            o01.setOpacity(0);
+        }
+        if (i == 0 && j == 2 && symbol == '.') {
+            x02.setOpacity(0);
+            o02.setOpacity(0);
+        }
+        if (i == 1 && j == 0 && symbol == '.') {
+            x10.setOpacity(0);
+            o10.setOpacity(0);
+        }
+        if (i == 1 && j == 1 && symbol == '.') {
+            x11.setOpacity(0);
+            o11.setOpacity(0);
+        }
+        if (i == 1 && j == 2 && symbol == '.') {
+            x12.setOpacity(0);
+            o12.setOpacity(0);
+        }
+        if (i == 2 && j == 0 && symbol == '.') {
+            x20.setOpacity(0);
+            o20.setOpacity(0);
+        }
+        if (i == 2 && j == 1 && symbol == '.') {
+            x21.setOpacity(0);
+            o21.setOpacity(0);
+        }
+        if (i == 2 && j == 2 && symbol == '.') {
+            x22.setOpacity(0);
+            o22.setOpacity(0);
+        }
+
     }
-    
+
     public void resetSaveMatchBtn()
     {
         btnSaveMatch.setStyle("-fx-background-color: #D38CC4;");
@@ -817,76 +888,73 @@ public class GamePlayBoard extends AnchorPane {
         saveTheMatch = false;
         btnSaveMatch.setDisable(false);
     }
-    
-    
+
     private void playMatchFromHistory()
     {
         String[] movesFromFile = boardController.getMoves().split(",");
         playerXXNameText.setText(movesFromFile[0]);
         playerOONameText.setText(movesFromFile[1]);
-        roundNumberText.setText("Round : "+ movesFromFile[2]);
+        roundNumberText.setText("Round : " + movesFromFile[2]);
         playerXXWinsText.setText("Wins : " + movesFromFile[3]);
         playerOOWinsText.setText("Wins : " + movesFromFile[4]);
-        
-        
-        
-        replayThread = new Thread(()->{
-            
+
+        replayThread = new Thread(() -> {
+
             char player;
-            for(int k = 5;k < movesFromFile.length;k++)
-            {
+            for (int k = 5; k < movesFromFile.length; k++) {
                 try {
-                Thread.sleep(1000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                int i = Integer.valueOf(movesFromFile[k].charAt(0))-'0';
-                int j = Integer.valueOf(movesFromFile[k].charAt(1))-'0';
-                if(k % 2 == 1)player = 'x';
-                else player = 'o';
+                int i = Integer.valueOf(movesFromFile[k].charAt(0)) - '0';
+                int j = Integer.valueOf(movesFromFile[k].charAt(1)) - '0';
+                if (k % 2 == 1) {
+                    player = 'x';
+                } else {
+                    player = 'o';
+                }
 
-                setOpacityBasedOnIndex(player,i,j,1);
+                setOpacityBasedOnIndex(player, i, j, 1);
             }
         });
         replayThread.start();
         TicTacToe.primaryStage.setOnCloseRequest((e) -> {
-        replayThread.stop();
+            replayThread.stop();
         });
     }
-    
-    void doOnlineMove()
-    {
-        Thread myTh = new Thread(()->{
-            while (true) {                
-                try {
-                    String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
-                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(str);
-                    switch(pl.getState())
-                    { 
-                        case PLAYER_MOVE:
-                        {
-                            System.out.println("move received.");
-                            int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
-                            int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
-                            ((OnlineModeController)boardController).setMoveToOnline(i, j,!((OnlineModeController)boardController).currentPlayerSymbol);
-                            resetBoardBaseOnSimulationBoard();
-                            actionWhenGetBoardState();
-                            boardController.isThisIsCurrentPlayerTurn = true;
-                            break;
-                        }
-                    }
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        
-        Platform.runLater(() -> {
-            myTh.start();
-        });
-    }
-    
-    
+
+//    void doOnlineMove()
+//    {
+//        Thread myTh = new Thread(()->{
+//            while (true) {                
+//                try {
+//                    String str = SocketConnectionController.getInstance().getPlayerDataHandler().recieveMessage();
+//                    PlayerMessageBody pl = JSONParser.convertFromJSONToPlayerMessageBody(str);
+//                    switch(pl.getState())
+//                    { 
+//                        case PLAYER_MOVE:
+//                        {
+//                            System.out.println("move received.");
+//                            int i = Integer.valueOf(pl.getMove().charAt(0))-'0';
+//                            int j = Integer.valueOf(pl.getMove().charAt(1))-'0';
+//                            ((OnlineModeController)boardController).setMoveToOnline(i, j,!((OnlineModeController)boardController).currentPlayerSymbol);
+//                            resetBoardBaseOnSimulationBoard();
+//                            actionWhenGetBoardState();
+//                            boardController.isThisIsCurrentPlayerTurn = true;
+//                            break;
+//                        }
+//                    }
+//                } catch (InstantiationException ex) {
+//                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(GamePlayBoard.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//        
+//        Platform.runLater(() -> {
+//            myTh.start();
+//        });
+//    }
 }

@@ -7,19 +7,14 @@ package tictactoe.data;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Vector;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tictactoe.domain.ConnectionInterface;
 import tictactoe.domain.PlayerDataHandler;
-import tictactoe.ui.util.VoidCallableParameterizedPMB;
 
 /**
  *
@@ -45,32 +40,27 @@ public class SocketConnectionController implements ConnectionInterface{
         if(instance == null) throw new InstantiationError("An instance was not yet created, Create an instance by calling initialize first.");
         return instance;
     }
-    //The instance of playerDataHandler in the singleton SocketConnectionController
-    private PlayerDataHandler playerDataHandler;
-
-    public void setPlayerDataHandlerFunction(VoidCallableParameterizedPMB vcppmb)
-    {
-        playerDataHandler.setVcppmb(vcppmb);
-    }
-    public PlayerDataHandler getPlayerDataHandler()
-    {
-        return playerDataHandler;
-    }
-    
-
-    
+    //The PlayerDataHandler thread
+    private Thread playerDataHandlerTh;
+     
     /**
      * Creates a server withe the specified local IP address, and port.
      * @param serverAddr the server address (should be your device's local IP address)
      * @param port the port number
      * @return a created instance of running server
      * @throws IllegalArgumentException if server address or port number were invalid
+     * @throws java.net.SocketTimeoutException if server takes too long to respond
      * @throws IOException if an exception occurs while trying to communicate or receive data from client (Player)
+     * @throws java.net.ConnectException
      */
-    public static SocketConnectionController initialize(String serverAddr, int port) throws IllegalArgumentException, IOException, ConnectException{
+    public static SocketConnectionController initialize(String serverAddr, int port) throws IllegalArgumentException, SocketTimeoutException, IOException, ConnectException{
         
-        if(instance == null){//basically restarts the server with different parameters
+        if(instance == null){try {
+            //basically restarts the server with different parameters
             instance = new SocketConnectionController(serverAddr, port);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(SocketConnectionController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
          return instance;
     }
@@ -82,24 +72,34 @@ public class SocketConnectionController implements ConnectionInterface{
      * @return a created instance of running server
      * @throws IllegalArgumentException if server address or port number were invalid
      * @throws IOException if an exception occurs while trying to communicate or receive data from client (Player)
+     * @throws java.net.SocketTimeoutException if server takes too long to respond
+     * @throws java.net.ConnectException
      */
-    public static SocketConnectionController initialize(String serverAddr) throws IllegalArgumentException, IOException, ConnectException{
+    public static SocketConnectionController initialize(String serverAddr) throws IllegalArgumentException, IOException, SocketTimeoutException, ConnectException{
         
-        if(instance == null){//basically restarts the server with different parameters
+        if(instance == null){try {
+            //basically restarts the server with different parameters
             instance = new SocketConnectionController(serverAddr, 5005);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(SocketConnectionController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return instance;
     }
     
-    private SocketConnectionController(String addr, int port) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException{
-            if(addr.split("[.]").length != 4) throw new IllegalArgumentException("invalid IP address");
+    private SocketConnectionController(String addr, int port) throws UnknownHostException, IllegalArgumentException, SocketTimeoutException, InstantiationException, IOException, ConnectException{
+            if(addr.equals("localhost"))
+                addr = "127.0.0.1";
+            else if(addr.split("[.]").length != 4) throw new IllegalArgumentException("invalid IP address");
             this.addr = addr;
             if (port < 0 || port > 0xFFFF) throw new IllegalArgumentException("Invalid port value");
             createdSocket = new Socket();
             createdSocket.connect(new InetSocketAddress(addr, port), 2000);
 //            createdSocket.setSoTimeout(5000);
             this.port = createdSocket.getLocalPort();
-            playerDataHandler = new PlayerDataHandler(createdSocket);
+            PlayerDataHandler.setInstance(new PlayerDataHandler(createdSocket));
+            playerDataHandlerTh = new Thread(PlayerDataHandler.getInstance());
+            playerDataHandlerTh.start();
     }
     
     //instance getters and setters
@@ -117,18 +117,20 @@ public class SocketConnectionController implements ConnectionInterface{
     {
         //NOTE: this should throw an exception because the thread will be waiting for a player to connect
         createdSocket.close();
-        playerDataHandler = null;
+        playerDataHandlerTh.stop();
+        PlayerDataHandler.setInstance(null);
+        playerDataHandlerTh = null;
         SocketConnectionController.setInstance(null);
     }
 
     @Override
-    public void connectToServer(String ip) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException
+    public void connectToServer(String ip) throws UnknownHostException, IllegalArgumentException, IOException, SocketTimeoutException, ConnectException
     {
          initialize(ip);
     }
 
     @Override
-    public void connectToServer(String playerIp, int playerPort) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException
+    public void connectToServer(String playerIp, int playerPort) throws UnknownHostException, IllegalArgumentException, IOException, ConnectException, SocketTimeoutException
     {
         initialize(playerIp, playerPort);
     }

@@ -2,6 +2,7 @@ package tictactoe.ui.util;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,9 +78,9 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         okButton.setFont(new Font("Agency FB Bold", 18.0));
         okButton.setDefaultButton(true);
         okButton.addEventHandler(ActionEvent.ACTION, (e) -> {
-            String ip = textField1.getText();
+            String ip = textField1.getText().trim();
+            ip = ip.isEmpty() ? "localhost" : ip.toLowerCase();
             if(validateInput(ip)){
-
                 try {
                     okButton.setDisable(true);
                     cancelButton.setDisable(true);
@@ -90,10 +91,9 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
                     errorLabel.setText(ex.getMessage());
                     errorLabel.setVisible(true);
                     Logger.getLogger(CustomDialogWithTextFieldBase.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ConnectException ex) {
+                } catch (SocketTimeoutException | ConnectException ex) {
                     errorLabel.setText("server took too long, try again later");
-                    errorLabel.setVisible(true);
-                    Logger.getLogger(CustomDialogWithTextFieldBase.class.getName()).log(Level.SEVERE, null, ex);
+                    errorLabel.setVisible(true);                    
                 } catch (IOException ex) {
                     errorLabel.setText("server might be down, try again later");
                     errorLabel.setVisible(true);
@@ -127,6 +127,7 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         errorLabel.setTextFill(javafx.scene.paint.Color.RED);
         errorLabel.setVisible(false);
         errorLabel.setFont(new Font(18.0));
+        errorLabel.setWrapText(true);
 
         getChildren().add(text);
         getChildren().add(textField1);
@@ -140,12 +141,12 @@ public class CustomDialogWithTextFieldBase extends AnchorPane {
         private boolean validateInput(String ip){
         boolean result = false;
         if(!ip.isEmpty()){
+            if(ip.equals("localhost")) result = true;
             String[] octets = ip.split("[.]");  
             if(octets.length == 4){
                 result = true;
             }
-        }
-        
+        }  
         return result;
     }
 }

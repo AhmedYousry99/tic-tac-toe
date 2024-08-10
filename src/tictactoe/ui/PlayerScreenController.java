@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import tictactoe.TicTacToe;
 import tictactoe.data.SocketConnectionController;
+import tictactoe.domain.PlayerDataHandler;
 import tictactoe.domain.PlayerMessageBody;
 import tictactoe.domain.SocketRoute;
 import tictactoe.ui.CustomPlayerListTile;
+import tictactoe.ui.util.CustomDialogBase;
 import tictactoe.ui.util.ScreenController;
 
 
@@ -26,44 +28,45 @@ import tictactoe.ui.util.ScreenController;
  */
 public class PlayerScreenController {
     
-    public static void getAllPlayers(List<CustomPlayerListTile> listTiles, PlayersScreenBase playersScreenBase){
+    public static PlayersScreenBase playersScreenBase;
+    
+    public static void getAllPlayers(){
         try {
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.ALL_PLAYERS);
-            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.ALL_PLAYERS);
+            PlayerDataHandler.getInstance().sendMessage(pl, CustomDialogBase::onPrintComplete);
         } catch (InstantiationException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-       public static void signOut(PlayersScreenBase playersScreenBase){
+    public static void handleGetAllPlayersResponse(PlayerMessageBody pl){
+        playersScreenBase.addPlayersToList(pl);
+    }
+    
+       public static void logOut(){
         try {
-            SocketConnectionController.getInstance().setPlayerDataHandlerFunction(playersScreenBase::signout);
             PlayerMessageBody pl= new PlayerMessageBody();
             pl.setState(SocketRoute.LOG_OUT);
-            Thread th = new Thread(SocketConnectionController.getInstance().getPlayerDataHandler());
-            Platform.runLater(() -> {
-                th.start();
-            });
-            SocketConnectionController.getInstance().getPlayerDataHandler().sendMessage(pl, SocketRoute.LOG_OUT);
-            //System.out.println("done");
-            ScreenController.popScreen();
-            ScreenController.popScreen();
-        } catch (InstantiationException ex) {
-            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+           PlayerDataHandler.getInstance().sendMessage(pl, CustomDialogBase::onPrintComplete);
+        } catch (InstantiationException | JsonProcessingException ex) {
             Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+       
+       public static void logOutResponse(){
+        try {
+            SocketConnectionController.getInstance().disconnectFromServer();
+        } catch (InstantiationException | IOException ex) {
+            Logger.getLogger(PlayerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            PlayerDataHandler.player = null;
+            PlayerDataHandler.opponent = null;
+           playersScreenBase.logOut();
+       }
     
 }

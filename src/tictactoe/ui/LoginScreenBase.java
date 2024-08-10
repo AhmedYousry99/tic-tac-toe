@@ -54,15 +54,13 @@ public class LoginScreenBase extends AnchorPane {
          return false;
         }
         else {
-            
-            LoginScreenController.login(username, password, this);
-
+            LoginScreenController.login(username, password);
         }
        
         return true;        
     }
     public LoginScreenBase() {
-
+        LoginScreenController.loginScreenBase = this;
         imageView = new ImageView();
         text = new Text();
         text0 = new Text();
@@ -198,24 +196,27 @@ public class LoginScreenBase extends AnchorPane {
    { 
        if(pl.getResponse())
        { 
-          CustomDialogSuccess cds = new CustomDialogSuccess("Login successful","Okay",  () -> {
-               ScreenController.pushScreen(new PlayersScreenBase(), this);
+           System.out.println("player is active: " + pl.isIsActive());
+            if(pl.isIsActive())
+                new CustomDialogBase("This account is already in use.", null, "Okay", null, null);
+            else{
+                PlayerDataHandler.player = Player.fromPlayerMessageBody(pl);
+                new CustomDialogSuccess("Login successful","Okay",  () -> {
+                ScreenController.pushScreen(new PlayersScreenBase(), this);
             });
-          currentUser = new Player();
-          currentUser.setUsername(pl.getUsername());
-          currentUser.setPassword(pl.getPassword());
-          currentUser.setScore(pl.getScore());
-          currentUser.setIsActive(pl.isIsActive());
-          currentUser.setIsPlaying(pl.isIsPlaying());
+                currentUser = new Player();
+                currentUser.setUsername(pl.getUsername());
+                currentUser.setPassword(pl.getPassword());
+                currentUser.setScore(pl.getScore());
+                currentUser.setIsActive(pl.isIsActive());
+                currentUser.setIsPlaying(pl.isIsPlaying());
+            } 
        }
-       else {
-           CustomDialogBase cdb = new CustomDialogBase("Invalid username or password","Okay","Cancel",() -> {
-                
+       else 
+           new CustomDialogBase("Invalid username or password","Okay","Cancel",() -> {    
             },() -> {
                 ScreenController.popScreen();
             });
-       }
-      
     }
         
 }
